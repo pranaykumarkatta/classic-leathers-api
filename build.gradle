@@ -1,0 +1,27 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.1'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.classicLeathers'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation group: 'org.springframework', name: 'spring-web'
+	implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.11'
+	implementation 'com.google.code.gson:gson:2.7'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
