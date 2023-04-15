@@ -1,4 +1,4 @@
-package com.classicLeathers.classicLeathersTool.model;
+package com.classicLeathers.classicLeathersTool.retail.model;
 
 public class Vendor {
     private String name;

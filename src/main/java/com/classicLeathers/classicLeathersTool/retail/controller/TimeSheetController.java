@@ -1,8 +1,8 @@
-package com.classicLeathers.classicLeathersTool.controller;
+package com.classicLeathers.classicLeathersTool.retail.controller;
 
-import com.classicLeathers.classicLeathersTool.model.TimeSheet;
-import com.classicLeathers.classicLeathersTool.model.TimeSheetDto;
-import com.classicLeathers.classicLeathersTool.service.TimeSheetService;
+import com.classicLeathers.classicLeathersTool.retail.model.TimeSheet;
+import com.classicLeathers.classicLeathersTool.retail.model.TimeSheetDto;
+import com.classicLeathers.classicLeathersTool.retail.service.TimeSheetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

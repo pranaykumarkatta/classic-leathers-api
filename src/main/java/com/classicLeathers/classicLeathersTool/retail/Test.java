@@ -1,10 +1,10 @@
-package com.classicLeathers.classicLeathersTool;
+package com.classicLeathers.classicLeathersTool.retail;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
 
-import com.classicLeathers.classicLeathersTool.model.Inventory;
+import com.classicLeathers.classicLeathersTool.retail.model.Inventory;
 import com.google.gson.Gson;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

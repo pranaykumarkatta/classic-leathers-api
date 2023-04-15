@@ -1,7 +1,7 @@
-package com.classicLeathers.classicLeathersTool.controller;
+package com.classicLeathers.classicLeathersTool.retail.controller;
 
-import com.classicLeathers.classicLeathersTool.model.Vendor;
-import com.classicLeathers.classicLeathersTool.service.VendorService;
+import com.classicLeathers.classicLeathersTool.retail.model.Vendor;
+import com.classicLeathers.classicLeathersTool.retail.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

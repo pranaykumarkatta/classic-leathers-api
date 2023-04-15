@@ -1,4 +1,4 @@
-package com.classicLeathers.classicLeathersTool;
+package com.classicLeathers.classicLeathersTool.retail;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

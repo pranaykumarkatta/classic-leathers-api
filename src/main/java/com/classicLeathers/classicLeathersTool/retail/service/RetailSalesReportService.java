@@ -1,7 +1,7 @@
-package com.classicLeathers.classicLeathersTool.service;
+package com.classicLeathers.classicLeathersTool.retail.service;
 
 import com.classicLeathers.classicLeathersTool.FileUtils;
-import com.classicLeathers.classicLeathersTool.model.RetailSalesEntryDto;
+import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;

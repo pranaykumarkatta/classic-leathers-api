@@ -1,8 +1,8 @@
-package com.classicLeathers.classicLeathersTool.service;
+package com.classicLeathers.classicLeathersTool.retail.service;
 
 import com.classicLeathers.classicLeathersTool.FileUtils;
-import com.classicLeathers.classicLeathersTool.model.TimeSheet;
-import com.classicLeathers.classicLeathersTool.model.TimeSheetDto;
+import com.classicLeathers.classicLeathersTool.retail.model.TimeSheet;
+import com.classicLeathers.classicLeathersTool.retail.model.TimeSheetDto;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
