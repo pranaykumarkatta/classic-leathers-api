@@ -1,6 +1,6 @@
 package com.classicLeathers.classicLeathersTool.production.model;
 
-public class TeakWoodPurchaseOrderDto {
+public class ArticleDto {
 
     private String classicSku;
     private String teakWoodSku;

@@ -39,8 +39,6 @@ public class TimeSheetService {
     }
 
     private List<TimeSheetDto> buildTimeSheetDtiList(List<TimeSheet> timeSheetList) {
-//        List<TimeSheetDto> timeSheetDtos = new ArrayList<>();
-//        TimeSheetDto timeSheetDto;
         Map<String, List<TimeSheet>> map = new HashMap<>();
         for (TimeSheet timeSheet : timeSheetList) {
 
@@ -53,14 +51,7 @@ public class TimeSheetService {
                 list.add(timeSheet);
                 map.put(new SimpleDateFormat("MMM-d-yyyy").format(new Date()) + "_" + timeSheet.getEmployeeName(), list);
             }
-//
-//            timeSheetDto = new TimeSheetDto();
-//            timeSheetDto.setDate(timeSheet.getDate());
-//            timeSheetDto.setEmployeeName(timeSheet.getEmployeeName());
-//            timeSheetDto.setRowNumber(timeSheet.getRowNumber());
-//            timeSheetDtos.add(timeSheetDto);
         }
-        System.out.println(map);
         List<TimeSheetDto> finalTimeSheetDtos = new ArrayList<>();
         for (String mapKey : map.keySet()) {
             TimeSheetDto dto = new TimeSheetDto();
