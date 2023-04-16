@@ -46,14 +46,6 @@ public class FileUtils {
     }
 
     public void WriteData(String filePath, Integer sheetIndex, Object[] data) throws Exception {
-        File file = new File(filePath);
-        if (!file.exists()){
-            Workbook wb = new XSSFWorkbook();
-            Sheet sheet1 = wb.createSheet("Sheet1");
-            FileOutputStream fileOut = new FileOutputStream(filePath);
-            wb.write(fileOut);
-            fileOut.close();
-        }
         FileInputStream inputStream = new FileInputStream(filePath);
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook(inputStream);
 

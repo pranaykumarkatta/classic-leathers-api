@@ -2,28 +2,19 @@ package com.classicLeathers.classicLeathersTool.production.model;
 
 public class ArticleDto {
 
-    private String classicSku;
-    private String teakWoodSku;
+    private String sku;
     private String leather;
     private String handStitchingPattern;
     private String style;
     private String lining;
     private String sole;
 
-    public String getClassicSku() {
-        return classicSku;
+    public String getSku() {
+        return sku;
     }
 
-    public void setClassicSku(String classicSku) {
-        this.classicSku = classicSku;
-    }
-
-    public String getTeakWoodSku() {
-        return teakWoodSku;
-    }
-
-    public void setTeakWoodSku(String teakWoodSku) {
-        this.teakWoodSku = teakWoodSku;
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public String getLeather() {
