@@ -42,14 +42,14 @@ public class TimeSheetService {
         Map<String, List<TimeSheet>> map = new HashMap<>();
         for (TimeSheet timeSheet : timeSheetList) {
 
-            if (map.get(new SimpleDateFormat("MMM-d-yyyy").format(new Date()) + "_" + timeSheet.getEmployeeName()) != null) {
-                List<TimeSheet> list = map.get(new SimpleDateFormat("MMM-d-yyyy").format(new Date()) + "_" + timeSheet.getEmployeeName());
+            if (map.get(new SimpleDateFormat("MMM-d-yyyy").format(new Date(timeSheet.getDate())) + "_" + timeSheet.getEmployeeName()) != null) {
+                List<TimeSheet> list = map.get(new SimpleDateFormat("MMM-d-yyyy").format(new Date(timeSheet.getDate())) + "_" + timeSheet.getEmployeeName());
                 list.add(timeSheet);
-                map.put(new SimpleDateFormat("MMM-d-yyyy").format(new Date()) + "_" + timeSheet.getEmployeeName(), list);
+                map.put(new SimpleDateFormat("MMM-d-yyyy").format(new Date(timeSheet.getDate())) + "_" + timeSheet.getEmployeeName(), list);
             } else {
                 List<TimeSheet> list = new ArrayList<>();
                 list.add(timeSheet);
-                map.put(new SimpleDateFormat("MMM-d-yyyy").format(new Date()) + "_" + timeSheet.getEmployeeName(), list);
+                map.put(new SimpleDateFormat("MMM-d-yyyy").format(new Date(timeSheet.getDate())) + "_" + timeSheet.getEmployeeName(), list);
             }
         }
         List<TimeSheetDto> finalTimeSheetDtos = new ArrayList<>();
