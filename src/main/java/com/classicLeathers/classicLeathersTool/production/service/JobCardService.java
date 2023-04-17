@@ -16,10 +16,8 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class JobCardService {
@@ -69,7 +67,7 @@ public class JobCardService {
 
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName , 0);
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -82,25 +80,53 @@ public class JobCardService {
             List<String> jobCardProgressSkus = new ArrayList<>();
             for (String row : rowData) {
                 String[] cellData = row.split(",");
-                JobCardProgressDto jobCardProgressDto = new JobCardProgressDto();
-                jobCardProgressSkus.add(cellData[0]+"_"+cellData[1]+"_40");
-                jobCardProgressSkus.add(cellData[0]+"_"+cellData[1]+"_41");
-                jobCardProgressSkus.add(cellData[0]+"_"+cellData[1]+"_42");
-                jobCardProgressSkus.add(cellData[0]+"_"+cellData[1]+"_43");
-                jobCardProgressSkus.add(cellData[0]+"_"+cellData[1]+"_44");
-                jobCardProgressSkus.add(cellData[0]+"_"+cellData[1]+"_45");
-                jobCardProgressSkus.add(cellData[0]+"_"+cellData[1]+"_46");
-                jobCardProgressSkus.add(cellData[0]+"_"+cellData[1]+"_47");
+                jobCardProgressSkus.add(cellData[0] + "_" + cellData[1] + "_40");
+                jobCardProgressSkus.add(cellData[0] + "_" + cellData[1] + "_41");
+                jobCardProgressSkus.add(cellData[0] + "_" + cellData[1] + "_42");
+                jobCardProgressSkus.add(cellData[0] + "_" + cellData[1] + "_43");
+                jobCardProgressSkus.add(cellData[0] + "_" + cellData[1] + "_44");
+                jobCardProgressSkus.add(cellData[0] + "_" + cellData[1] + "_45");
+                jobCardProgressSkus.add(cellData[0] + "_" + cellData[1] + "_46");
+                jobCardProgressSkus.add(cellData[0] + "_" + cellData[1] + "_47");
             }
             return jobCardProgressSkus;
         }
         return Collections.EMPTY_LIST;
     }
 
+    public List<JobCardProgressDto> getJobCardProgressList(String jobCardFileName) {
+
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 1);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        if (rowData.size() != 0) {
+            List<JobCardProgressDto> jobCardProgressDtos = new ArrayList<>();
+            for (String row : rowData) {
+                String[] cellData = row.split(",");
+                if (cellData.length > 1) {
+                    JobCardProgressDto jobCardProgressDto = new JobCardProgressDto();
+                    jobCardProgressDto.setSku(cellData[0]);
+                    jobCardProgressDto.setProductionStage(cellData[1]);
+                    jobCardProgressDto.setCount(cellData[2]);
+                    jobCardProgressDto.setDate(cellData[3]);
+                    jobCardProgressDtos.add(jobCardProgressDto);
+                }
+            }
+            return jobCardProgressDtos;
+        }
+        return Collections.EMPTY_LIST;
+    }
+
     public void saveJobCard(List<JobCard> jobCardList, String fileName,
-                                  String customer, String brand,
-                                  String poNumber, String jobWorkVendor,
-                                  String poDate) {
+                            String customer, String brand,
+                            String poNumber, String jobWorkVendor,
+                            String poDate) {
         try {
             createJobCard("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + fileName + ".xlsx",
                     customer, brand, poNumber, jobWorkVendor, poDate);
@@ -135,11 +161,12 @@ public class JobCardService {
     }
 
     private void createJobCard(String filePath, String customer, String brand,
-                                     String poNumber, String jobWorkVendor, String poDate) throws Exception {
+                               String poNumber, String jobWorkVendor, String poDate) throws Exception {
         File file = new File(filePath);
         if (!file.exists()) {
             Workbook wb = new XSSFWorkbook();
-            Sheet sheet1 = wb.createSheet("Sheet1");
+            Sheet sheet1 = wb.createSheet("JOB_CARD");
+            Sheet sheet2 = wb.createSheet("JOB_CARD_PROGRESS");
             FileOutputStream fileOut = new FileOutputStream(filePath);
             wb.write(fileOut);
             fileOut.close();
@@ -173,4 +200,16 @@ public class JobCardService {
         out.close();
     }
 
+    public void saveJobCardProgress(JobCardProgressDto jobCardProgressDto, String jobCardFileName) {
+        Object[] data = new Object[]{jobCardProgressDto.getSku(),
+                jobCardProgressDto.getProductionStage(),
+                jobCardProgressDto.getCount(),
+                new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+        };
+        try {
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 1, data);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

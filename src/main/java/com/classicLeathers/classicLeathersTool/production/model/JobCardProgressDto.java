@@ -1,20 +1,10 @@
 package com.classicLeathers.classicLeathersTool.production.model;
 
 public class JobCardProgressDto {
-
-
-    private String jobCard;
     private String Date;
-    private String trackingSku;
+    private String sku;
+    private String productionStage;
     private String count;
-
-    public String getJobCard() {
-        return jobCard;
-    }
-
-    public void setJobCard(String jobCard) {
-        this.jobCard = jobCard;
-    }
 
     public String getDate() {
         return Date;
@@ -24,12 +14,20 @@ public class JobCardProgressDto {
         Date = date;
     }
 
-    public String getTrackingSku() {
-        return trackingSku;
+    public String getSku() {
+        return sku;
     }
 
-    public void setTrackingSku(String trackingSku) {
-        this.trackingSku = trackingSku;
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public String getProductionStage() {
+        return productionStage;
+    }
+
+    public void setProductionStage(String productionStage) {
+        this.productionStage = productionStage;
     }
 
     public String getCount() {
