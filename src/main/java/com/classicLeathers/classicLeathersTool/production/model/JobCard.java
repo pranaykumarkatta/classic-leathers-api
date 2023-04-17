@@ -1,6 +1,6 @@
 package com.classicLeathers.classicLeathersTool.production.model;
 
-public class PurchaseOrder {
+public class JobCard {
     private String sku;
     private String leather;
     private String size_40_quantity;
