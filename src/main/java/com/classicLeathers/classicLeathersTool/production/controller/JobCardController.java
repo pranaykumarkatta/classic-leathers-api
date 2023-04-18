@@ -25,6 +25,9 @@ public class JobCardController {
     @GetMapping("/getJobCardFiles")
     public ResponseEntity<List<String>> getJobCardFiles() {
         return ResponseEntity.ok(jobCardService.getJobCardFiles());
+    } @GetMapping("/getNextJobCardNumber")
+    public ResponseEntity<Integer> getNextJobCardNumber() {
+        return ResponseEntity.ok(jobCardService.getNextJobCardNumber());
     }
 
     @GetMapping("/jobCardProgressSkus")
@@ -39,11 +42,11 @@ public class JobCardController {
 
 
     @PostMapping(path = "/saveJobCard", consumes = "application/json")
-    public void saveJobCard(@RequestBody List<JobCard> jobCardList, @RequestParam String fileName,
+    public void saveJobCard(@RequestBody List<JobCard> jobCardList, @RequestParam String jobCardNumber,
                             @RequestParam String customer, @RequestParam String brand,
                             @RequestParam String poNumber, @RequestParam String jobWorkVendor,
                             @RequestParam String poDate) {
-        jobCardService.saveJobCard(jobCardList, fileName, customer, brand, poNumber, jobWorkVendor, poDate.substring(0, 15));
+        jobCardService.saveJobCard(jobCardList, jobCardNumber, customer, brand, poNumber, jobWorkVendor, poDate.substring(0, 15));
     }
 
     @PostMapping(path = "/saveJobCardProgress", consumes = "application/json")

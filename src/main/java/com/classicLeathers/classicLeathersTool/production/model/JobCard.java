@@ -10,6 +10,7 @@ public class JobCard {
     private String size_44_quantity;
     private String size_45_quantity;
     private String size_46_quantity;
+    private String size_47_quantity;
     private String totalQuantity;
     private String handStitchingPattern;
     private String style;
@@ -86,6 +87,14 @@ public class JobCard {
 
     public void setSize_46_quantity(String size_46_quantity) {
         this.size_46_quantity = size_46_quantity;
+    }
+
+    public String getSize_47_quantity() {
+        return size_47_quantity;
+    }
+
+    public void setSize_47_quantity(String size_47_quantity) {
+        this.size_47_quantity = size_47_quantity;
     }
 
     public String getTotalQuantity() {

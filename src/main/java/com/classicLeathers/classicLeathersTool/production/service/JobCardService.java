@@ -63,6 +63,35 @@ public class JobCardService {
         return fileNames;
     }
 
+    public Integer getNextJobCardNumber() {
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\JOB_CARD_DETAILS.xlsx", 0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        if (rowData.size() != 0) {
+            rowData.remove(0);
+            List<Integer> jobCardIds = new ArrayList<>();
+            for (String row : rowData) {
+                String[] cellData = row.split(",");
+                jobCardIds.add(Integer.valueOf(cellData[0]));
+            }
+            if (jobCardIds.size() > 0) {
+                return jobCardIds
+                        .stream()
+                        .mapToInt(v -> v)
+                        .max().orElseThrow(NoSuchElementException::new) + 1;
+            } else {
+                return 1;
+            }
+        }
+        return 9999;
+    }
+
     public List<String> getJobCardProgressSkus(String jobCardFileName) {
 
         String fileData = "";
@@ -123,13 +152,25 @@ public class JobCardService {
         return Collections.EMPTY_LIST;
     }
 
-    public void saveJobCard(List<JobCard> jobCardList, String fileName,
+    public void saveJobCard(List<JobCard> jobCardList, String jobCardNumber,
                             String customer, String brand,
                             String poNumber, String jobWorkVendor,
                             String poDate) {
+        String fileName = "JOBCARD_" + jobCardNumber + "_" + customer + "_" + poNumber;
         try {
             createJobCard("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + fileName + ".xlsx",
                     customer, brand, poNumber, jobWorkVendor, poDate);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Object[] jobCardData = new Object[]{jobCardNumber,
+                customer,
+                poNumber,
+                poDate
+        };
+        try {
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\JOB_CARD_DETAILS.xlsx", 0, jobCardData);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -145,6 +186,7 @@ public class JobCardService {
                     jobCard.getSize_44_quantity(),
                     jobCard.getSize_45_quantity(),
                     jobCard.getSize_46_quantity(),
+                    jobCard.getSize_47_quantity(),
                     jobCard.getTotalQuantity(),
                     jobCard.getHandStitchingPattern(),
                     jobCard.getStyle(),
