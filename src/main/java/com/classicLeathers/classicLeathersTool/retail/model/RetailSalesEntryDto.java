@@ -21,6 +21,7 @@ public class RetailSalesEntryDto implements Comparable {
     private String swipePayment;
     private String updatedBy;
 
+    private String isTodaySale;
     public String getSaleDate() {
         return saleDate;
     }
@@ -147,6 +148,14 @@ public class RetailSalesEntryDto implements Comparable {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public String getIsTodaySale() {
+        return isTodaySale;
+    }
+
+    public void setIsTodaySale(String isTodaySale) {
+        this.isTodaySale = isTodaySale;
     }
 
     @Override

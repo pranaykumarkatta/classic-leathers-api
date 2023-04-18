@@ -8,6 +8,7 @@ public class TimeSheetDto implements Comparable{
     private String present;
     private String totalWorkingHours;
     private String rowNumber;
+    private String isTodayEntry;
 
     public String getDate() {
         return date;
@@ -47,6 +48,14 @@ public class TimeSheetDto implements Comparable{
 
     public void setRowNumber(String rowNumber) {
         this.rowNumber = rowNumber;
+    }
+
+    public String getIsTodayEntry() {
+        return isTodayEntry;
+    }
+
+    public void setIsTodayEntry(String isTodayEntry) {
+        this.isTodayEntry = isTodayEntry;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.classicLeathers.classicLeathersTool.production.model;
 
-public class JobCardProgressDto {
+public class JobCardProgress {
     private String Date;
     private String sku;
     private String productionStage;

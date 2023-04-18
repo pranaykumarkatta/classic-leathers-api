@@ -3,7 +3,8 @@ package com.classicLeathers.classicLeathersTool.production.service;
 import com.classicLeathers.classicLeathersTool.FileUtils;
 import com.classicLeathers.classicLeathersTool.production.model.ArticleDto;
 import com.classicLeathers.classicLeathersTool.production.model.JobCard;
-import com.classicLeathers.classicLeathersTool.production.model.JobCardProgressDto;
+import com.classicLeathers.classicLeathersTool.production.model.ProductionProgressDto;
+import com.classicLeathers.classicLeathersTool.production.model.JobCardProgress;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -123,7 +124,7 @@ public class JobCardService {
         return Collections.EMPTY_LIST;
     }
 
-    public List<JobCardProgressDto> getJobCardProgressList(String jobCardFileName) {
+    public List<JobCardProgress> getJobCardProgressList(String jobCardFileName) {
 
         String fileData = "";
         try {
@@ -135,22 +136,48 @@ public class JobCardService {
         List<String> rowData = new ArrayList<>();
         rowData.addAll(Arrays.asList(fileData.split("\n")));
         if (rowData.size() != 0) {
-            List<JobCardProgressDto> jobCardProgressDtos = new ArrayList<>();
+            List<JobCardProgress> jobCardProgresses = new ArrayList<>();
             for (String row : rowData) {
                 String[] cellData = row.split(",");
                 if (cellData.length > 1) {
-                    JobCardProgressDto jobCardProgressDto = new JobCardProgressDto();
-                    jobCardProgressDto.setSku(cellData[0]);
-                    jobCardProgressDto.setProductionStage(cellData[1]);
-                    jobCardProgressDto.setCount(cellData[2]);
-                    jobCardProgressDto.setDate(cellData[3]);
-                    jobCardProgressDtos.add(jobCardProgressDto);
+                    JobCardProgress jobCardProgress = new JobCardProgress();
+                    jobCardProgress.setSku(cellData[0]);
+                    jobCardProgress.setProductionStage(cellData[1]);
+                    jobCardProgress.setCount(cellData[2]);
+                    jobCardProgress.setDate(cellData[3]);
+                    jobCardProgresses.add(jobCardProgress);
                 }
             }
-            return jobCardProgressDtos;
+            return jobCardProgresses;
         }
         return Collections.EMPTY_LIST;
     }
+
+    public List<ProductionProgressDto> getJobCardOverAllProgressList(String jobCardFileName) {
+        List<ProductionProgressDto> jobCardProgressDtoList = getJobCardProgressDtoList(jobCardFileName);
+
+        return Collections.EMPTY_LIST;
+    }
+
+    private List<ProductionProgressDto> getJobCardProgressDtoList(String jobCardFileName) {
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        if (rowData.size() != 0) {
+            List<JobCardProgress> jobCardProgresses = new ArrayList<>();
+            for (String row : rowData) {
+                System.out.println(row);
+            }
+        }
+        return Collections.EMPTY_LIST;
+    }
+
 
     public void saveJobCard(List<JobCard> jobCardList, String jobCardNumber,
                             String customer, String brand,
@@ -242,10 +269,10 @@ public class JobCardService {
         out.close();
     }
 
-    public void saveJobCardProgress(JobCardProgressDto jobCardProgressDto, String jobCardFileName) {
-        Object[] data = new Object[]{jobCardProgressDto.getSku(),
-                jobCardProgressDto.getProductionStage(),
-                jobCardProgressDto.getCount(),
+    public void saveJobCardProgress(JobCardProgress jobCardProgress, String jobCardFileName) {
+        Object[] data = new Object[]{jobCardProgress.getSku(),
+                jobCardProgress.getProductionStage(),
+                jobCardProgress.getCount(),
                 new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
         };
         try {

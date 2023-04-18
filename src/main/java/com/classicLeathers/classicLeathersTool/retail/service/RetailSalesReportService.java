@@ -42,6 +42,8 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.setgPayPayment(cellData[13]);
                 retailSalesEntryDto.setSwipePayment(cellData[14]);
                 retailSalesEntryDto.setUpdatedBy(cellData[15]);
+                retailSalesEntryDto.setIsTodaySale(""+(new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
+                        .equals((new SimpleDateFormat("MMM-d-yyyy").format(new Date())))));
                 retailSalesEntryDtoList.add(retailSalesEntryDto);
             }
 

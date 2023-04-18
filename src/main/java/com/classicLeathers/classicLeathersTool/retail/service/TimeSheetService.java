@@ -56,6 +56,8 @@ public class TimeSheetService {
         for (String mapKey : map.keySet()) {
             TimeSheetDto dto = new TimeSheetDto();
             String[] strings = mapKey.split("_");
+            dto.setIsTodayEntry(""+(new SimpleDateFormat("MM-d-yyyy").format(new Date(strings[0]))
+                    .equals(new SimpleDateFormat("MM-d-yyyy").format(new Date()))));
             dto.setDate(strings[0]);
             dto.setEmployeeName(strings[1]);
             String present = "Yes";

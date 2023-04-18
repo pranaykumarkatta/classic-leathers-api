@@ -2,7 +2,8 @@ package com.classicLeathers.classicLeathersTool.production.controller;
 
 import com.classicLeathers.classicLeathersTool.production.model.JobCard;
 import com.classicLeathers.classicLeathersTool.production.model.ArticleDto;
-import com.classicLeathers.classicLeathersTool.production.model.JobCardProgressDto;
+import com.classicLeathers.classicLeathersTool.production.model.ProductionProgressDto;
+import com.classicLeathers.classicLeathersTool.production.model.JobCardProgress;
 import com.classicLeathers.classicLeathersTool.production.service.JobCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,9 @@ public class JobCardController {
     @GetMapping("/getJobCardFiles")
     public ResponseEntity<List<String>> getJobCardFiles() {
         return ResponseEntity.ok(jobCardService.getJobCardFiles());
-    } @GetMapping("/getNextJobCardNumber")
+    }
+
+    @GetMapping("/getNextJobCardNumber")
     public ResponseEntity<Integer> getNextJobCardNumber() {
         return ResponseEntity.ok(jobCardService.getNextJobCardNumber());
     }
@@ -36,8 +39,13 @@ public class JobCardController {
     }
 
     @GetMapping("/jobCardProgressList")
-    public ResponseEntity<List<JobCardProgressDto>> getJobCardProgressList(@RequestParam String jobCardFileName) {
+    public ResponseEntity<List<JobCardProgress>> getJobCardProgressList(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.getJobCardProgressList(jobCardFileName));
+    }
+
+    @GetMapping("/jobCardOverAllProgressList")
+    public ResponseEntity<List<ProductionProgressDto>> getJobCardOverAllProgressList(@RequestParam String jobCardFileName) {
+        return ResponseEntity.ok(jobCardService.getJobCardOverAllProgressList(jobCardFileName));
     }
 
 
@@ -50,8 +58,8 @@ public class JobCardController {
     }
 
     @PostMapping(path = "/saveJobCardProgress", consumes = "application/json")
-    public void saveJobCardProgress(@RequestBody JobCardProgressDto jobCardProgressDto,
+    public void saveJobCardProgress(@RequestBody JobCardProgress jobCardProgress,
                                     @RequestParam String jobCardFileName) {
-        jobCardService.saveJobCardProgress(jobCardProgressDto, jobCardFileName);
+        jobCardService.saveJobCardProgress(jobCardProgress, jobCardFileName);
     }
 }
