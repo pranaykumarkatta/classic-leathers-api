@@ -288,7 +288,7 @@ public class JobCardService {
             Cell cell = row.createCell(0);
             cell.setCellValue("SKU");
             Cell cell1 = row.createCell(1);
-            cell.setCellValue("leather");
+            cell1.setCellValue("leather");
             Cell cell2 = row.createCell(2);
             cell2.setCellValue("40");
             Cell cell3 = row.createCell(3);
