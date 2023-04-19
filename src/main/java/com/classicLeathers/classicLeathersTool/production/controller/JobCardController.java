@@ -36,7 +36,7 @@ public class JobCardController {
     }
 
     @GetMapping("/jobCardProgressList")
-    public ResponseEntity<List<JobCardProgressDto>> getJobCardProgressList(@RequestParam String jobCardFileName) {
+    public ResponseEntity<List<JobCardProgress>> getJobCardProgressList(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.getJobCardProgressList(jobCardFileName));
     }
 

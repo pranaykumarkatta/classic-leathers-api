@@ -9,7 +9,6 @@ public class JobCardSizes {
     private String size_45_quantity;
     private String size_46_quantity;
     private String size_47_quantity;
-    private String totalQuantity;
 
     public String getSize_40_quantity() {
         return size_40_quantity;
@@ -73,13 +72,5 @@ public class JobCardSizes {
 
     public void setSize_47_quantity(String size_47_quantity) {
         this.size_47_quantity = size_47_quantity;
-    }
-
-    public String getTotalQuantity() {
-        return totalQuantity;
-    }
-
-    public void setTotalQuantity(String totalQuantity) {
-        this.totalQuantity = totalQuantity;
     }
 }
