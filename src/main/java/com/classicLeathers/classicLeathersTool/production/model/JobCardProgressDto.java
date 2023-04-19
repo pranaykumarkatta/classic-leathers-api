@@ -1,10 +1,8 @@
 package com.classicLeathers.classicLeathersTool.production.model;
 
-public class JobCardProgress {
+public class JobCardProgressDto {
     private String Date;
     private String sku;
-    private String leather;
-    private String size;
     private String productionStage;
     private String count;
 
@@ -22,22 +20,6 @@ public class JobCardProgress {
 
     public void setSku(String sku) {
         this.sku = sku;
-    }
-
-    public String getLeather() {
-        return leather;
-    }
-
-    public void setLeather(String leather) {
-        this.leather = leather;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
     }
 
     public String getProductionStage() {

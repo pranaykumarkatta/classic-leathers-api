@@ -1,10 +1,7 @@
 package com.classicLeathers.classicLeathersTool.production.service;
 
 import com.classicLeathers.classicLeathersTool.FileUtils;
-import com.classicLeathers.classicLeathersTool.production.model.ArticleDto;
-import com.classicLeathers.classicLeathersTool.production.model.JobCard;
-import com.classicLeathers.classicLeathersTool.production.model.ProductionProgressDto;
-import com.classicLeathers.classicLeathersTool.production.model.JobCardProgress;
+import com.classicLeathers.classicLeathersTool.production.model.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -124,7 +121,7 @@ public class JobCardService {
         return Collections.EMPTY_LIST;
     }
 
-    public List<JobCardProgress> getJobCardProgressList(String jobCardFileName) {
+    public List<JobCardProgressDto> getJobCardProgressList(String jobCardFileName) {
 
         String fileData = "";
         try {
@@ -136,16 +133,43 @@ public class JobCardService {
         List<String> rowData = new ArrayList<>();
         rowData.addAll(Arrays.asList(fileData.split("\n")));
         if (rowData.size() != 0) {
-            List<JobCardProgress> jobCardProgresses = new ArrayList<>();
+            List<JobCardProgressDto> jobCardProgresses = new ArrayList<>();
             for (String row : rowData) {
                 String[] cellData = row.split(",");
                 if (cellData.length > 1) {
-                    JobCardProgress jobCardProgress = new JobCardProgress();
-                    jobCardProgress.setSku(cellData[0]);
-                    jobCardProgress.setProductionStage(cellData[1]);
-                    jobCardProgress.setCount(cellData[2]);
-                    jobCardProgress.setDate(cellData[3]);
-                    jobCardProgresses.add(jobCardProgress);
+                    String count="";
+                    String size="";
+                    if (!cellData[2].equals("0")){
+                        count=cellData[2];
+                        size="40";
+                    }if (!cellData[3].equals("0")){
+                        count=cellData[3];
+                        size="41";
+                    }if (!cellData[4].equals("0")){
+                        count=cellData[4];
+                        size="42";
+                    }if (!cellData[5].equals("0")){
+                        count=cellData[5];
+                        size="43";
+                    }if (!cellData[6].equals("0")){
+                        count=cellData[6];
+                        size="44";
+                    }if (!cellData[7].equals("0")){
+                        count=cellData[7];
+                        size="45";
+                    }if (!cellData[8].equals("0")){
+                        count=cellData[8];
+                        size="46";
+                    }if (!cellData[9].equals("0")){
+                        count=cellData[9];
+                        size="47";
+                    }
+                    JobCardProgressDto jobCardProgressDto = new JobCardProgressDto();
+                    jobCardProgressDto.setSku(cellData[0]+"_"+cellData[1]+"_"+size);
+                    jobCardProgressDto.setProductionStage(cellData[10]);
+                    jobCardProgressDto.setCount(count);
+                    jobCardProgressDto.setDate(cellData[11]);
+                    jobCardProgresses.add(jobCardProgressDto);
                 }
             }
             return jobCardProgresses;
@@ -154,12 +178,6 @@ public class JobCardService {
     }
 
     public List<ProductionProgressDto> getJobCardOverAllProgressList(String jobCardFileName) {
-        List<ProductionProgressDto> jobCardProgressDtoList = getJobCardProgressDtoList(jobCardFileName);
-
-        return Collections.EMPTY_LIST;
-    }
-
-    private List<ProductionProgressDto> getJobCardProgressDtoList(String jobCardFileName) {
         String fileData = "";
         try {
             fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 0);
@@ -167,17 +185,47 @@ public class JobCardService {
             throw new RuntimeException(e);
         }
 
+        List<ProductionProgressDto> dtoList = new ArrayList<>();
+
+        //Get data from ordered quantity
         List<String> rowData = new ArrayList<>();
         rowData.addAll(Arrays.asList(fileData.split("\n")));
+        rowData.remove(0);
+        rowData.remove(0);
         if (rowData.size() != 0) {
-            List<JobCardProgress> jobCardProgresses = new ArrayList<>();
+            JobCardSizes jobCardSizes = new JobCardSizes();
             for (String row : rowData) {
-                System.out.println(row);
+                ProductionProgressDto dto = new ProductionProgressDto();
+                String[] cellData = row.split(",");
+                dto.setSku(cellData[0]);
+                dto.setLeather(cellData[1]);
+                dto.setIsProductionProgressEntry("No");
+
+                jobCardSizes.setSize_40_quantity(cellData[2]);
+                jobCardSizes.setSize_41_quantity(cellData[3]);
+                jobCardSizes.setSize_42_quantity(cellData[4]);
+                jobCardSizes.setSize_43_quantity(cellData[5]);
+                jobCardSizes.setSize_44_quantity(cellData[6]);
+                jobCardSizes.setSize_45_quantity(cellData[7]);
+                jobCardSizes.setSize_46_quantity(cellData[8]);
+                jobCardSizes.setSize_47_quantity(cellData[9]);
+                jobCardSizes.setTotalQuantity(cellData[10]);
+
+                Map<String, JobCardSizes> map = new HashMap<>();
+                map.put("CUTTING", jobCardSizes);
+                map.put("JOB_WORK", jobCardSizes);
+                map.put("HS", jobCardSizes);
+                map.put("FINISHING", jobCardSizes);
+                map.put("PACKING", jobCardSizes);
+                map.put("DISPATCH", jobCardSizes);
+
+                dto.setProductionStageSizeList(map);
+                dtoList.add(dto);
             }
         }
-        return Collections.EMPTY_LIST;
+        //TODO
+        return dtoList;
     }
-
 
     public void saveJobCard(List<JobCard> jobCardList, String jobCardNumber,
                             String customer, String brand,
@@ -236,6 +284,31 @@ public class JobCardService {
             Workbook wb = new XSSFWorkbook();
             Sheet sheet1 = wb.createSheet("JOB_CARD");
             Sheet sheet2 = wb.createSheet("JOB_CARD_PROGRESS");
+            XSSFRow row = (XSSFRow) sheet2.createRow(0);
+            Cell cell = row.createCell(0);
+            cell.setCellValue("SKU");
+            Cell cell1 = row.createCell(1);
+            cell.setCellValue("leather");
+            Cell cell2 = row.createCell(2);
+            cell2.setCellValue("40");
+            Cell cell3 = row.createCell(3);
+            cell3.setCellValue("41");
+            Cell cell4 = row.createCell(4);
+            cell4.setCellValue("42");
+            Cell cell5 = row.createCell(5);
+            cell5.setCellValue("43");
+            Cell cell6 = row.createCell(6);
+            cell6.setCellValue("44");
+            Cell cell7 = row.createCell(7);
+            cell7.setCellValue("45");
+            Cell cell8 = row.createCell(8);
+            cell8.setCellValue("46");
+            Cell cell9 = row.createCell(9);
+            cell9.setCellValue("47");
+            Cell cell10 = row.createCell(10);
+            cell10.setCellValue("PRODUCTION STAGE");
+            Cell cell11 = row.createCell(11);
+            cell11.setCellValue("DATE");
             FileOutputStream fileOut = new FileOutputStream(filePath);
             wb.write(fileOut);
             fileOut.close();
@@ -270,14 +343,69 @@ public class JobCardService {
     }
 
     public void saveJobCardProgress(JobCardProgress jobCardProgress, String jobCardFileName) {
-        Object[] data = new Object[]{jobCardProgress.getSku(),
-                jobCardProgress.getProductionStage(),
-                jobCardProgress.getCount(),
-                new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
-        };
+        Object[] data;
+        if (jobCardProgress.getSize().equals("40")) {
+            data = new Object[]{jobCardProgress.getSku(),
+                    jobCardProgress.getLeather(),
+                    jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0", "0",
+                    jobCardProgress.getProductionStage(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+            };
+        } else if (jobCardProgress.getSize().equals("41")) {
+            data = new Object[]{jobCardProgress.getSku(),
+                    jobCardProgress.getLeather(),
+                    "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0",
+                    jobCardProgress.getProductionStage(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+            };
+        } else if (jobCardProgress.getSize().equals("42")) {
+            data = new Object[]{jobCardProgress.getSku(),
+                    jobCardProgress.getLeather(),
+                    "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0",
+                    jobCardProgress.getProductionStage(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+            };
+        } else if (jobCardProgress.getSize().equals("43")) {
+            data = new Object[]{jobCardProgress.getSku(),
+                    jobCardProgress.getLeather(),
+                    "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0",
+                    jobCardProgress.getProductionStage(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+            };
+        } else if (jobCardProgress.getSize().equals("44")) {
+            data = new Object[]{jobCardProgress.getSku(),
+                    jobCardProgress.getLeather(),
+                    "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0",
+                    jobCardProgress.getProductionStage(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+            };
+        } else if (jobCardProgress.getSize().equals("45")) {
+            data = new Object[]{jobCardProgress.getSku(),
+                    jobCardProgress.getLeather(),
+                    "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0",
+                    jobCardProgress.getProductionStage(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+            };
+        } else if (jobCardProgress.getSize().equals("46")) {
+            data = new Object[]{jobCardProgress.getSku(),
+                    jobCardProgress.getLeather(),
+                    "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0",
+                    jobCardProgress.getProductionStage(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+            };
+        } else {
+            data = new Object[]{jobCardProgress.getSku(),
+                    jobCardProgress.getLeather(),
+                    "0", "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(),
+                    jobCardProgress.getProductionStage(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
+            };
+        }
+
         try {
             new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 1, data);
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             throw new RuntimeException(e);
         }
     }

@@ -1,9 +1,6 @@
 package com.classicLeathers.classicLeathersTool.production.controller;
 
-import com.classicLeathers.classicLeathersTool.production.model.JobCard;
-import com.classicLeathers.classicLeathersTool.production.model.ArticleDto;
-import com.classicLeathers.classicLeathersTool.production.model.ProductionProgressDto;
-import com.classicLeathers.classicLeathersTool.production.model.JobCardProgress;
+import com.classicLeathers.classicLeathersTool.production.model.*;
 import com.classicLeathers.classicLeathersTool.production.service.JobCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +36,7 @@ public class JobCardController {
     }
 
     @GetMapping("/jobCardProgressList")
-    public ResponseEntity<List<JobCardProgress>> getJobCardProgressList(@RequestParam String jobCardFileName) {
+    public ResponseEntity<List<JobCardProgressDto>> getJobCardProgressList(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.getJobCardProgressList(jobCardFileName));
     }
 
