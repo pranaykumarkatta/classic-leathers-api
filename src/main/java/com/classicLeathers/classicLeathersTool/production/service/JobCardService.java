@@ -132,6 +132,7 @@ public class JobCardService {
 
         List<String> rowData = new ArrayList<>();
         rowData.addAll(Arrays.asList(fileData.split("\n")));
+        rowData.remove(0);
         if (rowData.size() != 0) {
             List<JobCardProgressDto> jobCardProgresses = new ArrayList<>();
             for (String row : rowData) {
