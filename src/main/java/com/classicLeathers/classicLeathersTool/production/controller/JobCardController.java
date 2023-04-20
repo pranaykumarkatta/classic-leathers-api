@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/jobCard")
@@ -41,7 +42,7 @@ public class JobCardController {
     }
 
     @GetMapping("/jobCardOverAllProgressList")
-    public ResponseEntity<List<ProductionProgressDto>> getJobCardOverAllProgressList(@RequestParam String jobCardFileName) {
+    public ResponseEntity<Map<String, List<ProductionProgressDto>>> getJobCardOverAllProgressList(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.getJobCardOverAllProgressList(jobCardFileName));
     }
 

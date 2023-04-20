@@ -1,11 +1,12 @@
 package com.classicLeathers.classicLeathersTool.production.service;
 
 import com.classicLeathers.classicLeathersTool.FileUtils;
-import com.classicLeathers.classicLeathersTool.production.model.*;
-import com.sun.org.apache.bcel.internal.generic.RET;
+import com.classicLeathers.classicLeathersTool.production.model.ArticleDto;
+import com.classicLeathers.classicLeathersTool.production.model.JobCard;
+import com.classicLeathers.classicLeathersTool.production.model.JobCardProgress;
+import com.classicLeathers.classicLeathersTool.production.model.ProductionProgressDto;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -192,8 +193,101 @@ public class JobCardService {
         return Collections.EMPTY_LIST;
     }
 
-    public List<ProductionProgressDto> getJobCardOverAllProgressList(String jobCardFileName) {
-        return null;
+    public Map<String, List<ProductionProgressDto>> getJobCardOverAllProgressList(String jobCardFileName) {
+        Map<String, List<ProductionProgressDto>> productionProgressMap = new HashMap<>();
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        //Get data from ordered quantity
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        rowData.remove(0);
+        rowData.remove(0);
+        if (rowData.size() != 0) {
+            List<ProductionProgressDto> dtoList = new ArrayList<>();
+            for (String row : rowData) {
+                ProductionProgressDto dto = new ProductionProgressDto();
+                String[] cellData = row.split(",");
+                dto.setSku(cellData[0]);
+                dto.setLeather(cellData[1]);
+                dto.setSize_40_quantity(cellData[2]);
+                dto.setSize_41_quantity(cellData[3]);
+                dto.setSize_42_quantity(cellData[4]);
+                dto.setSize_43_quantity(cellData[5]);
+                dto.setSize_44_quantity(cellData[6]);
+                dto.setSize_45_quantity(cellData[7]);
+                dto.setSize_46_quantity(cellData[8]);
+                dto.setSize_47_quantity(cellData[9]);
+
+                dtoList.add(dto);
+            }
+            productionProgressMap.put("ORDERED", dtoList);
+            productionProgressMap.put("CUTTING", getProductionProgressMap(jobCardFileName,1));
+            productionProgressMap.put("JOB WORK", getProductionProgressMap(jobCardFileName,2));
+            productionProgressMap.put("HS", getProductionProgressMap(jobCardFileName,3));
+            productionProgressMap.put("FINISHING", getProductionProgressMap(jobCardFileName,4));
+            productionProgressMap.put("PACKED", getProductionProgressMap(jobCardFileName,5));
+            productionProgressMap.put("DISPATCHED", getProductionProgressMap(jobCardFileName,6));
+        }
+        return productionProgressMap;
+    }
+
+    private List<ProductionProgressDto> getProductionProgressMap(String jobCardFileName, int sheetIndex) {
+
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, sheetIndex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        rowData.remove(0);
+        if (rowData.size() != 0) {
+            Map<String,ProductionProgressDto> map = new HashMap<>();
+            List<ProductionProgressDto> dtoList = new ArrayList<>();
+            for (String row : rowData) {
+                String[] cellData = row.split(",");
+                if (!map.keySet().contains(cellData[0]+"_"+cellData[1])){
+                    ProductionProgressDto productionProgressDto = new ProductionProgressDto();
+                    productionProgressDto.setSku(cellData[0]);
+                    productionProgressDto.setLeather(cellData[1]);
+                    productionProgressDto.setSize_40_quantity(cellData[2]);
+                    productionProgressDto.setSize_41_quantity(cellData[3]);
+                    productionProgressDto.setSize_42_quantity(cellData[4]);
+                    productionProgressDto.setSize_43_quantity(cellData[5]);
+                    productionProgressDto.setSize_44_quantity(cellData[6]);
+                    productionProgressDto.setSize_45_quantity(cellData[7]);
+                    productionProgressDto.setSize_46_quantity(cellData[8]);
+                    productionProgressDto.setSize_47_quantity(cellData[9]);
+                    map.put(cellData[0]+"_"+cellData[1],productionProgressDto);
+                }else{
+                    ProductionProgressDto productionProgressDto = map.get(cellData[0]+"_"+cellData[1]);
+                    productionProgressDto.setSku(cellData[0]);
+                    productionProgressDto.setLeather(cellData[1]);
+                    productionProgressDto.setSize_40_quantity(""+((Integer.parseInt(cellData[2]))+(Integer.parseInt(productionProgressDto.getSize_40_quantity()))));
+                    productionProgressDto.setSize_41_quantity(""+((Integer.parseInt(cellData[3]))+(Integer.parseInt(productionProgressDto.getSize_41_quantity()))));
+                    productionProgressDto.setSize_42_quantity(""+((Integer.parseInt(cellData[4]))+(Integer.parseInt(productionProgressDto.getSize_42_quantity()))));
+                    productionProgressDto.setSize_43_quantity(""+((Integer.parseInt(cellData[5]))+(Integer.parseInt(productionProgressDto.getSize_43_quantity()))));
+                    productionProgressDto.setSize_44_quantity(""+((Integer.parseInt(cellData[6]))+(Integer.parseInt(productionProgressDto.getSize_44_quantity()))));
+                    productionProgressDto.setSize_45_quantity(""+((Integer.parseInt(cellData[7]))+(Integer.parseInt(productionProgressDto.getSize_45_quantity()))));
+                    productionProgressDto.setSize_46_quantity(""+((Integer.parseInt(cellData[8]))+(Integer.parseInt(productionProgressDto.getSize_46_quantity()))));
+                    productionProgressDto.setSize_47_quantity(""+((Integer.parseInt(cellData[9]))+(Integer.parseInt(productionProgressDto.getSize_47_quantity()))));
+                    map.put(cellData[0]+"_"+cellData[1],productionProgressDto);
+                }
+            }
+
+            map.forEach((s, productionProgressDto) -> {
+                dtoList.add(productionProgressDto);
+            });
+            return dtoList;
+        }
+        return Collections.EMPTY_LIST;
     }
 
     public void saveJobCard(List<JobCard> jobCardList, String jobCardNumber,
