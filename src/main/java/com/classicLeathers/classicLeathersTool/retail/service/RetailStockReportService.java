@@ -27,22 +27,23 @@ public class RetailStockReportService {
             for (String row : rowData) {
                 String[] cellData = row.split(",");
                 DrivingShoeStockEntry drivingShoeStockEntry = new DrivingShoeStockEntry();
-                drivingShoeStockEntry.setSku(cellData[0]);
-                drivingShoeStockEntry.setLeather(cellData[1]);
-                drivingShoeStockEntry.setBrand(cellData[2]);
-                drivingShoeStockEntry.setSize_40_quantity(cellData[3]);
-                drivingShoeStockEntry.setSize_41_quantity(cellData[4]);
-                drivingShoeStockEntry.setSize_42_quantity(cellData[5]);
-                drivingShoeStockEntry.setSize_43_quantity(cellData[6]);
-                drivingShoeStockEntry.setSize_44_quantity(cellData[7]);
-                drivingShoeStockEntry.setSize_45_quantity(cellData[8]);
-                drivingShoeStockEntry.setSize_46_quantity(cellData[9]);
-                drivingShoeStockEntry.setSize_47_quantity(cellData[10]);
+                drivingShoeStockEntry.setRowNumber(cellData[0]);
+                drivingShoeStockEntry.setSku(cellData[1]);
+                drivingShoeStockEntry.setLeather(cellData[2]);
+                drivingShoeStockEntry.setBrand(cellData[3]);
+                drivingShoeStockEntry.setSize_40_quantity(cellData[4]);
+                drivingShoeStockEntry.setSize_41_quantity(cellData[5]);
+                drivingShoeStockEntry.setSize_42_quantity(cellData[6]);
+                drivingShoeStockEntry.setSize_43_quantity(cellData[7]);
+                drivingShoeStockEntry.setSize_44_quantity(cellData[8]);
+                drivingShoeStockEntry.setSize_45_quantity(cellData[9]);
+                drivingShoeStockEntry.setSize_46_quantity(cellData[10]);
+                drivingShoeStockEntry.setSize_47_quantity(cellData[11]);
                 drivingShoeStockEntry.setTotalQuantity("" + (
-                        Integer.parseInt(cellData[3]) + Integer.parseInt(cellData[4])
-                                + Integer.parseInt(cellData[5]) + Integer.parseInt(cellData[6])
-                                + Integer.parseInt(cellData[7]) + Integer.parseInt(cellData[8])
-                                + Integer.parseInt(cellData[9]) + Integer.parseInt(cellData[10])));
+                        Integer.parseInt(cellData[4]) + Integer.parseInt(cellData[5])
+                                + Integer.parseInt(cellData[6]) + Integer.parseInt(cellData[7])
+                                + Integer.parseInt(cellData[8]) + Integer.parseInt(cellData[8])
+                                + Integer.parseInt(cellData[10]) + Integer.parseInt(cellData[11])));
 
                 drivingShoeStockEntryList.add(drivingShoeStockEntry);
             }

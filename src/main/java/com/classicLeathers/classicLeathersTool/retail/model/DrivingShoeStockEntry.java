@@ -1,6 +1,7 @@
 package com.classicLeathers.classicLeathersTool.retail.model;
 
 public class DrivingShoeStockEntry {
+    private String rowNumber;
     private String sku;
     private String leather;
     private String brand;
@@ -13,6 +14,14 @@ public class DrivingShoeStockEntry {
     private String size_46_quantity;
     private String size_47_quantity;
     private String totalQuantity;
+
+    public String getRowNumber() {
+        return rowNumber;
+    }
+
+    public void setRowNumber(String rowNumber) {
+        this.rowNumber = rowNumber;
+    }
 
     public String getSku() {
         return sku;
