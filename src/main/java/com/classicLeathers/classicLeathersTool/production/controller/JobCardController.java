@@ -1,8 +1,10 @@
 package com.classicLeathers.classicLeathersTool.production.controller;
 
+import com.classicLeathers.classicLeathersTool.production.InvalidCountException;
 import com.classicLeathers.classicLeathersTool.production.model.*;
 import com.classicLeathers.classicLeathersTool.production.service.JobCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +44,7 @@ public class JobCardController {
     }
 
     @GetMapping("/jobCardOverAllProgressList")
-    public ResponseEntity<Map<String, List<ProductionProgressDto>>> getJobCardOverAllProgressList(@RequestParam String jobCardFileName) {
+    public ResponseEntity<List<OverAllJobCardProgress>> getJobCardOverAllProgressList(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.getJobCardOverAllProgressList(jobCardFileName));
     }
 
@@ -55,9 +57,14 @@ public class JobCardController {
         jobCardService.saveJobCard(jobCardList, jobCardNumber, customer, brand, poNumber, jobWorkVendor, poDate.substring(0, 15));
     }
 
-    @PostMapping(path = "/saveJobCardProgress", consumes = "application/json")
-    public void saveJobCardProgress(@RequestBody JobCardProgress jobCardProgress,
+    @PostMapping(path = "/saveJobCardProgress", consumes = "application/json", produces = "text/plain")
+    public ResponseEntity<String> saveJobCardProgress(@RequestBody JobCardProgress jobCardProgress,
                                     @RequestParam String jobCardFileName) {
-        jobCardService.saveJobCardProgress(jobCardProgress, jobCardFileName);
+        try {
+            jobCardService.saveJobCardProgress(jobCardProgress, jobCardFileName);
+            return ResponseEntity.ok("");
+        } catch (InvalidCountException e) {
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        }
     }
 }

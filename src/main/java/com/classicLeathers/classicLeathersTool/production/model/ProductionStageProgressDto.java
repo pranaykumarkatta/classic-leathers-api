@@ -1,6 +1,6 @@
 package com.classicLeathers.classicLeathersTool.production.model;
 
-public class ProductionProgressDto {
+public class ProductionStageProgressDto {
     private String sku;
     private String leather;
     private String size_40_quantity;
