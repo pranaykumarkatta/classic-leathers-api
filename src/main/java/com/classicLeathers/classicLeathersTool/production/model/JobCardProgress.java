@@ -7,6 +7,10 @@ public class JobCardProgress {
     private String size;
     private String productionStage;
     private String count;
+    private String batchNumber;
+    private String packingBoxNumber;
+    private String courierName;
+    private String trackingNumber;
 
     public String getDate() {
         return Date;
@@ -54,5 +58,37 @@ public class JobCardProgress {
 
     public void setCount(String count) {
         this.count = count;
+    }
+
+    public String getBatchNumber() {
+        return batchNumber;
+    }
+
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber;
+    }
+
+    public String getPackingBoxNumber() {
+        return packingBoxNumber;
+    }
+
+    public void setPackingBoxNumber(String packingBoxNumber) {
+        this.packingBoxNumber = packingBoxNumber;
+    }
+
+    public String getCourierName() {
+        return courierName;
+    }
+
+    public void setCourierName(String courierName) {
+        this.courierName = courierName;
+    }
+
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
     }
 }
