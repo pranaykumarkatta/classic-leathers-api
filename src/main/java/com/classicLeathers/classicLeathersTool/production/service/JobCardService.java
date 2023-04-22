@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JobCardService {
@@ -122,7 +123,7 @@ public class JobCardService {
         jobCardProgressDtos.addAll(getJobCardProgress(jobCardFileName, "FINISHING", 4));
         jobCardProgressDtos.addAll(getJobCardProgress(jobCardFileName, "PACKING", 5));
         jobCardProgressDtos.addAll(getJobCardProgress(jobCardFileName, "DISPATCH", 6));
-        return jobCardProgressDtos;
+        return jobCardProgressDtos.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
     }
 
     private List<JobCardProgress> getJobCardProgress(String jobCardFileName, String productionStage, Integer sheetIndex) {

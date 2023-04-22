@@ -1,6 +1,8 @@
 package com.classicLeathers.classicLeathersTool.production.model;
 
-public class JobCardProgress {
+import java.util.Date;
+
+public class JobCardProgress implements Comparable{
     private String Date;
     private String sku;
     private String leather;
@@ -90,5 +92,19 @@ public class JobCardProgress {
 
     public void setTrackingNumber(String trackingNumber) {
         this.trackingNumber = trackingNumber;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        java.util.Date thisDate = new Date(this.getDate());
+        Date oDate = new Date(((JobCardProgress) o).getDate());
+        if (thisDate.after(oDate) || ((thisDate.equals(oDate)))) {
+            return 1;
+        }
+        if (thisDate.before(oDate) || ((thisDate.equals(oDate)))) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

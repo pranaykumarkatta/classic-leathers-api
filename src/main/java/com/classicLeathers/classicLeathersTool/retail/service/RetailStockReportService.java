@@ -21,9 +21,9 @@ public class RetailStockReportService {
 
         List<String> rowData = new ArrayList<>();
         rowData.addAll(Arrays.asList(fileData.split("\n")));
+        List<DrivingShoeStockEntry> drivingShoeStockEntryList = new ArrayList<>();
         if (rowData.size() != 0) {
             rowData.remove(0);//Remove header data
-            List<DrivingShoeStockEntry> drivingShoeStockEntryList = new ArrayList<>();
             for (String row : rowData) {
                 String[] cellData = row.split(",");
                 DrivingShoeStockEntry drivingShoeStockEntry = new DrivingShoeStockEntry();
@@ -50,6 +50,8 @@ public class RetailStockReportService {
 
             return drivingShoeStockEntryList;
         }
-        return Collections.emptyList();
+        //Deduct sales data from stock
+
+        return drivingShoeStockEntryList;
     }
 }
