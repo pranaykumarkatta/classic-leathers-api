@@ -1,5 +1,7 @@
 package com.classicLeathers.classicLeathersTool.production.model;
 
+import java.util.List;
+
 public class OverAllJobCardProgress {
     private String sku;
     private String leather;
@@ -9,56 +11,48 @@ public class OverAllJobCardProgress {
     private Integer size_40_hs_quantity;
     private Integer size_40_finished_quantity;
     private Integer size_40_packed_quantity;
-    private Integer size_40_dispatched_quantity;
     private Integer size_41_ordered_quantity;
     private Integer size_41_cutting_quantity;
     private Integer size_41_upperMaking_quantity;
     private Integer size_41_hs_quantity;
     private Integer size_41_finished_quantity;
     private Integer size_41_packed_quantity;
-    private Integer size_41_dispatched_quantity;
     private Integer size_42_ordered_quantity;
     private Integer size_42_cutting_quantity;
     private Integer size_42_upperMaking_quantity;
     private Integer size_42_hs_quantity;
     private Integer size_42_finished_quantity;
     private Integer size_42_packed_quantity;
-    private Integer size_42_dispatched_quantity;
     private Integer size_43_ordered_quantity;
     private Integer size_43_cutting_quantity;
     private Integer size_43_upperMaking_quantity;
     private Integer size_43_hs_quantity;
     private Integer size_43_finished_quantity;
     private Integer size_43_packed_quantity;
-    private Integer size_43_dispatched_quantity;
     private Integer size_44_ordered_quantity;
     private Integer size_44_cutting_quantity;
     private Integer size_44_upperMaking_quantity;
     private Integer size_44_hs_quantity;
     private Integer size_44_finished_quantity;
     private Integer size_44_packed_quantity;
-    private Integer size_44_dispatched_quantity;
     private Integer size_45_ordered_quantity;
     private Integer size_45_cutting_quantity;
     private Integer size_45_upperMaking_quantity;
     private Integer size_45_hs_quantity;
     private Integer size_45_finished_quantity;
     private Integer size_45_packed_quantity;
-    private Integer size_45_dispatched_quantity;
     private Integer size_46_ordered_quantity;
     private Integer size_46_cutting_quantity;
     private Integer size_46_upperMaking_quantity;
     private Integer size_46_hs_quantity;
     private Integer size_46_finished_quantity;
     private Integer size_46_packed_quantity;
-    private Integer size_46_dispatched_quantity;
     private Integer size_47_ordered_quantity;
     private Integer size_47_cutting_quantity;
     private Integer size_47_upperMaking_quantity;
     private Integer size_47_hs_quantity;
     private Integer size_47_finished_quantity;
     private Integer size_47_packed_quantity;
-    private Integer size_47_dispatched_quantity;
 
     public String getSku() {
         return sku;
@@ -124,14 +118,6 @@ public class OverAllJobCardProgress {
         this.size_40_packed_quantity = size_40_packed_quantity;
     }
 
-    public Integer getSize_40_dispatched_quantity() {
-        return size_40_dispatched_quantity;
-    }
-
-    public void setSize_40_dispatched_quantity(Integer size_40_dispatched_quantity) {
-        this.size_40_dispatched_quantity = size_40_dispatched_quantity;
-    }
-
     public Integer getSize_41_ordered_quantity() {
         return size_41_ordered_quantity;
     }
@@ -178,14 +164,6 @@ public class OverAllJobCardProgress {
 
     public void setSize_41_packed_quantity(Integer size_41_packed_quantity) {
         this.size_41_packed_quantity = size_41_packed_quantity;
-    }
-
-    public Integer getSize_41_dispatched_quantity() {
-        return size_41_dispatched_quantity;
-    }
-
-    public void setSize_41_dispatched_quantity(Integer size_41_dispatched_quantity) {
-        this.size_41_dispatched_quantity = size_41_dispatched_quantity;
     }
 
     public Integer getSize_42_ordered_quantity() {
@@ -236,14 +214,6 @@ public class OverAllJobCardProgress {
         this.size_42_packed_quantity = size_42_packed_quantity;
     }
 
-    public Integer getSize_42_dispatched_quantity() {
-        return size_42_dispatched_quantity;
-    }
-
-    public void setSize_42_dispatched_quantity(Integer size_42_dispatched_quantity) {
-        this.size_42_dispatched_quantity = size_42_dispatched_quantity;
-    }
-
     public Integer getSize_43_ordered_quantity() {
         return size_43_ordered_quantity;
     }
@@ -290,14 +260,6 @@ public class OverAllJobCardProgress {
 
     public void setSize_43_packed_quantity(Integer size_43_packed_quantity) {
         this.size_43_packed_quantity = size_43_packed_quantity;
-    }
-
-    public Integer getSize_43_dispatched_quantity() {
-        return size_43_dispatched_quantity;
-    }
-
-    public void setSize_43_dispatched_quantity(Integer size_43_dispatched_quantity) {
-        this.size_43_dispatched_quantity = size_43_dispatched_quantity;
     }
 
     public Integer getSize_44_ordered_quantity() {
@@ -348,14 +310,6 @@ public class OverAllJobCardProgress {
         this.size_44_packed_quantity = size_44_packed_quantity;
     }
 
-    public Integer getSize_44_dispatched_quantity() {
-        return size_44_dispatched_quantity;
-    }
-
-    public void setSize_44_dispatched_quantity(Integer size_44_dispatched_quantity) {
-        this.size_44_dispatched_quantity = size_44_dispatched_quantity;
-    }
-
     public Integer getSize_45_ordered_quantity() {
         return size_45_ordered_quantity;
     }
@@ -402,14 +356,6 @@ public class OverAllJobCardProgress {
 
     public void setSize_45_packed_quantity(Integer size_45_packed_quantity) {
         this.size_45_packed_quantity = size_45_packed_quantity;
-    }
-
-    public Integer getSize_45_dispatched_quantity() {
-        return size_45_dispatched_quantity;
-    }
-
-    public void setSize_45_dispatched_quantity(Integer size_45_dispatched_quantity) {
-        this.size_45_dispatched_quantity = size_45_dispatched_quantity;
     }
 
     public Integer getSize_46_ordered_quantity() {
@@ -460,14 +406,6 @@ public class OverAllJobCardProgress {
         this.size_46_packed_quantity = size_46_packed_quantity;
     }
 
-    public Integer getSize_46_dispatched_quantity() {
-        return size_46_dispatched_quantity;
-    }
-
-    public void setSize_46_dispatched_quantity(Integer size_46_dispatched_quantity) {
-        this.size_46_dispatched_quantity = size_46_dispatched_quantity;
-    }
-
     public Integer getSize_47_ordered_quantity() {
         return size_47_ordered_quantity;
     }
@@ -514,13 +452,5 @@ public class OverAllJobCardProgress {
 
     public void setSize_47_packed_quantity(Integer size_47_packed_quantity) {
         this.size_47_packed_quantity = size_47_packed_quantity;
-    }
-
-    public Integer getSize_47_dispatched_quantity() {
-        return size_47_dispatched_quantity;
-    }
-
-    public void setSize_47_dispatched_quantity(Integer size_47_dispatched_quantity) {
-        this.size_47_dispatched_quantity = size_47_dispatched_quantity;
     }
 }

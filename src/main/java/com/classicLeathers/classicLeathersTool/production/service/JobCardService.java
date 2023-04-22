@@ -138,7 +138,7 @@ public class JobCardService {
         List<String> rowData = new ArrayList<>();
         rowData.addAll(Arrays.asList(fileData.split("\n")));
         rowData.remove(0);
-        if (rowData.size() != 0) {
+        if (rowData.size() != 0 && !productionStage.equals("DISPATCH")) {
             for (String row : rowData) {
                 String[] cellData = row.split(",");
                 if (cellData.length > 1) {
@@ -183,17 +183,35 @@ public class JobCardService {
                     jobCardProgressDto.setProductionStage(productionStage);
                     jobCardProgressDto.setCount(count);
                     jobCardProgressDto.setDate(cellData[10]);
+                    jobCardProgressDto.setBatchNumber("NA");
+                    jobCardProgressDto.setPackingBoxNumber("NA");
                     if (productionStage.equals("PACKING")) {
                         jobCardProgressDto.setBatchNumber(cellData[11]);
                         jobCardProgressDto.setPackingBoxNumber(cellData[12]);
-                    } else if (productionStage.equals("DISPATCH")) {
-                        jobCardProgressDto.setCourierName(cellData[11]);
-                        jobCardProgressDto.setTrackingNumber(cellData[12]);
                     }
+                    jobCardProgressDto.setCourierName("NA");
+                    jobCardProgressDto.setTrackingNumber("NA");
                     jobCardProgresses.add(jobCardProgressDto);
                 }
             }
             return jobCardProgresses;
+        } else {
+            for (String row : rowData) {
+                String[] cellData = row.split(",");
+                JobCardProgress jobCardProgressDto = new JobCardProgress();
+                jobCardProgressDto.setSku("NA");
+                jobCardProgressDto.setLeather("NA");
+                jobCardProgressDto.setSize("NA");
+                jobCardProgressDto.setCount("NA");
+                jobCardProgressDto.setBatchNumber("NA");
+                jobCardProgressDto.setProductionStage(productionStage);
+                jobCardProgressDto.setBatchNumber(cellData[0]);
+                jobCardProgressDto.setCourierName(cellData[1]);
+                jobCardProgressDto.setTrackingNumber(cellData[2]);
+                jobCardProgressDto.setDate(cellData[3]);
+                jobCardProgresses.add(jobCardProgressDto);
+                return jobCardProgresses;
+            }
         }
         return Collections.EMPTY_LIST;
     }
@@ -205,7 +223,6 @@ public class JobCardService {
         Map<String, ProductionStageProgressDto> hsProgressMap = getProductionProgressMap(jobCardFileName, 3);
         Map<String, ProductionStageProgressDto> finishingProgressMap = getProductionProgressMap(jobCardFileName, 4);
         Map<String, ProductionStageProgressDto> packingProgressMap = getProductionProgressMap(jobCardFileName, 5);
-        Map<String, ProductionStageProgressDto> dispatchedProgressMap = getProductionProgressMap(jobCardFileName, 6);
         String fileData = "";
         try {
             fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 0);
@@ -247,7 +264,6 @@ public class JobCardService {
             ProductionStageProgressDto hsDto = hsProgressMap.get(sku) != null ? hsProgressMap.get(sku) : new ProductionStageProgressDto();
             ProductionStageProgressDto finishingDto = finishingProgressMap.get(sku) != null ? finishingProgressMap.get(sku) : new ProductionStageProgressDto();
             ProductionStageProgressDto packedDto = packingProgressMap.get(sku) != null ? packingProgressMap.get(sku) : new ProductionStageProgressDto();
-            ProductionStageProgressDto dispatchedDto = dispatchedProgressMap.get(sku) != null ? dispatchedProgressMap.get(sku) : new ProductionStageProgressDto();
 
 
             OverAllJobCardProgress overAllJobCardProgress = new OverAllJobCardProgress();
@@ -259,7 +275,6 @@ public class JobCardService {
             overAllJobCardProgress.setSize_40_hs_quantity(hsDto.getSize_40_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_40_quantity()));
             overAllJobCardProgress.setSize_40_finished_quantity(finishingDto.getSize_40_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_40_quantity()));
             overAllJobCardProgress.setSize_40_packed_quantity(packedDto.getSize_40_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_40_quantity()));
-            overAllJobCardProgress.setSize_40_dispatched_quantity(dispatchedDto.getSize_40_quantity() == null ? 0 : Integer.parseInt(dispatchedDto.getSize_40_quantity()));
 
             overAllJobCardProgress.setSize_41_ordered_quantity(orderDto.getSize_41_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_41_quantity()));
             overAllJobCardProgress.setSize_41_cutting_quantity(cutDto.getSize_41_quantity() == null ? 0 : Integer.parseInt(cutDto.getSize_41_quantity()));
@@ -267,7 +282,6 @@ public class JobCardService {
             overAllJobCardProgress.setSize_41_hs_quantity(hsDto.getSize_41_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_41_quantity()));
             overAllJobCardProgress.setSize_41_finished_quantity(finishingDto.getSize_41_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_41_quantity()));
             overAllJobCardProgress.setSize_41_packed_quantity(packedDto.getSize_41_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_41_quantity()));
-            overAllJobCardProgress.setSize_41_dispatched_quantity(dispatchedDto.getSize_41_quantity() == null ? 0 : Integer.parseInt(dispatchedDto.getSize_41_quantity()));
 
             overAllJobCardProgress.setSize_42_ordered_quantity(orderDto.getSize_42_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_42_quantity()));
             overAllJobCardProgress.setSize_42_cutting_quantity(cutDto.getSize_42_quantity() == null ? 0 : Integer.parseInt(cutDto.getSize_42_quantity()));
@@ -275,7 +289,6 @@ public class JobCardService {
             overAllJobCardProgress.setSize_42_hs_quantity(hsDto.getSize_42_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_42_quantity()));
             overAllJobCardProgress.setSize_42_finished_quantity(finishingDto.getSize_42_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_42_quantity()));
             overAllJobCardProgress.setSize_42_packed_quantity(packedDto.getSize_42_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_42_quantity()));
-            overAllJobCardProgress.setSize_42_dispatched_quantity(dispatchedDto.getSize_42_quantity() == null ? 0 : Integer.parseInt(dispatchedDto.getSize_42_quantity()));
 
             overAllJobCardProgress.setSize_43_ordered_quantity(orderDto.getSize_43_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_43_quantity()));
             overAllJobCardProgress.setSize_43_cutting_quantity(cutDto.getSize_43_quantity() == null ? 0 : Integer.parseInt(cutDto.getSize_43_quantity()));
@@ -283,7 +296,6 @@ public class JobCardService {
             overAllJobCardProgress.setSize_43_hs_quantity(hsDto.getSize_43_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_43_quantity()));
             overAllJobCardProgress.setSize_43_finished_quantity(finishingDto.getSize_43_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_43_quantity()));
             overAllJobCardProgress.setSize_43_packed_quantity(packedDto.getSize_43_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_43_quantity()));
-            overAllJobCardProgress.setSize_43_dispatched_quantity(dispatchedDto.getSize_43_quantity() == null ? 0 : Integer.parseInt(dispatchedDto.getSize_43_quantity()));
 
 
             overAllJobCardProgress.setSize_44_ordered_quantity(orderDto.getSize_44_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_44_quantity()));
@@ -292,7 +304,6 @@ public class JobCardService {
             overAllJobCardProgress.setSize_44_hs_quantity(hsDto.getSize_44_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_44_quantity()));
             overAllJobCardProgress.setSize_44_finished_quantity(finishingDto.getSize_44_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_44_quantity()));
             overAllJobCardProgress.setSize_44_packed_quantity(packedDto.getSize_44_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_44_quantity()));
-            overAllJobCardProgress.setSize_44_dispatched_quantity(dispatchedDto.getSize_44_quantity() == null ? 0 : Integer.parseInt(dispatchedDto.getSize_44_quantity()));
 
             overAllJobCardProgress.setSize_45_ordered_quantity(orderDto.getSize_45_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_45_quantity()));
             overAllJobCardProgress.setSize_45_cutting_quantity(cutDto.getSize_45_quantity() == null ? 0 : Integer.parseInt(cutDto.getSize_45_quantity()));
@@ -300,7 +311,6 @@ public class JobCardService {
             overAllJobCardProgress.setSize_45_hs_quantity(hsDto.getSize_45_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_45_quantity()));
             overAllJobCardProgress.setSize_45_finished_quantity(finishingDto.getSize_45_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_45_quantity()));
             overAllJobCardProgress.setSize_45_packed_quantity(packedDto.getSize_45_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_45_quantity()));
-            overAllJobCardProgress.setSize_45_dispatched_quantity(dispatchedDto.getSize_45_quantity() == null ? 0 : Integer.parseInt(dispatchedDto.getSize_45_quantity()));
 
             overAllJobCardProgress.setSize_46_ordered_quantity(orderDto.getSize_46_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_46_quantity()));
             overAllJobCardProgress.setSize_46_cutting_quantity(cutDto.getSize_46_quantity() == null ? 0 : Integer.parseInt(cutDto.getSize_46_quantity()));
@@ -308,7 +318,6 @@ public class JobCardService {
             overAllJobCardProgress.setSize_46_hs_quantity(hsDto.getSize_46_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_46_quantity()));
             overAllJobCardProgress.setSize_46_finished_quantity(finishingDto.getSize_46_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_46_quantity()));
             overAllJobCardProgress.setSize_46_packed_quantity(packedDto.getSize_46_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_46_quantity()));
-            overAllJobCardProgress.setSize_46_dispatched_quantity(dispatchedDto.getSize_46_quantity() == null ? 0 : Integer.parseInt(dispatchedDto.getSize_46_quantity()));
 
             overAllJobCardProgress.setSize_47_ordered_quantity(orderDto.getSize_47_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_47_quantity()));
             overAllJobCardProgress.setSize_47_cutting_quantity(cutDto.getSize_47_quantity() == null ? 0 : Integer.parseInt(cutDto.getSize_47_quantity()));
@@ -316,7 +325,6 @@ public class JobCardService {
             overAllJobCardProgress.setSize_47_hs_quantity(hsDto.getSize_47_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_47_quantity()));
             overAllJobCardProgress.setSize_47_finished_quantity(finishingDto.getSize_47_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_47_quantity()));
             overAllJobCardProgress.setSize_47_packed_quantity(packedDto.getSize_47_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_47_quantity()));
-            overAllJobCardProgress.setSize_47_dispatched_quantity(dispatchedDto.getSize_47_quantity() == null ? 0 : Integer.parseInt(dispatchedDto.getSize_47_quantity()));
 
             overAllJobCardProgressList.add(overAllJobCardProgress);
 
@@ -473,102 +481,116 @@ public class JobCardService {
     private void createProductionProgressSheets(XSSFWorkbook wb, String sheetName) {
         Sheet sheet = wb.createSheet(sheetName);
         XSSFRow row = (XSSFRow) sheet.createRow(0);
-        Cell cell = row.createCell(0);
-        cell.setCellValue("SKU");
-        Cell cell1 = row.createCell(1);
-        cell1.setCellValue("LEATHER");
-        Cell cell2 = row.createCell(2);
-        cell2.setCellValue("40");
-        Cell cell3 = row.createCell(3);
-        cell3.setCellValue("41");
-        Cell cell4 = row.createCell(4);
-        cell4.setCellValue("42");
-        Cell cell5 = row.createCell(5);
-        cell5.setCellValue("43");
-        Cell cell6 = row.createCell(6);
-        cell6.setCellValue("44");
-        Cell cell7 = row.createCell(7);
-        cell7.setCellValue("45");
-        Cell cell8 = row.createCell(8);
-        cell8.setCellValue("46");
-        Cell cell9 = row.createCell(9);
-        cell9.setCellValue("47");
-        Cell cell10 = row.createCell(10);
-        cell10.setCellValue("DATE");
-        if (sheetName.equals("PACKING")) {
-            Cell cell11 = row.createCell(11);
-            cell11.setCellValue("BATCH_NUMBER");
-            Cell cell12 = row.createCell(12);
-            cell12.setCellValue("BOX_NUMBER");
-        }
         if (sheetName.equals("DISPATCH")) {
-            Cell cell11 = row.createCell(11);
-            cell11.setCellValue("COURIER NAME");
-            Cell cell12 = row.createCell(12);
-            cell12.setCellValue("TRACKING NUMBER");
+            Cell cell0 = row.createCell(0);
+            cell0.setCellValue("BATCH NUMBER");
+            Cell cell1 = row.createCell(1);
+            cell1.setCellValue("COURIER NAME");
+            Cell cell2 = row.createCell(2);
+            cell2.setCellValue("TRACKING NUMBER");
+            Cell cell3 = row.createCell(3);
+            cell3.setCellValue("DATE");
+        } else {
+            Cell cell = row.createCell(0);
+            cell.setCellValue("SKU");
+            Cell cell1 = row.createCell(1);
+            cell1.setCellValue("LEATHER");
+            Cell cell2 = row.createCell(2);
+            cell2.setCellValue("40");
+            Cell cell3 = row.createCell(3);
+            cell3.setCellValue("41");
+            Cell cell4 = row.createCell(4);
+            cell4.setCellValue("42");
+            Cell cell5 = row.createCell(5);
+            cell5.setCellValue("43");
+            Cell cell6 = row.createCell(6);
+            cell6.setCellValue("44");
+            Cell cell7 = row.createCell(7);
+            cell7.setCellValue("45");
+            Cell cell8 = row.createCell(8);
+            cell8.setCellValue("46");
+            Cell cell9 = row.createCell(9);
+            cell9.setCellValue("47");
+            Cell cell10 = row.createCell(10);
+            cell10.setCellValue("DATE");
+            if (sheetName.equals("PACKING")) {
+                Cell cell11 = row.createCell(11);
+                cell11.setCellValue("BATCH_NUMBER");
+                Cell cell12 = row.createCell(12);
+                cell12.setCellValue("BOX_NUMBER");
+            }
         }
     }
 
-    public void saveJobCardProgress(JobCardProgress jobCardProgress, String jobCardFileName) throws InvalidCountException {
-        validateJobCardProgressEntry(jobCardProgress, jobCardFileName);
-        if (jobCardProgress.getProductionStage().equals("PACKING"))
-            validatePackingDetails(jobCardProgress, jobCardFileName);
+    public void saveJobCardProgress(JobCardProgress jobCardProgress, String jobCardFileName) throws
+            InvalidCountException {
         Object[] data;
-        if (jobCardProgress.getSize().equals("40")) {
-            data = new Object[]{jobCardProgress.getSku(),
-                    jobCardProgress.getLeather(),
-                    jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0", "0",
-                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                    "", ""
-            };
-        } else if (jobCardProgress.getSize().equals("41")) {
-            data = new Object[]{jobCardProgress.getSku(),
-                    jobCardProgress.getLeather(),
-                    "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0",
-                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                    "", ""
-            };
-        } else if (jobCardProgress.getSize().equals("42")) {
-            data = new Object[]{jobCardProgress.getSku(),
-                    jobCardProgress.getLeather(),
-                    "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0",
-                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                    "", ""
-            };
-        } else if (jobCardProgress.getSize().equals("43")) {
-            data = new Object[]{jobCardProgress.getSku(),
-                    jobCardProgress.getLeather(),
-                    "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0",
-                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                    "", ""
-            };
-        } else if (jobCardProgress.getSize().equals("44")) {
-            data = new Object[]{jobCardProgress.getSku(),
-                    jobCardProgress.getLeather(),
-                    "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0",
-                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                    "", ""
-            };
-        } else if (jobCardProgress.getSize().equals("45")) {
-            data = new Object[]{jobCardProgress.getSku(),
-                    jobCardProgress.getLeather(),
-                    "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0",
-                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                    "", ""
-            };
-        } else if (jobCardProgress.getSize().equals("46")) {
-            data = new Object[]{jobCardProgress.getSku(),
-                    jobCardProgress.getLeather(),
-                    "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0",
-                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                    "", ""
-            };
+        if (!jobCardProgress.getProductionStage().equals("DISPATCH")) {
+            validateJobCardProgressEntry(jobCardProgress, jobCardFileName);
+            if (jobCardProgress.getProductionStage().equals("PACKING"))
+                validatePackingDetails(jobCardProgress, jobCardFileName);
+            if (jobCardProgress.getSize().equals("40")) {
+                data = new Object[]{jobCardProgress.getSku(),
+                        jobCardProgress.getLeather(),
+                        jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0", "0",
+                        new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                        "", ""
+                };
+            } else if (jobCardProgress.getSize().equals("41")) {
+                data = new Object[]{jobCardProgress.getSku(),
+                        jobCardProgress.getLeather(),
+                        "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0",
+                        new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                        "", ""
+                };
+            } else if (jobCardProgress.getSize().equals("42")) {
+                data = new Object[]{jobCardProgress.getSku(),
+                        jobCardProgress.getLeather(),
+                        "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0",
+                        new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                        "", ""
+                };
+            } else if (jobCardProgress.getSize().equals("43")) {
+                data = new Object[]{jobCardProgress.getSku(),
+                        jobCardProgress.getLeather(),
+                        "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0",
+                        new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                        "", ""
+                };
+            } else if (jobCardProgress.getSize().equals("44")) {
+                data = new Object[]{jobCardProgress.getSku(),
+                        jobCardProgress.getLeather(),
+                        "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0",
+                        new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                        "", ""
+                };
+            } else if (jobCardProgress.getSize().equals("45")) {
+                data = new Object[]{jobCardProgress.getSku(),
+                        jobCardProgress.getLeather(),
+                        "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0",
+                        new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                        "", ""
+                };
+            } else if (jobCardProgress.getSize().equals("46")) {
+                data = new Object[]{jobCardProgress.getSku(),
+                        jobCardProgress.getLeather(),
+                        "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0",
+                        new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                        "", ""
+                };
+            } else {
+                data = new Object[]{jobCardProgress.getSku(),
+                        jobCardProgress.getLeather(),
+                        "0", "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(),
+                        new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                        "", ""
+                };
+            }
         } else {
-            data = new Object[]{jobCardProgress.getSku(),
-                    jobCardProgress.getLeather(),
-                    "0", "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(),
-                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                    "", ""
+            data = new Object[]{jobCardProgress.getBatchNumber(),
+                    jobCardProgress.getCourierName(),
+                    jobCardProgress.getTrackingNumber(),
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date())
             };
         }
 
@@ -587,12 +609,10 @@ public class JobCardService {
             }
             if (jobCardProgress.getProductionStage().equals("PACKING")) {
                 data[11] = jobCardProgress.getBatchNumber();
-                data[12] = jobCardProgress.getBatchNumber();
+                data[12] = jobCardProgress.getPackingBoxNumber();
                 new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 5, data);
             }
             if (jobCardProgress.getProductionStage().equals("DISPATCH")) {
-                data[11] = jobCardProgress.getCourierName();
-                data[12] = jobCardProgress.getTrackingNumber();
                 new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 6, data);
             }
         } catch (
@@ -601,7 +621,8 @@ public class JobCardService {
         }
     }
 
-    private void validateJobCardProgressEntry(JobCardProgress jobCardProgress, String jobCardFileName) throws InvalidCountException {
+    private void validateJobCardProgressEntry(JobCardProgress jobCardProgress, String jobCardFileName) throws
+            InvalidCountException {
 
         for (OverAllJobCardProgress overAllJobCardProgress : getJobCardOverAllProgressList(jobCardFileName)) {
             if (jobCardProgress.getSku().equals(overAllJobCardProgress.getSku()) &&
@@ -951,126 +972,18 @@ public class JobCardService {
                                 break;
                         }
                         break;
-                    case "DISPATCH":
-                        switch (jobCardProgress.getSize()) {
-
-                            case "40":
-                                if (Integer.parseInt(jobCardProgress.getCount()) >
-                                        overAllJobCardProgress.getSize_40_packed_quantity()
-                                                - overAllJobCardProgress.getSize_40_dispatched_quantity()) {
-                                    throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_40_packed_quantity()
-                                            - overAllJobCardProgress.getSize_40_dispatched_quantity()) + " for the selection");
-                                }
-                                break;
-                            case "41":
-                                if (Integer.parseInt(jobCardProgress.getCount()) >
-                                        overAllJobCardProgress.getSize_41_packed_quantity()
-                                                - overAllJobCardProgress.getSize_41_dispatched_quantity()) {
-                                    throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_41_packed_quantity()
-                                            - overAllJobCardProgress.getSize_41_dispatched_quantity()) + " for the selection");
-                                }
-                                break;
-                            case "42":
-                                if (Integer.parseInt(jobCardProgress.getCount()) >
-                                        overAllJobCardProgress.getSize_42_packed_quantity()
-                                                - overAllJobCardProgress.getSize_42_dispatched_quantity()) {
-                                    throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_42_packed_quantity()
-                                            - overAllJobCardProgress.getSize_42_dispatched_quantity()) + " for the selection");
-                                }
-                                break;
-                            case "43":
-                                if (Integer.parseInt(jobCardProgress.getCount()) >
-                                        overAllJobCardProgress.getSize_43_packed_quantity()
-                                                - overAllJobCardProgress.getSize_43_dispatched_quantity()) {
-                                    throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_43_packed_quantity()
-                                            - overAllJobCardProgress.getSize_43_dispatched_quantity()) + " for the selection");
-                                }
-                                break;
-                            case "44":
-                                if (Integer.parseInt(jobCardProgress.getCount()) >
-                                        overAllJobCardProgress.getSize_44_packed_quantity()
-                                                - overAllJobCardProgress.getSize_44_dispatched_quantity()) {
-                                    throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_44_packed_quantity()
-                                            - overAllJobCardProgress.getSize_44_dispatched_quantity()) + " for the selection");
-                                }
-                                break;
-                            case "45":
-                                if (Integer.parseInt(jobCardProgress.getCount()) >
-                                        overAllJobCardProgress.getSize_45_packed_quantity()
-                                                - overAllJobCardProgress.getSize_45_dispatched_quantity()) {
-                                    throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_45_packed_quantity()
-                                            - overAllJobCardProgress.getSize_45_dispatched_quantity()) + " for the selection");
-                                }
-                                break;
-                            case "46":
-                                if (Integer.parseInt(jobCardProgress.getCount()) >
-                                        overAllJobCardProgress.getSize_46_packed_quantity()
-                                                - overAllJobCardProgress.getSize_46_dispatched_quantity()) {
-                                    throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_46_packed_quantity()
-                                            - overAllJobCardProgress.getSize_46_dispatched_quantity()) + " for the selection");
-                                }
-                                break;
-                            case "47":
-                                if (Integer.parseInt(jobCardProgress.getCount()) >
-                                        overAllJobCardProgress.getSize_47_packed_quantity()
-                                                - overAllJobCardProgress.getSize_47_dispatched_quantity()) {
-                                    throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_47_packed_quantity()
-                                            - overAllJobCardProgress.getSize_47_dispatched_quantity()) + " for the selection");
-                                }
-                                break;
-                        }
-                        break;
                 }
 
             }
         }
     }
 
-    private void validatePackingDetails(JobCardProgress jobCardProgress, String jobCardFileName) throws InvalidCountException {
+    private void validatePackingDetails(JobCardProgress jobCardProgress, String jobCardFileName) throws
+            InvalidCountException {
         if (Integer.parseInt(jobCardProgress.getCount()) > 15) {
             throw new InvalidCountException("Invalid Count. Expected value <= 15 for each box");
         } else {
-            String fileData = "";
-            try {
-                fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 5);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            List<String> rowData = new ArrayList<>();
-            rowData.addAll(Arrays.asList(fileData.split("\n")));
-            rowData.remove(0);
-            Map<String, Integer> boxVolumeCountMap = new HashMap<>();
-            if (rowData.size() != 0) {
-                for (String row : rowData) {
-                    String[] cellData = row.split(",");
-                    if (!boxVolumeCountMap.keySet().contains(cellData[11] + "_" + cellData[12])) {
-                        Integer unitBoxCount = 0;
-                        unitBoxCount += Integer.parseInt(cellData[2]);
-                        unitBoxCount += Integer.parseInt(cellData[3]);
-                        unitBoxCount += Integer.parseInt(cellData[4]);
-                        unitBoxCount += Integer.parseInt(cellData[5]);
-                        unitBoxCount += Integer.parseInt(cellData[6]);
-                        unitBoxCount += Integer.parseInt(cellData[7]);
-                        unitBoxCount += Integer.parseInt(cellData[8]);
-                        unitBoxCount += Integer.parseInt(cellData[9]);
-                        boxVolumeCountMap.put(cellData[11] + "_" + cellData[12], unitBoxCount);
-                    } else {
-                        Integer unitBoxCount = boxVolumeCountMap.get(cellData[11] + "_" + cellData[12]);
-                        unitBoxCount += Integer.parseInt(cellData[2]);
-                        unitBoxCount += Integer.parseInt(cellData[3]);
-                        unitBoxCount += Integer.parseInt(cellData[4]);
-                        unitBoxCount += Integer.parseInt(cellData[5]);
-                        unitBoxCount += Integer.parseInt(cellData[6]);
-                        unitBoxCount += Integer.parseInt(cellData[7]);
-                        unitBoxCount += Integer.parseInt(cellData[8]);
-                        unitBoxCount += Integer.parseInt(cellData[9]);
-
-                        boxVolumeCountMap.put(cellData[11] + "_" + cellData[12], unitBoxCount);
-                    }
-                }
-            }
-
+            Map<String, Integer> boxVolumeCountMap = getPackingBoxDetails(jobCardFileName);
             if (boxVolumeCountMap.keySet().contains(jobCardProgress.getBatchNumber() + "_" + jobCardProgress.getPackingBoxNumber())
                     && ((boxVolumeCountMap.get(jobCardProgress.getBatchNumber() + "_" + jobCardProgress.getPackingBoxNumber())
                     + Integer.parseInt(jobCardProgress.getCount())) > 15)) {
@@ -1078,5 +991,49 @@ public class JobCardService {
                         (15 - Integer.parseInt(jobCardProgress.getCount())) + " for the box " + jobCardProgress.getPackingBoxNumber() + " in batch " + jobCardProgress.getBatchNumber());
             }
         }
+    }
+
+    private Map<String, Integer> getPackingBoxDetails(String jobCardFileName) {
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 5);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        rowData.remove(0);
+        Map<String, Integer> boxVolumeCountMap = new HashMap<>();
+        if (rowData.size() != 0) {
+            for (String row : rowData) {
+                String[] cellData = row.split(",");
+                if (!boxVolumeCountMap.keySet().contains(cellData[11] + "_" + cellData[12])) {
+                    Integer unitBoxCount = 0;
+                    unitBoxCount += Integer.parseInt(cellData[2]);
+                    unitBoxCount += Integer.parseInt(cellData[3]);
+                    unitBoxCount += Integer.parseInt(cellData[4]);
+                    unitBoxCount += Integer.parseInt(cellData[5]);
+                    unitBoxCount += Integer.parseInt(cellData[6]);
+                    unitBoxCount += Integer.parseInt(cellData[7]);
+                    unitBoxCount += Integer.parseInt(cellData[8]);
+                    unitBoxCount += Integer.parseInt(cellData[9]);
+                    boxVolumeCountMap.put(cellData[11] + "_" + cellData[12], unitBoxCount);
+                } else {
+                    Integer unitBoxCount = boxVolumeCountMap.get(cellData[11] + "_" + cellData[12]);
+                    unitBoxCount += Integer.parseInt(cellData[2]);
+                    unitBoxCount += Integer.parseInt(cellData[3]);
+                    unitBoxCount += Integer.parseInt(cellData[4]);
+                    unitBoxCount += Integer.parseInt(cellData[5]);
+                    unitBoxCount += Integer.parseInt(cellData[6]);
+                    unitBoxCount += Integer.parseInt(cellData[7]);
+                    unitBoxCount += Integer.parseInt(cellData[8]);
+                    unitBoxCount += Integer.parseInt(cellData[9]);
+
+                    boxVolumeCountMap.put(cellData[11] + "_" + cellData[12], unitBoxCount);
+                }
+            }
+        }
+        return boxVolumeCountMap;
     }
 }
