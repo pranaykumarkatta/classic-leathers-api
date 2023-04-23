@@ -387,7 +387,7 @@ public class JobCardService {
                             String customer, String brand,
                             String poNumber, String jobWorkVendor,
                             String poDate) {
-        String fileName = "JOBCARD_" + jobCardNumber + "_" + customer + "_" + poNumber;
+        String fileName = "JOBCARD_" + jobCardNumber + "_" + customer + "_" + brand + "_" + poNumber;
         try {
             createJobCard("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + fileName + ".xlsx",
                     customer, brand, poNumber, jobWorkVendor, poDate);
@@ -587,6 +587,7 @@ public class JobCardService {
                 };
             }
         } else {
+            validateDispatchEntry(jobCardProgress.getBatchNumber(),jobCardFileName);
             data = new Object[]{jobCardProgress.getBatchNumber(),
                     jobCardProgress.getCourierName(),
                     jobCardProgress.getTrackingNumber(),
@@ -619,6 +620,29 @@ public class JobCardService {
                 Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void validateDispatchEntry(String batchNumber, String jobCardFileName) throws InvalidCountException {
+        List<JobCardProgress> packingJobCardProgressList = getJobCardProgress(jobCardFileName, "PACKING", 5);
+        Map<String, JobCardProgress> packingJobCardProgressMap = new HashMap<>();
+        packingJobCardProgressList.forEach(jobCardProgress -> {
+            String jobCardKey=jobCardProgress.getBatchNumber()+jobCardProgress.getPackingBoxNumber();
+            if (packingJobCardProgressMap.get(jobCardKey) != null) {
+                JobCardProgress existingEntry = packingJobCardProgressMap.get(jobCardKey);
+                existingEntry.setCount("" + ((Integer.parseInt(existingEntry.getCount())) + Integer.parseInt(jobCardProgress.getCount())));
+
+            } else {
+                packingJobCardProgressMap.put(jobCardKey, jobCardProgress);
+            }
+        });
+        List<String> invalidBoxDetailsList=new ArrayList<>();
+        packingJobCardProgressMap.values().forEach(jobCardProgress -> {
+            if (Integer.parseInt(jobCardProgress.getCount())<15 && batchNumber.equals(jobCardProgress.getBatchNumber())){
+                invalidBoxDetailsList.add(jobCardProgress.getPackingBoxNumber()+" : contains "+jobCardProgress.getCount()+" Pairs");
+            }
+        });
+        if (invalidBoxDetailsList.size()>0)
+            throw new InvalidCountException("Boxes has < 15 Pairs : \n"+invalidBoxDetailsList.toString());
     }
 
     private void validateJobCardProgressEntry(JobCardProgress jobCardProgress, String jobCardFileName) throws
@@ -1035,5 +1059,121 @@ public class JobCardService {
             }
         }
         return boxVolumeCountMap;
+    }
+
+    public List<PackingListEntry> getPackingList(String jobCardFileName) {
+
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 6);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        List<JobCardProgress> dispatchJobCardProgressList = new ArrayList<>();
+        if (rowData.size() != 0) {
+            rowData.remove(0);//Remove header data
+            for (String row : rowData) {
+                JobCardProgress jobCardProgress = new JobCardProgress();
+                String[] cellData = row.split(",");
+                jobCardProgress.setBatchNumber(cellData[0]);
+                jobCardProgress.setCourierName(cellData[1]);
+                jobCardProgress.setTrackingNumber(cellData[2]);
+                jobCardProgress.setDate(cellData[3]);
+                dispatchJobCardProgressList.add(jobCardProgress);
+            }
+        }
+
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, 5);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Map<String, List<PackingListEntry>> batchMap = new HashMap<>();
+        rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        for (String row : rowData) {
+            String[] cellData = row.split(",");
+            if (batchMap.get(cellData[11]) != null) {
+                List<PackingListEntry> packingListEntryList = batchMap.get(cellData[11]);
+                PackingListEntry packingListEntry = new PackingListEntry();
+                packingListEntry.setSku(cellData[0]);
+                packingListEntry.setLeather(cellData[1]);
+                packingListEntry.setSize_40_quantity(cellData[2]);
+                packingListEntry.setSize_41_quantity(cellData[3]);
+                packingListEntry.setSize_42_quantity(cellData[4]);
+                packingListEntry.setSize_43_quantity(cellData[5]);
+                packingListEntry.setSize_44_quantity(cellData[6]);
+                packingListEntry.setSize_45_quantity(cellData[7]);
+                packingListEntry.setSize_46_quantity(cellData[8]);
+                packingListEntry.setSize_47_quantity(cellData[9]);
+
+                packingListEntry.setTotal(""+((Integer.parseInt(cellData[2])+(Integer.parseInt(cellData[3]))+
+                        (Integer.parseInt(cellData[4]))+(Integer.parseInt(cellData[5]))+(Integer.parseInt(cellData[6]))+
+                        (Integer.parseInt(cellData[7]))+(Integer.parseInt(cellData[8]))+(Integer.parseInt(cellData[9])))));
+                packingListEntry.setBatchNumber(cellData[11]);
+                packingListEntry.setBoxNumber(cellData[12]);
+                packingListEntryList.add(packingListEntry);
+            } else {
+                List<PackingListEntry> packingListEntryList = new ArrayList<>();
+                PackingListEntry packingListEntry = new PackingListEntry();
+                packingListEntry.setSku(cellData[0]);
+                packingListEntry.setLeather(cellData[1]);
+                packingListEntry.setSize_40_quantity(cellData[2]);
+                packingListEntry.setSize_41_quantity(cellData[3]);
+                packingListEntry.setSize_42_quantity(cellData[4]);
+                packingListEntry.setSize_43_quantity(cellData[5]);
+                packingListEntry.setSize_44_quantity(cellData[6]);
+                packingListEntry.setSize_45_quantity(cellData[7]);
+                packingListEntry.setSize_46_quantity(cellData[8]);
+                packingListEntry.setSize_47_quantity(cellData[9]);
+                packingListEntry.setTotal(""+((Integer.parseInt(cellData[2])+(Integer.parseInt(cellData[3]))+
+                        (Integer.parseInt(cellData[4]))+(Integer.parseInt(cellData[5]))+(Integer.parseInt(cellData[6]))+
+                        (Integer.parseInt(cellData[7]))+(Integer.parseInt(cellData[8]))+(Integer.parseInt(cellData[9])))));
+                packingListEntry.setBatchNumber(cellData[11]);
+                packingListEntry.setBoxNumber(cellData[12]);
+                packingListEntryList.add(packingListEntry);
+                batchMap.put(cellData[11], packingListEntryList);
+            }
+        }
+
+        List<PackingListEntry> finalListEntries = new ArrayList<>();
+        String[] info = jobCardFileName.split("_");
+        dispatchJobCardProgressList.forEach(jobCardProgress -> {
+            if (batchMap.get(jobCardProgress.getBatchNumber()) != null) {
+                batchMap.get(jobCardProgress.getBatchNumber()).forEach(packingListEntry -> {
+                    PackingListEntry entry = packingListEntry;
+                    entry.setCourierName(jobCardProgress.getCourierName());
+                    entry.setTrackingNumber(jobCardProgress.getTrackingNumber());
+                    entry.setShippedDate(jobCardProgress.getDate());
+                    entry.setBrand(info[3]);
+                    entry.setPoNumber(info[4]);
+                    finalListEntries.add(entry);
+                });
+            }
+        });
+
+        Map<String, PackingListEntry> stringPackingListEntryMap = new HashMap<>();
+        finalListEntries.forEach(packingListEntry -> {
+            if (stringPackingListEntryMap.get(packingListEntry.toString()) != null) {
+                PackingListEntry existingEntry = stringPackingListEntryMap.get(packingListEntry.toString());
+                existingEntry.setSize_40_quantity("" + ((Integer.parseInt(existingEntry.getSize_40_quantity())) + Integer.parseInt(packingListEntry.getSize_40_quantity())));
+                existingEntry.setSize_41_quantity("" + ((Integer.parseInt(existingEntry.getSize_41_quantity())) + Integer.parseInt(packingListEntry.getSize_41_quantity())));
+                existingEntry.setSize_42_quantity("" + ((Integer.parseInt(existingEntry.getSize_42_quantity())) + Integer.parseInt(packingListEntry.getSize_42_quantity())));
+                existingEntry.setSize_43_quantity("" + ((Integer.parseInt(existingEntry.getSize_43_quantity())) + Integer.parseInt(packingListEntry.getSize_43_quantity())));
+                existingEntry.setSize_44_quantity("" + ((Integer.parseInt(existingEntry.getSize_44_quantity())) + Integer.parseInt(packingListEntry.getSize_44_quantity())));
+                existingEntry.setSize_45_quantity("" + ((Integer.parseInt(existingEntry.getSize_45_quantity())) + Integer.parseInt(packingListEntry.getSize_45_quantity())));
+                existingEntry.setSize_46_quantity("" + ((Integer.parseInt(existingEntry.getSize_46_quantity())) + Integer.parseInt(packingListEntry.getSize_46_quantity())));
+                existingEntry.setSize_47_quantity("" + ((Integer.parseInt(existingEntry.getSize_47_quantity())) + Integer.parseInt(packingListEntry.getSize_47_quantity())));
+                existingEntry.setTotal("" + ((Integer.parseInt(existingEntry.getTotal())) + Integer.parseInt(packingListEntry.getTotal())));
+
+            } else {
+                stringPackingListEntryMap.put(packingListEntry.toString(), packingListEntry);
+            }
+        });
+
+        return new ArrayList<>(stringPackingListEntryMap.values());
     }
 }

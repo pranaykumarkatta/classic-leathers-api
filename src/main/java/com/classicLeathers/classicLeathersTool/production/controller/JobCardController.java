@@ -48,6 +48,11 @@ public class JobCardController {
         return ResponseEntity.ok(jobCardService.getJobCardOverAllProgressList(jobCardFileName));
     }
 
+    @GetMapping("/packingList")
+    public ResponseEntity<List<PackingListEntry>> getPackingList(@RequestParam String jobCardFileName) {
+        return ResponseEntity.ok(jobCardService.getPackingList(jobCardFileName));
+    }
+
 
     @PostMapping(path = "/saveJobCard", consumes = "application/json")
     public void saveJobCard(@RequestBody List<JobCard> jobCardList, @RequestParam String jobCardNumber,
