@@ -587,7 +587,7 @@ public class JobCardService {
                 };
             }
         } else {
-            validateDispatchEntry(jobCardProgress.getBatchNumber(),jobCardFileName);
+            validateDispatchEntry(jobCardProgress.getBatchNumber(), jobCardFileName);
             data = new Object[]{jobCardProgress.getBatchNumber(),
                     jobCardProgress.getCourierName(),
                     jobCardProgress.getTrackingNumber(),
@@ -626,7 +626,7 @@ public class JobCardService {
         List<JobCardProgress> packingJobCardProgressList = getJobCardProgress(jobCardFileName, "PACKING", 5);
         Map<String, JobCardProgress> packingJobCardProgressMap = new HashMap<>();
         packingJobCardProgressList.forEach(jobCardProgress -> {
-            String jobCardKey=jobCardProgress.getBatchNumber()+jobCardProgress.getPackingBoxNumber();
+            String jobCardKey = jobCardProgress.getBatchNumber() + jobCardProgress.getPackingBoxNumber();
             if (packingJobCardProgressMap.get(jobCardKey) != null) {
                 JobCardProgress existingEntry = packingJobCardProgressMap.get(jobCardKey);
                 existingEntry.setCount("" + ((Integer.parseInt(existingEntry.getCount())) + Integer.parseInt(jobCardProgress.getCount())));
@@ -635,14 +635,14 @@ public class JobCardService {
                 packingJobCardProgressMap.put(jobCardKey, jobCardProgress);
             }
         });
-        List<String> invalidBoxDetailsList=new ArrayList<>();
+        List<String> invalidBoxDetailsList = new ArrayList<>();
         packingJobCardProgressMap.values().forEach(jobCardProgress -> {
-            if (Integer.parseInt(jobCardProgress.getCount())<15 && batchNumber.equals(jobCardProgress.getBatchNumber())){
-                invalidBoxDetailsList.add(jobCardProgress.getPackingBoxNumber()+" : contains "+jobCardProgress.getCount()+" Pairs");
+            if (Integer.parseInt(jobCardProgress.getCount()) < 15 && batchNumber.equals(jobCardProgress.getBatchNumber())) {
+                invalidBoxDetailsList.add(jobCardProgress.getPackingBoxNumber() + " : contains " + jobCardProgress.getCount() + " Pairs");
             }
         });
-        if (invalidBoxDetailsList.size()>0)
-            throw new InvalidCountException("Boxes has < 15 Pairs : \n"+invalidBoxDetailsList.toString());
+        if (invalidBoxDetailsList.size() > 0)
+            throw new InvalidCountException("Boxes has < 15 Pairs : \n" + invalidBoxDetailsList.toString());
     }
 
     private void validateJobCardProgressEntry(JobCardProgress jobCardProgress, String jobCardFileName) throws
@@ -1008,11 +1008,11 @@ public class JobCardService {
             throw new InvalidCountException("Invalid Count. Expected value <= 15 for each box");
         } else {
             Map<String, Integer> boxVolumeCountMap = getPackingBoxDetails(jobCardFileName);
-            if (boxVolumeCountMap.keySet().contains(jobCardProgress.getBatchNumber() + "_" + jobCardProgress.getPackingBoxNumber())
-                    && ((boxVolumeCountMap.get(jobCardProgress.getBatchNumber() + "_" + jobCardProgress.getPackingBoxNumber())
-                    + Integer.parseInt(jobCardProgress.getCount())) > 15)) {
+            String s =jobCardProgress.getBatchNumber() + "_" + jobCardProgress.getPackingBoxNumber();
+            if (boxVolumeCountMap.keySet().contains(s)
+                    && ((boxVolumeCountMap.get(s) + Integer.parseInt(jobCardProgress.getCount())) > 15)) {
                 throw new InvalidCountException("Invalid Count. Expected value <= " +
-                        (15 - Integer.parseInt(jobCardProgress.getCount())) + " for the box " + jobCardProgress.getPackingBoxNumber() + " in batch " + jobCardProgress.getBatchNumber());
+                        (15 - boxVolumeCountMap.get(s)) + " for the box " + jobCardProgress.getPackingBoxNumber() + " in batch " + jobCardProgress.getBatchNumber());
             }
         }
     }
@@ -1072,7 +1072,7 @@ public class JobCardService {
 
         List<String> rowData = new ArrayList<>();
         rowData.addAll(Arrays.asList(fileData.split("\n")));
-        List<JobCardProgress> dispatchJobCardProgressList = new ArrayList<>();
+        Map<String, JobCardProgress> dispatchJobCardProgressMap = new HashMap<>();
         if (rowData.size() != 0) {
             rowData.remove(0);//Remove header data
             for (String row : rowData) {
@@ -1082,7 +1082,8 @@ public class JobCardService {
                 jobCardProgress.setCourierName(cellData[1]);
                 jobCardProgress.setTrackingNumber(cellData[2]);
                 jobCardProgress.setDate(cellData[3]);
-                dispatchJobCardProgressList.add(jobCardProgress);
+                dispatchJobCardProgressMap.put(jobCardProgress.getBatchNumber(),jobCardProgress);
+                ;
             }
         }
 
@@ -1094,6 +1095,7 @@ public class JobCardService {
         Map<String, List<PackingListEntry>> batchMap = new HashMap<>();
         rowData = new ArrayList<>();
         rowData.addAll(Arrays.asList(fileData.split("\n")));
+        rowData.remove(0);
         for (String row : rowData) {
             String[] cellData = row.split(",");
             if (batchMap.get(cellData[11]) != null) {
@@ -1110,9 +1112,9 @@ public class JobCardService {
                 packingListEntry.setSize_46_quantity(cellData[8]);
                 packingListEntry.setSize_47_quantity(cellData[9]);
 
-                packingListEntry.setTotal(""+((Integer.parseInt(cellData[2])+(Integer.parseInt(cellData[3]))+
-                        (Integer.parseInt(cellData[4]))+(Integer.parseInt(cellData[5]))+(Integer.parseInt(cellData[6]))+
-                        (Integer.parseInt(cellData[7]))+(Integer.parseInt(cellData[8]))+(Integer.parseInt(cellData[9])))));
+                packingListEntry.setTotal("" + ((Integer.parseInt(cellData[2]) + (Integer.parseInt(cellData[3])) +
+                        (Integer.parseInt(cellData[4])) + (Integer.parseInt(cellData[5])) + (Integer.parseInt(cellData[6])) +
+                        (Integer.parseInt(cellData[7])) + (Integer.parseInt(cellData[8])) + (Integer.parseInt(cellData[9])))));
                 packingListEntry.setBatchNumber(cellData[11]);
                 packingListEntry.setBoxNumber(cellData[12]);
                 packingListEntryList.add(packingListEntry);
@@ -1129,9 +1131,9 @@ public class JobCardService {
                 packingListEntry.setSize_45_quantity(cellData[7]);
                 packingListEntry.setSize_46_quantity(cellData[8]);
                 packingListEntry.setSize_47_quantity(cellData[9]);
-                packingListEntry.setTotal(""+((Integer.parseInt(cellData[2])+(Integer.parseInt(cellData[3]))+
-                        (Integer.parseInt(cellData[4]))+(Integer.parseInt(cellData[5]))+(Integer.parseInt(cellData[6]))+
-                        (Integer.parseInt(cellData[7]))+(Integer.parseInt(cellData[8]))+(Integer.parseInt(cellData[9])))));
+                packingListEntry.setTotal("" + ((Integer.parseInt(cellData[2]) + (Integer.parseInt(cellData[3])) +
+                        (Integer.parseInt(cellData[4])) + (Integer.parseInt(cellData[5])) + (Integer.parseInt(cellData[6])) +
+                        (Integer.parseInt(cellData[7])) + (Integer.parseInt(cellData[8])) + (Integer.parseInt(cellData[9])))));
                 packingListEntry.setBatchNumber(cellData[11]);
                 packingListEntry.setBoxNumber(cellData[12]);
                 packingListEntryList.add(packingListEntry);
@@ -1141,7 +1143,7 @@ public class JobCardService {
 
         List<PackingListEntry> finalListEntries = new ArrayList<>();
         String[] info = jobCardFileName.split("_");
-        dispatchJobCardProgressList.forEach(jobCardProgress -> {
+        dispatchJobCardProgressMap.forEach((s, jobCardProgress) -> {
             if (batchMap.get(jobCardProgress.getBatchNumber()) != null) {
                 batchMap.get(jobCardProgress.getBatchNumber()).forEach(packingListEntry -> {
                     PackingListEntry entry = packingListEntry;
