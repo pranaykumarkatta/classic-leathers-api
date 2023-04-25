@@ -52,6 +52,10 @@ public class JobCardController {
     public ResponseEntity<List<PackingListEntry>> getPackingList(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.getPackingList(jobCardFileName));
     }
+    @GetMapping("/dispatchDetails")
+    public ResponseEntity<List<PackingListEntry>> getDispatchDetails(@RequestParam String jobCardFileName) {
+        return ResponseEntity.ok(jobCardService.getDispatchDetails(jobCardFileName));
+    }
 
 
     @PostMapping(path = "/saveJobCard", consumes = "application/json")

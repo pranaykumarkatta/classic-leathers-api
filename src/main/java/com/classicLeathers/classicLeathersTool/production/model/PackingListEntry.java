@@ -180,4 +180,14 @@ public class PackingListEntry {
                 ", shippedDate='" + shippedDate + '\'' +
                 '}';
     }
+    public String getDispatchString() {
+        return "PackingListEntry{" +
+                ", batchNumber='" + batchNumber + '\'' +
+                ", brand='" + brand + '\'' +
+                ", poNumber='" + poNumber + '\'' +
+                ", sku='" + sku + '\'' +
+                ", leather='" + leather + '\'' +
+                ", shippedDate='" + shippedDate + '\'' +
+                '}';
+    }
 }

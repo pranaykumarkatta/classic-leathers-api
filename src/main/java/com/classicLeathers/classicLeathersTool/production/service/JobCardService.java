@@ -1178,4 +1178,29 @@ public class JobCardService {
 
         return new ArrayList<>(stringPackingListEntryMap.values());
     }
+
+    public List<PackingListEntry> getDispatchDetails(String jobCardFileName) {
+        Map<String, PackingListEntry> stringPackingListEntryMap = new HashMap<>();
+        getPackingList(jobCardFileName).forEach(packingListEntry -> {
+            if (stringPackingListEntryMap.get(packingListEntry.getDispatchString()) != null) {
+                PackingListEntry existingEntry = stringPackingListEntryMap.get(packingListEntry.getDispatchString());
+                existingEntry.setSize_40_quantity("" + ((Integer.parseInt(existingEntry.getSize_40_quantity())) + Integer.parseInt(packingListEntry.getSize_40_quantity())));
+                existingEntry.setSize_41_quantity("" + ((Integer.parseInt(existingEntry.getSize_41_quantity())) + Integer.parseInt(packingListEntry.getSize_41_quantity())));
+                existingEntry.setSize_42_quantity("" + ((Integer.parseInt(existingEntry.getSize_42_quantity())) + Integer.parseInt(packingListEntry.getSize_42_quantity())));
+                existingEntry.setSize_43_quantity("" + ((Integer.parseInt(existingEntry.getSize_43_quantity())) + Integer.parseInt(packingListEntry.getSize_43_quantity())));
+                existingEntry.setSize_44_quantity("" + ((Integer.parseInt(existingEntry.getSize_44_quantity())) + Integer.parseInt(packingListEntry.getSize_44_quantity())));
+                existingEntry.setSize_45_quantity("" + ((Integer.parseInt(existingEntry.getSize_45_quantity())) + Integer.parseInt(packingListEntry.getSize_45_quantity())));
+                existingEntry.setSize_46_quantity("" + ((Integer.parseInt(existingEntry.getSize_46_quantity())) + Integer.parseInt(packingListEntry.getSize_46_quantity())));
+                existingEntry.setSize_47_quantity("" + ((Integer.parseInt(existingEntry.getSize_47_quantity())) + Integer.parseInt(packingListEntry.getSize_47_quantity())));
+                existingEntry.setTotal("" + ((Integer.parseInt(existingEntry.getTotal())) + Integer.parseInt(packingListEntry.getTotal())));
+
+            } else {
+                stringPackingListEntryMap.put(packingListEntry.getDispatchString(), packingListEntry);
+            }
+        });
+
+        return new ArrayList<>(stringPackingListEntryMap.values());
+    }
+
+
 }
