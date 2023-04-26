@@ -9,6 +9,7 @@ public class JobCardProgress implements Comparable{
     private String size;
     private String productionStage;
     private String count;
+    private String vendor;
     private String batchNumber;
     private String packingBoxNumber;
     private String courierName;
@@ -60,6 +61,14 @@ public class JobCardProgress implements Comparable{
 
     public void setCount(String count) {
         this.count = count;
+    }
+
+    public String getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
     }
 
     public String getBatchNumber() {

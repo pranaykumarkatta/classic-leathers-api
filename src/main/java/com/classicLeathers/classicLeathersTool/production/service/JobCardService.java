@@ -519,6 +519,8 @@ public class JobCardService {
                 Cell cell12 = row.createCell(12);
                 cell12.setCellValue("BOX_NUMBER");
             }
+            Cell cell13 = row.createCell(13);
+            cell13.setCellValue("VENDOR");
         }
     }
 
@@ -534,56 +536,56 @@ public class JobCardService {
                         jobCardProgress.getLeather(),
                         jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", ""
+                        "", "", jobCardProgress.getVendor()
                 };
             } else if (jobCardProgress.getSize().equals("41")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", ""
+                        "", "", jobCardProgress.getVendor()
                 };
             } else if (jobCardProgress.getSize().equals("42")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", ""
+                        "", "", jobCardProgress.getVendor()
                 };
             } else if (jobCardProgress.getSize().equals("43")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", ""
+                        "", "", jobCardProgress.getVendor()
                 };
             } else if (jobCardProgress.getSize().equals("44")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", ""
+                        "", "", jobCardProgress.getVendor()
                 };
             } else if (jobCardProgress.getSize().equals("45")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", ""
+                        "", "", jobCardProgress.getVendor()
                 };
             } else if (jobCardProgress.getSize().equals("46")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", ""
+                        "", "", jobCardProgress.getVendor()
                 };
             } else {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(),
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", ""
+                        "", "", jobCardProgress.getVendor()
                 };
             }
         } else {
