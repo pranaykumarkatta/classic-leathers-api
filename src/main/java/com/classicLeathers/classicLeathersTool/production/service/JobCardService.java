@@ -191,6 +191,7 @@ public class JobCardService {
                     }
                     jobCardProgressDto.setCourierName("NA");
                     jobCardProgressDto.setTrackingNumber("NA");
+                    jobCardProgressDto.setVendor(cellData[13]);
                     jobCardProgresses.add(jobCardProgressDto);
                 }
             }
@@ -663,7 +664,7 @@ public class JobCardService {
                                     throw new InvalidCountException("Invalid Count. Expected value <= " + (overAllJobCardProgress.getSize_40_ordered_quantity()
                                             - overAllJobCardProgress.getSize_40_cutting_quantity()) + " for the selection");
                                 }
-                                ;
+                                break;
                             case "41":
                                 if (Integer.parseInt(jobCardProgress.getCount()) >
                                         (overAllJobCardProgress.getSize_41_ordered_quantity()
