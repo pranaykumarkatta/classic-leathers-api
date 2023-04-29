@@ -5,6 +5,8 @@ import java.util.List;
 public class OverAllJobCardProgress {
     private String sku;
     private String leather;
+
+    private String SearchString;
     private Integer size_40_ordered_quantity;
     private Integer size_40_cutting_quantity;
     private Integer size_40_upperMaking_quantity;
@@ -68,6 +70,14 @@ public class OverAllJobCardProgress {
 
     public void setLeather(String leather) {
         this.leather = leather;
+    }
+
+    public String getSearchString() {
+        return SearchString;
+    }
+
+    public void setSearchString(String searchString) {
+        SearchString = sku+"@"+leather;
     }
 
     public Integer getSize_40_ordered_quantity() {

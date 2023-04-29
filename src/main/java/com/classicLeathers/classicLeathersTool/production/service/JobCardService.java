@@ -192,6 +192,7 @@ public class JobCardService {
                     jobCardProgressDto.setCourierName("NA");
                     jobCardProgressDto.setTrackingNumber("NA");
                     jobCardProgressDto.setVendor(cellData[13]);
+                    jobCardProgressDto.setSearchString(jobCardProgressDto.getSearchString());
                     jobCardProgresses.add(jobCardProgressDto);
                 }
             }
@@ -210,6 +211,7 @@ public class JobCardService {
                 jobCardProgressDto.setCourierName(cellData[1]);
                 jobCardProgressDto.setTrackingNumber(cellData[2]);
                 jobCardProgressDto.setDate(cellData[3]);
+                jobCardProgressDto.setSearchString(jobCardProgressDto.getSearchString());
                 jobCardProgresses.add(jobCardProgressDto);
                 return jobCardProgresses;
             }
@@ -327,6 +329,7 @@ public class JobCardService {
             overAllJobCardProgress.setSize_47_finished_quantity(finishingDto.getSize_47_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_47_quantity()));
             overAllJobCardProgress.setSize_47_packed_quantity(packedDto.getSize_47_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_47_quantity()));
 
+            overAllJobCardProgress.setSearchString(overAllJobCardProgress.getSearchString());
             overAllJobCardProgressList.add(overAllJobCardProgress);
 
         });

@@ -14,6 +14,7 @@ public class JobCardProgress implements Comparable{
     private String packingBoxNumber;
     private String courierName;
     private String trackingNumber;
+    private String searchString;
 
     public String getDate() {
         return Date;
@@ -101,6 +102,14 @@ public class JobCardProgress implements Comparable{
 
     public void setTrackingNumber(String trackingNumber) {
         this.trackingNumber = trackingNumber;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = productionStage+":"+sku+"@"+leather;
     }
 
     @Override
