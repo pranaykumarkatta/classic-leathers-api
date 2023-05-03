@@ -28,6 +28,11 @@ public class JobCardController {
         return ResponseEntity.ok(jobCardService.getJobCardFiles());
     }
 
+    @GetMapping("/getJobCardDetails")
+    public ResponseEntity<List<JobCard>> getJobCardDetails(@RequestParam String fileName) {
+        return ResponseEntity.ok(jobCardService.getJobCardDetails(fileName));
+    }
+
     @GetMapping("/getNextJobCardNumber")
     public ResponseEntity<Integer> getNextJobCardNumber() {
         return ResponseEntity.ok(jobCardService.getNextJobCardNumber());
@@ -52,6 +57,7 @@ public class JobCardController {
     public ResponseEntity<List<PackingListEntry>> getPackingList(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.getPackingList(jobCardFileName));
     }
+
     @GetMapping("/dispatchDetails")
     public ResponseEntity<List<PackingListEntry>> getDispatchDetails(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.getDispatchDetails(jobCardFileName));
@@ -68,12 +74,18 @@ public class JobCardController {
 
     @PostMapping(path = "/saveJobCardProgress", consumes = "application/json", produces = "text/plain")
     public ResponseEntity<String> saveJobCardProgress(@RequestBody JobCardProgress jobCardProgress,
-                                    @RequestParam String jobCardFileName) {
+                                                      @RequestParam String jobCardFileName) {
         try {
             jobCardService.saveJobCardProgress(jobCardProgress, jobCardFileName);
             return ResponseEntity.ok("");
         } catch (InvalidCountException e) {
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
         }
+    }
+
+    @PostMapping(path = "/closeJobCard", consumes = "application/json", produces = "text/plain")
+    public ResponseEntity<String> closeJobCard(@RequestParam String jobCardFileName) {
+        jobCardService.closeJobCard(jobCardFileName);
+        return ResponseEntity.ok("");
     }
 }

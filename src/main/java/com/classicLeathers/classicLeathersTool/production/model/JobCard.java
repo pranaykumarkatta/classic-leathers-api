@@ -16,6 +16,9 @@ public class JobCard {
     private String style;
     private String lining;
     private String sole;
+    private String client;
+    private String brand;
+    private String poDate;
 
     public String getSku() {
         return sku;
@@ -135,5 +138,29 @@ public class JobCard {
 
     public void setSole(String sole) {
         this.sole = sole;
+    }
+
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getPoDate() {
+        return poDate;
+    }
+
+    public void setPoDate(String poDate) {
+        this.poDate = poDate;
     }
 }

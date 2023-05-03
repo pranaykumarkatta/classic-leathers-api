@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -60,6 +64,46 @@ public class JobCardService {
             }
         }
         return fileNames;
+    }
+
+    public List<JobCard> getJobCardDetails(String fileName) {
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + fileName, 0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        List<JobCard> jobCardEntries = new ArrayList<>();
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        String[] clientData = rowData.get(0).split(",");
+        rowData.remove(0);
+        rowData.remove(0);
+
+        for (String row : rowData) {
+            String[] cellData = row.split(",");
+            JobCard jobCardEntry = new JobCard();
+            jobCardEntry.setSku(cellData[0]);
+            jobCardEntry.setLeather(cellData[1]);
+            jobCardEntry.setSize_40_quantity(cellData[2]);
+            jobCardEntry.setSize_41_quantity(cellData[3]);
+            jobCardEntry.setSize_42_quantity(cellData[4]);
+            jobCardEntry.setSize_43_quantity(cellData[5]);
+            jobCardEntry.setSize_44_quantity(cellData[6]);
+            jobCardEntry.setSize_45_quantity(cellData[7]);
+            jobCardEntry.setSize_46_quantity(cellData[8]);
+            jobCardEntry.setSize_47_quantity(cellData[9]);
+            jobCardEntry.setTotalQuantity(cellData[10]);
+            jobCardEntry.setHandStitchingPattern(cellData[11]);
+            jobCardEntry.setStyle(cellData[12]);
+            jobCardEntry.setLining(cellData[13]);
+            jobCardEntry.setSole(cellData[14]);
+            jobCardEntry.setClient(clientData[0]);
+            jobCardEntry.setBrand(clientData[1]);
+            jobCardEntry.setPoDate(clientData[3]);
+            jobCardEntries.add(jobCardEntry);
+        }
+        return jobCardEntries;
     }
 
     public Integer getNextJobCardNumber() {
@@ -126,7 +170,8 @@ public class JobCardService {
         return jobCardProgressDtos.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
     }
 
-    private List<JobCardProgress> getJobCardProgress(String jobCardFileName, String productionStage, Integer sheetIndex) {
+    private List<JobCardProgress> getJobCardProgress(String jobCardFileName, String productionStage, Integer
+            sheetIndex) {
         String fileData = "";
         try {
             fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + jobCardFileName, sheetIndex);
@@ -483,6 +528,16 @@ public class JobCardService {
         xssfWorkbook.write(out);
         out.close();
     }
+  public void closeJobCard(String fileName) {
+      try {
+          Path temp = Files.move
+                  (Paths.get("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\"+fileName),
+                          Paths.get("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\Closed\\"+fileName));
+      } catch (IOException e) {
+          throw new RuntimeException(e);
+      }
+
+  }
 
     private void createProductionProgressSheets(XSSFWorkbook wb, String sheetName) {
         Sheet sheet = wb.createSheet(sheetName);
@@ -1170,7 +1225,7 @@ public class JobCardService {
             throw new InvalidCountException("Invalid Count. Expected value <= 15 for each box");
         } else {
             Map<String, Integer> boxVolumeCountMap = getPackingBoxDetails(jobCardFileName);
-            String s =jobCardProgress.getBatchNumber() + "_" + jobCardProgress.getPackingBoxNumber();
+            String s = jobCardProgress.getBatchNumber() + "_" + jobCardProgress.getPackingBoxNumber();
             if (boxVolumeCountMap.keySet().contains(s)
                     && ((boxVolumeCountMap.get(s) + Integer.parseInt(jobCardProgress.getCount())) > 15)) {
                 throw new InvalidCountException("Invalid Count. Expected value <= " +
@@ -1244,7 +1299,7 @@ public class JobCardService {
                 jobCardProgress.setCourierName(cellData[1]);
                 jobCardProgress.setTrackingNumber(cellData[2]);
                 jobCardProgress.setDate(cellData[3]);
-                dispatchJobCardProgressMap.put(jobCardProgress.getBatchNumber(),jobCardProgress);
+                dispatchJobCardProgressMap.put(jobCardProgress.getBatchNumber(), jobCardProgress);
                 ;
             }
         }
