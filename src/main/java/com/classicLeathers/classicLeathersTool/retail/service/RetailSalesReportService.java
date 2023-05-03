@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 public class RetailSalesReportService {
 
     private static int sheetNO = ((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))) - 4) % 12;
-    public List<RetailSalesEntryDto> getSalesDataByMonth() {
+    public List<RetailSalesEntryDto> getSalesDataByMonth(Integer sheetNumber) {
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx", sheetNO);
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx", sheetNumber);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

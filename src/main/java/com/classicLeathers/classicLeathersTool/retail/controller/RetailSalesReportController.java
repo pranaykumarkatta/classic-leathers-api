@@ -20,8 +20,8 @@ public class RetailSalesReportController {
     private RetailSalesReportService retailSalesReportService;
 
     @GetMapping
-    public ResponseEntity<List<RetailSalesEntryDto>> getSalesDataByMonth() {
-        return ResponseEntity.ok(retailSalesReportService.getSalesDataByMonth());
+    public ResponseEntity<List<RetailSalesEntryDto>> getSalesDataByMonth(@RequestParam Integer sheetNumber) {
+        return ResponseEntity.ok(retailSalesReportService.getSalesDataByMonth(sheetNumber));
     }
 
     @PostMapping(consumes = "application/json")
