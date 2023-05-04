@@ -1,8 +1,12 @@
 package com.classicLeathers.classicLeathersTool.retail.service;
 
 import com.classicLeathers.classicLeathersTool.FileUtils;
+import com.classicLeathers.classicLeathersTool.PdfUtils;
 import com.classicLeathers.classicLeathersTool.retail.model.TimeSheet;
 import com.classicLeathers.classicLeathersTool.retail.model.TimeSheetDto;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -13,10 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class TimeSheetService {
 
-    private static int sheetNO = ((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))) - 4) % 12;
+    private static int month = ((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))));
 
-    public List<TimeSheetDto> getTimeSheetEntries() {
-        List<String> rowData = getTimeSheetData();
+    public List<TimeSheetDto> getTimeSheetEntries(Integer monthNumber) {
+        Integer sheetIndex = (monthNumber - 4) % 12;
+        List<String> rowData = getTimeSheetData(sheetIndex);
         List<TimeSheet> timeSheetList = null;
         if (rowData.size() != 0) {
             rowData.remove(0);//Remove header data
@@ -98,7 +103,8 @@ public class TimeSheetService {
     }
 
     public void saveTimeSheet(TimeSheet timeSheet) {
-        List<String> rowData = getTimeSheetData();
+        Integer sheetIndex = (month - 4) % 12;
+        List<String> rowData = getTimeSheetData(sheetIndex);
         int pageLength = rowData.size();
         List<TimeSheet> timeSheetList = null;
         if (rowData.size() != 0) {
@@ -125,41 +131,41 @@ public class TimeSheetService {
         if (timeSheet.getEntryType().equals("In")) {
             if (employeeLatestTimeSheetEntry == null) {
                 data = new Object[]{new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), timeSheet.getEmployeeName(), "Yes", new SimpleDateFormat("h:mm a").format(new Date()), "NA", "NA", String.valueOf(pageLength)};
-                saveData(data);
+                saveData(data, sheetIndex);
             }
             if (employeeLatestTimeSheetEntry != null && !employeeLatestTimeSheetEntry.getOutTime().equals("NA")) {
                 data = new Object[]{new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), timeSheet.getEmployeeName(), "Yes", new SimpleDateFormat("h:mm a").format(new Date()), "NA", "NA", String.valueOf(pageLength)};
-                saveData(data);
+                saveData(data, sheetIndex);
             }
             if (employeeLatestTimeSheetEntry != null && employeeLatestTimeSheetEntry.getOutTime().equals("NA")) {
                 data = new Object[]{employeeLatestTimeSheetEntry.getDate(), employeeLatestTimeSheetEntry.getEmployeeName(), "No", employeeLatestTimeSheetEntry.getInTime(), "Invalid", new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), String.valueOf(pageLength)};
-                saveData(data);
+                saveData(data, sheetIndex);
                 pageLength++;
                 data = new Object[]{new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), timeSheet.getEmployeeName(), "Yes", new SimpleDateFormat("h:mm a").format(new Date()), "NA", "NA", String.valueOf(pageLength)};
-                saveData(data);
+                saveData(data, sheetIndex);
             }
         }
         if (timeSheet.getEntryType().equals("Out")) {
             if (employeeLatestTimeSheetEntry == null) {
                 data = new Object[]{new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), timeSheet.getEmployeeName(), "Yes", new SimpleDateFormat("h:mm a").format(new Date()), new SimpleDateFormat("h:mm a").format(new Date()), new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), String.valueOf(pageLength)};
-                saveData(data);
+                saveData(data, sheetIndex);
             }
             if (employeeLatestTimeSheetEntry != null && employeeLatestTimeSheetEntry.getOutTime().equals("NA")) {
                 data = new Object[]{employeeLatestTimeSheetEntry.getDate(), employeeLatestTimeSheetEntry.getEmployeeName(), employeeLatestTimeSheetEntry.getPresent(), employeeLatestTimeSheetEntry.getInTime(), new SimpleDateFormat("h:mm a").format(new Date()), new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), String.valueOf(pageLength)};
-                saveData(data);
+                saveData(data, sheetIndex);
             }
             if (employeeLatestTimeSheetEntry != null && !employeeLatestTimeSheetEntry.getOutTime().equals("NA")) {
                 data = new Object[]{new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), timeSheet.getEmployeeName(), "Yes", new SimpleDateFormat("h:mm a").format(new Date()), new SimpleDateFormat("h:mm a").format(new Date()), new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()), String.valueOf(pageLength)};
-                saveData(data);
+                saveData(data, sheetIndex);
             }
         }
 
     }
 
-    private List<String> getTimeSheetData() {
+    private List<String> getTimeSheetData(Integer sheetIndex) {
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\23_24_TIME_SHEET_V2.xlsx", sheetNO);
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\23_24_TIME_SHEET_V2.xlsx", sheetIndex);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -168,12 +174,34 @@ public class TimeSheetService {
         return rowData;
     }
 
-    private void saveData(Object[] data) {
+    private void saveData(Object[] data, Integer sheetIndex) {
         try {
-            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\23_24_TIME_SHEET_V2.xlsx", sheetNO, data);
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\23_24_TIME_SHEET_V2.xlsx", sheetIndex, data);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String exportData(Integer monthNumber) {
+        Table table = new Table(3);
+        Cell cell = new Cell(1,3);
+        cell.add(new Paragraph("TimeSheet Data"));
+        table.addHeaderCell(cell);
+        table.addHeaderCell("Date");
+        table.addHeaderCell("Name");
+        table.addHeaderCell("Total Working Hours");
+        List<TimeSheetDto> timeSheetDtos = getTimeSheetEntries(monthNumber);
+
+        timeSheetDtos.forEach(timeSheetDto -> {
+            table.addCell(timeSheetDto.getDate());
+            table.addCell(timeSheetDto.getEmployeeName());
+            table.addCell(timeSheetDto.getTotalWorkingHours());
+        });
+
+
+        return new PdfUtils("TimeSheet_"+monthNumber).SaveAsPdf(table);
+
+
     }
 
 }

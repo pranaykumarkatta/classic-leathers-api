@@ -17,8 +17,13 @@ public class TimeSheetController {
     private TimeSheetService timeSheetService;
 
     @GetMapping
-    public ResponseEntity<List<TimeSheetDto>> getTimeSheetEntries() {
-        return ResponseEntity.ok(timeSheetService.getTimeSheetEntries());
+    public ResponseEntity<List<TimeSheetDto>> getTimeSheetEntries(@RequestParam Integer monthNumber) {
+        return ResponseEntity.ok(timeSheetService.getTimeSheetEntries(monthNumber));
+    }
+
+    @GetMapping(path = "/exportData")
+    public String  exportData(@RequestParam Integer monthNumber) {
+        return timeSheetService.exportData(monthNumber);
     }
 
     @PostMapping
