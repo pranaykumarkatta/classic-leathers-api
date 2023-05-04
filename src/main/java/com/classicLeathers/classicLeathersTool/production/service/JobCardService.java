@@ -444,7 +444,7 @@ public class JobCardService {
                             String customer, String brand,
                             String poNumber, String jobWorkVendor,
                             String poDate) {
-        String fileName = "JOBCARD_" + jobCardNumber + "_" + customer + "_" + brand + "_" + poNumber;
+        String fileName = "JOBCARD_" + jobCardNumber + "_" + customer + "_" + brand + "_" + poNumber+"_" + jobWorkVendor;
         try {
             createJobCard("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + fileName + ".xlsx",
                     customer, brand, poNumber, jobWorkVendor, poDate);
