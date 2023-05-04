@@ -1,8 +1,14 @@
 package com.classicLeathers.classicLeathersTool.production.service;
 
 import com.classicLeathers.classicLeathersTool.FileUtils;
+import com.classicLeathers.classicLeathersTool.PdfUtils;
 import com.classicLeathers.classicLeathersTool.production.InvalidCountException;
 import com.classicLeathers.classicLeathersTool.production.model.*;
+import com.classicLeathers.classicLeathersTool.retail.model.TimeSheetDto;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -1417,6 +1423,69 @@ public class JobCardService {
         });
 
         return new ArrayList<>(stringPackingListEntryMap.values());
+    }
+
+
+    public String exportJobCard(String fileName) {
+        Table table = new Table(15);
+
+        List<JobCard> jobCardList = getJobCardDetails(fileName);
+        com.itextpdf.layout.element.Cell fileNameCell = new com.itextpdf.layout.element.Cell(1,15);
+        fileNameCell.add(new Paragraph(fileName.substring(0,fileName.length()-5)));
+        fileNameCell.setTextAlignment(TextAlignment.CENTER);
+        table.addHeaderCell(fileNameCell);
+
+        com.itextpdf.layout.element.Cell clientInfoCell = new com.itextpdf.layout.element.Cell(1,5);
+        clientInfoCell.add(new Paragraph(jobCardList.get(0).getClient()));
+        clientInfoCell.setTextAlignment(TextAlignment.CENTER);
+        table.addHeaderCell(clientInfoCell);
+        com.itextpdf.layout.element.Cell brandInfoCell = new com.itextpdf.layout.element.Cell(1,7);
+        brandInfoCell.add(new Paragraph(jobCardList.get(0).getBrand()));
+        brandInfoCell.setTextAlignment(TextAlignment.CENTER);
+        table.addHeaderCell(brandInfoCell);
+        com.itextpdf.layout.element.Cell poInfoCell = new com.itextpdf.layout.element.Cell(1,3);
+        poInfoCell.add(new Paragraph(jobCardList.get(0).getPoDate()));
+        poInfoCell.setTextAlignment(TextAlignment.CENTER);
+        table.addHeaderCell(poInfoCell);
+
+        table.addHeaderCell("SKU");
+        table.addHeaderCell("Leather");
+        table.addHeaderCell("40");
+        table.addHeaderCell("41");
+        table.addHeaderCell("42");
+        table.addHeaderCell("43");
+        table.addHeaderCell("44");
+        table.addHeaderCell("45");
+        table.addHeaderCell("46");
+        table.addHeaderCell("47");
+        table.addHeaderCell("Total");
+        table.addHeaderCell("HS");
+        table.addHeaderCell("Style");
+        table.addHeaderCell("Lining");
+        table.addHeaderCell("Sole");
+        table.setTextAlignment(TextAlignment.CENTER);
+
+        jobCardList.forEach(timeSheetDto -> {
+            table.addCell(timeSheetDto.getSku());
+            table.addCell(timeSheetDto.getLeather());
+            table.addCell(timeSheetDto.getSize_40_quantity());
+            table.addCell(timeSheetDto.getSize_41_quantity());
+            table.addCell(timeSheetDto.getSize_42_quantity());
+            table.addCell(timeSheetDto.getSize_43_quantity());
+            table.addCell(timeSheetDto.getSize_44_quantity());
+            table.addCell(timeSheetDto.getSize_45_quantity());
+            table.addCell(timeSheetDto.getSize_46_quantity());
+            table.addCell(timeSheetDto.getSize_47_quantity());
+            table.addCell(timeSheetDto.getTotalQuantity());
+            table.addCell(timeSheetDto.getHandStitchingPattern());
+            table.addCell(timeSheetDto.getStyle());
+            table.addCell(timeSheetDto.getLining());
+            table.addCell(timeSheetDto.getSole());
+        });
+
+
+        return new PdfUtils("D:\\JobCards\\"+fileName.substring(0,fileName.length()-5)).SaveAsPdf(table);
+
     }
 
 

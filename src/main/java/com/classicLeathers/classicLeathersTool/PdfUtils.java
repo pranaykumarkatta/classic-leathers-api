@@ -3,6 +3,7 @@ package com.classicLeathers.classicLeathersTool;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 
 import java.io.FileNotFoundException;
@@ -15,7 +16,7 @@ public class PdfUtils {
     }
 
     public String SaveAsPdf(Table table) {
-        String file = "D:\\Docs\\" + fileName + ".pdf";
+        String file = fileName + ".pdf";
         PdfDocument pdfDoc
                 = null;
         try {
@@ -24,7 +25,7 @@ public class PdfUtils {
             throw new RuntimeException(e);
         }
         Document doc = new Document(pdfDoc);
-        table.useAllAvailableWidth();
+        doc.setFontSize(8f);
         doc.add(table);
         doc.close();
         return "File saved Successfully. FilePath: "+file;

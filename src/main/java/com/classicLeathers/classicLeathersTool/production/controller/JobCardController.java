@@ -4,12 +4,10 @@ import com.classicLeathers.classicLeathersTool.production.InvalidCountException;
 import com.classicLeathers.classicLeathersTool.production.model.*;
 import com.classicLeathers.classicLeathersTool.production.service.JobCardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/jobCard")
@@ -86,6 +84,11 @@ public class JobCardController {
     @PostMapping(path = "/closeJobCard", consumes = "application/json", produces = "text/plain")
     public ResponseEntity<String> closeJobCard(@RequestParam String jobCardFileName) {
         jobCardService.closeJobCard(jobCardFileName);
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("JobCard Closed "+ jobCardFileName);
+    }
+
+    @PostMapping(path = "/exportJobCard", consumes = "application/json", produces = "text/plain")
+    public ResponseEntity<String> exportJobCard(@RequestParam String jobCardFileName) {
+        return ResponseEntity.ok(jobCardService.exportJobCard(jobCardFileName));
     }
 }
