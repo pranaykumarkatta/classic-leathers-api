@@ -91,4 +91,9 @@ public class JobCardController {
     public ResponseEntity<String> exportJobCard(@RequestParam String jobCardFileName) {
         return ResponseEntity.ok(jobCardService.exportJobCard(jobCardFileName));
     }
+
+    @PostMapping(path = "/exportPackingList", consumes = "application/json", produces = "text/plain")
+    public ResponseEntity<String> exportPackingList(@RequestParam String jobCardFileName) {
+        return ResponseEntity.ok(jobCardService.exportPackingList(jobCardFileName));
+    }
 }

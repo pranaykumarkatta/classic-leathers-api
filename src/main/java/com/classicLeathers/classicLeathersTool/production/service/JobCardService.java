@@ -1306,7 +1306,6 @@ public class JobCardService {
                 jobCardProgress.setTrackingNumber(cellData[2]);
                 jobCardProgress.setDate(cellData[3]);
                 dispatchJobCardProgressMap.put(jobCardProgress.getBatchNumber(), jobCardProgress);
-                ;
             }
         }
 
@@ -1315,34 +1314,14 @@ public class JobCardService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Map<String, List<PackingListEntry>> batchMap = new HashMap<>();
         rowData = new ArrayList<>();
+        List<PackingListEntry> packingListEntryList = new ArrayList<>();
+        String[] info = jobCardFileName.split("_");
         rowData.addAll(Arrays.asList(fileData.split("\n")));
         rowData.remove(0);
         for (String row : rowData) {
             String[] cellData = row.split(",");
-            if (batchMap.get(cellData[11]) != null) {
-                List<PackingListEntry> packingListEntryList = batchMap.get(cellData[11]);
-                PackingListEntry packingListEntry = new PackingListEntry();
-                packingListEntry.setSku(cellData[0]);
-                packingListEntry.setLeather(cellData[1]);
-                packingListEntry.setSize_40_quantity(cellData[2]);
-                packingListEntry.setSize_41_quantity(cellData[3]);
-                packingListEntry.setSize_42_quantity(cellData[4]);
-                packingListEntry.setSize_43_quantity(cellData[5]);
-                packingListEntry.setSize_44_quantity(cellData[6]);
-                packingListEntry.setSize_45_quantity(cellData[7]);
-                packingListEntry.setSize_46_quantity(cellData[8]);
-                packingListEntry.setSize_47_quantity(cellData[9]);
 
-                packingListEntry.setTotal("" + ((Integer.parseInt(cellData[2]) + (Integer.parseInt(cellData[3])) +
-                        (Integer.parseInt(cellData[4])) + (Integer.parseInt(cellData[5])) + (Integer.parseInt(cellData[6])) +
-                        (Integer.parseInt(cellData[7])) + (Integer.parseInt(cellData[8])) + (Integer.parseInt(cellData[9])))));
-                packingListEntry.setBatchNumber(cellData[11]);
-                packingListEntry.setBoxNumber(cellData[12]);
-                packingListEntryList.add(packingListEntry);
-            } else {
-                List<PackingListEntry> packingListEntryList = new ArrayList<>();
                 PackingListEntry packingListEntry = new PackingListEntry();
                 packingListEntry.setSku(cellData[0]);
                 packingListEntry.setLeather(cellData[1]);
@@ -1359,29 +1338,13 @@ public class JobCardService {
                         (Integer.parseInt(cellData[7])) + (Integer.parseInt(cellData[8])) + (Integer.parseInt(cellData[9])))));
                 packingListEntry.setBatchNumber(cellData[11]);
                 packingListEntry.setBoxNumber(cellData[12]);
+                packingListEntry.setBrand(info[3]);
+                packingListEntry.setPoNumber(info[4]);
                 packingListEntryList.add(packingListEntry);
-                batchMap.put(cellData[11], packingListEntryList);
-            }
         }
 
-        List<PackingListEntry> finalListEntries = new ArrayList<>();
-        String[] info = jobCardFileName.split("_");
-        dispatchJobCardProgressMap.forEach((s, jobCardProgress) -> {
-            if (batchMap.get(jobCardProgress.getBatchNumber()) != null) {
-                batchMap.get(jobCardProgress.getBatchNumber()).forEach(packingListEntry -> {
-                    PackingListEntry entry = packingListEntry;
-                    entry.setCourierName(jobCardProgress.getCourierName());
-                    entry.setTrackingNumber(jobCardProgress.getTrackingNumber());
-                    entry.setShippedDate(jobCardProgress.getDate());
-                    entry.setBrand(info[3]);
-                    entry.setPoNumber(info[4]);
-                    finalListEntries.add(entry);
-                });
-            }
-        });
-
         Map<String, PackingListEntry> stringPackingListEntryMap = new HashMap<>();
-        finalListEntries.forEach(packingListEntry -> {
+        packingListEntryList.forEach(packingListEntry -> {
             if (stringPackingListEntryMap.get(packingListEntry.toString()) != null) {
                 PackingListEntry existingEntry = stringPackingListEntryMap.get(packingListEntry.toString());
                 existingEntry.setSize_40_quantity("" + ((Integer.parseInt(existingEntry.getSize_40_quantity())) + Integer.parseInt(packingListEntry.getSize_40_quantity())));
@@ -1399,7 +1362,19 @@ public class JobCardService {
             }
         });
 
-        return new ArrayList<>(stringPackingListEntryMap.values());
+        List<PackingListEntry> finalPackingListEntries = new ArrayList<>(stringPackingListEntryMap.values());
+        finalPackingListEntries.forEach(packingListEntry -> {
+            if (dispatchJobCardProgressMap.keySet().contains(packingListEntry.getBatchNumber())){
+                packingListEntry.setCourierName(dispatchJobCardProgressMap.get(packingListEntry.getBatchNumber()).getCourierName());
+                packingListEntry.setTrackingNumber(dispatchJobCardProgressMap.get(packingListEntry.getBatchNumber()).getTrackingNumber());
+                packingListEntry.setShippedDate(dispatchJobCardProgressMap.get(packingListEntry.getBatchNumber()).getDate());
+            }
+        });
+
+        List<PackingListEntry> sortedPackingListEntries = stringPackingListEntryMap.values().stream().sorted((o1, o2)-> new Integer(o1.getBoxNumber()).
+                        compareTo(new Integer(o2.getBoxNumber()))).
+                collect(Collectors.toList());
+        return sortedPackingListEntries;
     }
 
     public List<PackingListEntry> getDispatchDetails(String jobCardFileName) {
@@ -1485,6 +1460,54 @@ public class JobCardService {
 
 
         return new PdfUtils("D:\\JobCards\\"+fileName.substring(0,fileName.length()-5)).SaveAsPdf(table);
+
+    }
+
+    public String exportPackingList(String fileName) {
+        Table table = new Table(17);
+
+        List<PackingListEntry> jobCardList = getPackingList(fileName);
+        table.addHeaderCell("Box Number");
+        table.addHeaderCell("Brand");
+        table.addHeaderCell("PO Number");
+        table.addHeaderCell("SKU");
+        table.addHeaderCell("Leather");
+        table.addHeaderCell("40");
+        table.addHeaderCell("41");
+        table.addHeaderCell("42");
+        table.addHeaderCell("43");
+        table.addHeaderCell("44");
+        table.addHeaderCell("45");
+        table.addHeaderCell("46");
+        table.addHeaderCell("47");
+        table.addHeaderCell("Total");
+        table.addHeaderCell("Courier Name");
+        table.addHeaderCell("Tracking Number");
+        table.addHeaderCell("Dispatch Date");
+        table.setTextAlignment(TextAlignment.CENTER);
+
+        jobCardList.forEach(timeSheetDto -> {
+            table.addCell(timeSheetDto.getBoxNumber());
+            table.addCell(timeSheetDto.getBrand());
+            table.addCell(timeSheetDto.getPoNumber());
+            table.addCell(timeSheetDto.getSku());
+            table.addCell(timeSheetDto.getLeather());
+            table.addCell(timeSheetDto.getSize_40_quantity());
+            table.addCell(timeSheetDto.getSize_41_quantity());
+            table.addCell(timeSheetDto.getSize_42_quantity());
+            table.addCell(timeSheetDto.getSize_43_quantity());
+            table.addCell(timeSheetDto.getSize_44_quantity());
+            table.addCell(timeSheetDto.getSize_45_quantity());
+            table.addCell(timeSheetDto.getSize_46_quantity());
+            table.addCell(timeSheetDto.getSize_47_quantity());
+            table.addCell(timeSheetDto.getTotal());
+            table.addCell(timeSheetDto.getCourierName()!=null?timeSheetDto.getCourierName():"");
+            table.addCell(timeSheetDto.getTrackingNumber()!=null?timeSheetDto.getTrackingNumber():"");
+            table.addCell(timeSheetDto.getShippedDate()!=null?timeSheetDto.getShippedDate():"");
+        });
+
+
+        return new PdfUtils("D:\\PackingList\\"+fileName.substring(0,fileName.length()-5)).SaveAsPdf(table);
 
     }
 
