@@ -6,6 +6,7 @@ public class JobCardProgress implements Comparable{
     private String Date;
     private String sku;
     private String leather;
+    private String price;
     private String size;
     private String productionStage;
     private String count;
@@ -38,6 +39,14 @@ public class JobCardProgress implements Comparable{
 
     public void setLeather(String leather) {
         this.leather = leather;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getSize() {

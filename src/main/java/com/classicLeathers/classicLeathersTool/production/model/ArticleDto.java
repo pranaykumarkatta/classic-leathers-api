@@ -8,6 +8,7 @@ public class ArticleDto {
     private String style;
     private String lining;
     private String sole;
+    private String price;
 
     public String getSku() {
         return sku;
@@ -55,5 +56,13 @@ public class ArticleDto {
 
     public void setSole(String sole) {
         this.sole = sole;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

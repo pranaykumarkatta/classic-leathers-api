@@ -46,13 +46,15 @@ public class JobCardService {
             for (String row : rowData) {
                 ArticleDto articleDto = new ArticleDto();
                 String[] cellData = row.split(",");
-                articleDto.setSku(cellData[0]);
-                articleDto.setLeather(cellData[1]);
-                articleDto.setHandStitchingPattern(cellData[2]);
-                articleDto.setStyle(cellData[3]);
-                articleDto.setLining(cellData[4]);
-                articleDto.setSole(cellData[5]);
-                articleDtoList.add(articleDto);
+                if (cellData.length > 1) {
+                    articleDto.setSku(cellData[0]);
+                    articleDto.setLeather(cellData[1]);
+                    articleDto.setHandStitchingPattern(cellData[2]);
+                    articleDto.setStyle(cellData[3]);
+                    articleDto.setLining(cellData[4]);
+                    articleDto.setSole(cellData[5]);
+                    articleDtoList.add(articleDto);
+                }
             }
             return articleDtoList;
         }
@@ -239,6 +241,7 @@ public class JobCardService {
                     if (productionStage.equals("PACKING")) {
                         jobCardProgressDto.setBatchNumber(cellData[11]);
                         jobCardProgressDto.setPackingBoxNumber(cellData[12]);
+                        jobCardProgressDto.setPrice(cellData[14]);
                     }
                     jobCardProgressDto.setCourierName("NA");
                     jobCardProgressDto.setTrackingNumber("NA");
@@ -444,7 +447,7 @@ public class JobCardService {
                             String customer, String brand,
                             String poNumber, String jobWorkVendor,
                             String poDate) {
-        String fileName = "JOBCARD_" + jobCardNumber + "_" + customer + "_" + brand + "_" + poNumber+"_" + jobWorkVendor;
+        String fileName = "JOBCARD_" + jobCardNumber + "_" + customer + "_" + brand + "_" + poNumber + "_" + jobWorkVendor;
         try {
             createJobCard("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + fileName + ".xlsx",
                     customer, brand, poNumber, jobWorkVendor, poDate);
@@ -534,16 +537,17 @@ public class JobCardService {
         xssfWorkbook.write(out);
         out.close();
     }
-  public void closeJobCard(String fileName) {
-      try {
-          Path temp = Files.move
-                  (Paths.get("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\"+fileName),
-                          Paths.get("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\Closed\\"+fileName));
-      } catch (IOException e) {
-          throw new RuntimeException(e);
-      }
 
-  }
+    public void closeJobCard(String fileName) {
+        try {
+            Path temp = Files.move
+                    (Paths.get("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\" + fileName),
+                            Paths.get("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\JobCards\\Closed\\" + fileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     private void createProductionProgressSheets(XSSFWorkbook wb, String sheetName) {
         Sheet sheet = wb.createSheet(sheetName);
@@ -580,19 +584,22 @@ public class JobCardService {
             cell9.setCellValue("47");
             Cell cell10 = row.createCell(10);
             cell10.setCellValue("DATE");
-            if (sheetName.equals("PACKING")) {
-                Cell cell11 = row.createCell(11);
-                cell11.setCellValue("BATCH_NUMBER");
-                Cell cell12 = row.createCell(12);
-                cell12.setCellValue("BOX_NUMBER");
-            }
+            Cell cell11 = row.createCell(11);
+            cell11.setCellValue("BATCH_NUMBER");
+            Cell cell12 = row.createCell(12);
+            cell12.setCellValue("BOX_NUMBER");
             Cell cell13 = row.createCell(13);
             cell13.setCellValue("VENDOR");
+            Cell cell14 = row.createCell(14);
+            cell14.setCellValue("PRICE");
         }
     }
 
     public void saveJobCardProgress(JobCardProgress jobCardProgress, String jobCardFileName) throws
             InvalidCountException {
+        if (jobCardProgress.getProductionStage().equals("PACKING"))
+            jobCardProgress = updatePrice(jobCardProgress, jobCardFileName);
+
         Object[] data;
         if (!jobCardProgress.getProductionStage().equals("DISPATCH")) {
             if (jobCardFileName.contains("Self")) {
@@ -602,61 +609,62 @@ public class JobCardService {
             }
             if (jobCardProgress.getProductionStage().equals("PACKING"))
                 validatePackingDetails(jobCardProgress, jobCardFileName);
+            String vendor = jobCardProgress.getVendor() != null ? jobCardProgress.getVendor() : "NA";
             if (jobCardProgress.getSize().equals("40")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", "", jobCardProgress.getVendor()
+                        "", "", vendor, jobCardProgress.getPrice()
                 };
             } else if (jobCardProgress.getSize().equals("41")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", "", jobCardProgress.getVendor()
+                        "", "", vendor, jobCardProgress.getPrice()
                 };
             } else if (jobCardProgress.getSize().equals("42")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", "", jobCardProgress.getVendor()
+                        "", "", vendor, jobCardProgress.getPrice()
                 };
             } else if (jobCardProgress.getSize().equals("43")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", "", jobCardProgress.getVendor()
+                        "", "", vendor, jobCardProgress.getPrice()
                 };
             } else if (jobCardProgress.getSize().equals("44")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", "", jobCardProgress.getVendor()
+                        "", "", vendor, jobCardProgress.getPrice()
                 };
             } else if (jobCardProgress.getSize().equals("45")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0", "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", "", jobCardProgress.getVendor()
+                        "", "", vendor, jobCardProgress.getPrice()
                 };
             } else if (jobCardProgress.getSize().equals("46")) {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(), "0",
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", "", jobCardProgress.getVendor()
+                        "", "", vendor, jobCardProgress.getPrice()
                 };
             } else {
                 data = new Object[]{jobCardProgress.getSku(),
                         jobCardProgress.getLeather(),
                         "0", "0", "0", "0", "0", "0", "0", jobCardProgress.getCount(),
                         new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                        "", "", jobCardProgress.getVendor()
+                        "", "", vendor, jobCardProgress.getPrice()
                 };
             }
         } else {
@@ -693,6 +701,33 @@ public class JobCardService {
                 Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private JobCardProgress updatePrice(JobCardProgress jobCardProgress, String jobCardFileName) {
+        String fileData = "";
+        Map<String, String> priceMap = new HashMap<>();
+
+        if (jobCardFileName.contains("TeakWood")) {
+            try {
+                fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\PRODUCTION_DOCS\\Articles\\ARTICLES.xlsx", 0);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            List<String> rowData = new ArrayList<>();
+            rowData.addAll(Arrays.asList(fileData.split("\n")));
+            if (rowData.size() != 0) {
+                rowData.remove(0);//Remove header data
+                priceMap = new HashMap<>();
+                for (String row : rowData) {
+                    String[] cellData = row.split(",");
+                    if (cellData.length > 1)
+                        priceMap.put(cellData[0] + "_" + cellData[1], cellData[6]);
+                }
+            }
+            jobCardProgress.setPrice(priceMap.get(jobCardProgress.getSku() + "_" + jobCardProgress.getLeather()));
+        }
+        return jobCardProgress;
     }
 
     private void validateDispatchEntry(String batchNumber, String jobCardFileName) throws InvalidCountException {
@@ -1322,25 +1357,26 @@ public class JobCardService {
         for (String row : rowData) {
             String[] cellData = row.split(",");
 
-                PackingListEntry packingListEntry = new PackingListEntry();
-                packingListEntry.setSku(cellData[0]);
-                packingListEntry.setLeather(cellData[1]);
-                packingListEntry.setSize_40_quantity(cellData[2]);
-                packingListEntry.setSize_41_quantity(cellData[3]);
-                packingListEntry.setSize_42_quantity(cellData[4]);
-                packingListEntry.setSize_43_quantity(cellData[5]);
-                packingListEntry.setSize_44_quantity(cellData[6]);
-                packingListEntry.setSize_45_quantity(cellData[7]);
-                packingListEntry.setSize_46_quantity(cellData[8]);
-                packingListEntry.setSize_47_quantity(cellData[9]);
-                packingListEntry.setTotal("" + ((Integer.parseInt(cellData[2]) + (Integer.parseInt(cellData[3])) +
-                        (Integer.parseInt(cellData[4])) + (Integer.parseInt(cellData[5])) + (Integer.parseInt(cellData[6])) +
-                        (Integer.parseInt(cellData[7])) + (Integer.parseInt(cellData[8])) + (Integer.parseInt(cellData[9])))));
-                packingListEntry.setBatchNumber(cellData[11]);
-                packingListEntry.setBoxNumber(cellData[12]);
-                packingListEntry.setBrand(info[3]);
-                packingListEntry.setPoNumber(info[4]);
-                packingListEntryList.add(packingListEntry);
+            PackingListEntry packingListEntry = new PackingListEntry();
+            packingListEntry.setSku(cellData[0]);
+            packingListEntry.setLeather(cellData[1]);
+            packingListEntry.setPrice(cellData[14]);
+            packingListEntry.setSize_40_quantity(cellData[2]);
+            packingListEntry.setSize_41_quantity(cellData[3]);
+            packingListEntry.setSize_42_quantity(cellData[4]);
+            packingListEntry.setSize_43_quantity(cellData[5]);
+            packingListEntry.setSize_44_quantity(cellData[6]);
+            packingListEntry.setSize_45_quantity(cellData[7]);
+            packingListEntry.setSize_46_quantity(cellData[8]);
+            packingListEntry.setSize_47_quantity(cellData[9]);
+            packingListEntry.setTotal("" + ((Integer.parseInt(cellData[2]) + (Integer.parseInt(cellData[3])) +
+                    (Integer.parseInt(cellData[4])) + (Integer.parseInt(cellData[5])) + (Integer.parseInt(cellData[6])) +
+                    (Integer.parseInt(cellData[7])) + (Integer.parseInt(cellData[8])) + (Integer.parseInt(cellData[9])))));
+            packingListEntry.setBatchNumber(cellData[11]);
+            packingListEntry.setBoxNumber(cellData[12]);
+            packingListEntry.setBrand(info[3]);
+            packingListEntry.setPoNumber(info[4]);
+            packingListEntryList.add(packingListEntry);
         }
 
         Map<String, PackingListEntry> stringPackingListEntryMap = new HashMap<>();
@@ -1364,14 +1400,14 @@ public class JobCardService {
 
         List<PackingListEntry> finalPackingListEntries = new ArrayList<>(stringPackingListEntryMap.values());
         finalPackingListEntries.forEach(packingListEntry -> {
-            if (dispatchJobCardProgressMap.keySet().contains(packingListEntry.getBatchNumber())){
+            if (dispatchJobCardProgressMap.keySet().contains(packingListEntry.getBatchNumber())) {
                 packingListEntry.setCourierName(dispatchJobCardProgressMap.get(packingListEntry.getBatchNumber()).getCourierName());
                 packingListEntry.setTrackingNumber(dispatchJobCardProgressMap.get(packingListEntry.getBatchNumber()).getTrackingNumber());
                 packingListEntry.setShippedDate(dispatchJobCardProgressMap.get(packingListEntry.getBatchNumber()).getDate());
             }
         });
 
-        List<PackingListEntry> sortedPackingListEntries = stringPackingListEntryMap.values().stream().sorted((o1, o2)-> new Integer(o1.getBoxNumber()).
+        List<PackingListEntry> sortedPackingListEntries = stringPackingListEntryMap.values().stream().sorted((o1, o2) -> new Integer(o1.getBoxNumber()).
                         compareTo(new Integer(o2.getBoxNumber()))).
                 collect(Collectors.toList());
         return sortedPackingListEntries;
@@ -1405,20 +1441,20 @@ public class JobCardService {
         Table table = new Table(15);
 
         List<JobCard> jobCardList = getJobCardDetails(fileName);
-        com.itextpdf.layout.element.Cell fileNameCell = new com.itextpdf.layout.element.Cell(1,15);
-        fileNameCell.add(new Paragraph(fileName.substring(0,fileName.length()-5)));
+        com.itextpdf.layout.element.Cell fileNameCell = new com.itextpdf.layout.element.Cell(1, 15);
+        fileNameCell.add(new Paragraph(fileName.substring(0, fileName.length() - 5)));
         fileNameCell.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(fileNameCell);
 
-        com.itextpdf.layout.element.Cell clientInfoCell = new com.itextpdf.layout.element.Cell(1,5);
+        com.itextpdf.layout.element.Cell clientInfoCell = new com.itextpdf.layout.element.Cell(1, 5);
         clientInfoCell.add(new Paragraph(jobCardList.get(0).getClient()));
         clientInfoCell.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(clientInfoCell);
-        com.itextpdf.layout.element.Cell brandInfoCell = new com.itextpdf.layout.element.Cell(1,7);
+        com.itextpdf.layout.element.Cell brandInfoCell = new com.itextpdf.layout.element.Cell(1, 7);
         brandInfoCell.add(new Paragraph(jobCardList.get(0).getBrand()));
         brandInfoCell.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(brandInfoCell);
-        com.itextpdf.layout.element.Cell poInfoCell = new com.itextpdf.layout.element.Cell(1,3);
+        com.itextpdf.layout.element.Cell poInfoCell = new com.itextpdf.layout.element.Cell(1, 3);
         poInfoCell.add(new Paragraph(jobCardList.get(0).getPoDate()));
         poInfoCell.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(poInfoCell);
@@ -1459,19 +1495,20 @@ public class JobCardService {
         });
 
 
-        return new PdfUtils("D:\\JobCards\\"+fileName.substring(0,fileName.length()-5)).SaveAsPdf(table);
+        return new PdfUtils("D:\\JobCards\\" + fileName.substring(0, fileName.length() - 5)).SaveAsPdf(table);
 
     }
 
     public String exportPackingList(String fileName) {
-        Table table = new Table(17);
+        Table table = new Table(18);
 
-        List<PackingListEntry> jobCardList = getPackingList(fileName);
+        List<PackingListEntry> packingListEntryList = getPackingList(fileName);
         table.addHeaderCell("Box Number");
         table.addHeaderCell("Brand");
         table.addHeaderCell("PO Number");
         table.addHeaderCell("SKU");
         table.addHeaderCell("Leather");
+        table.addHeaderCell("Price");
         table.addHeaderCell("40");
         table.addHeaderCell("41");
         table.addHeaderCell("42");
@@ -1485,29 +1522,34 @@ public class JobCardService {
         table.addHeaderCell("Tracking Number");
         table.addHeaderCell("Dispatch Date");
         table.setTextAlignment(TextAlignment.CENTER);
+        packingListEntryList.forEach(packingListEntry -> {
+            table.addCell(packingListEntry.getBoxNumber());
+            table.addCell(packingListEntry.getBrand());
+            if (!packingListEntry.getBatchNumber().contains("PO")) {
+                table.addCell(packingListEntry.getPoNumber());
+            } else {
+                table.addCell(packingListEntry.getBatchNumber().split("_")[1]);
+            }
+            table.addCell(packingListEntry.getSku());
+            table.addCell(packingListEntry.getLeather());
+            table.addCell(packingListEntry.getPrice());
+            table.addCell(packingListEntry.getSize_40_quantity());
+            table.addCell(packingListEntry.getSize_41_quantity());
+            table.addCell(packingListEntry.getSize_42_quantity());
+            table.addCell(packingListEntry.getSize_43_quantity());
+            table.addCell(packingListEntry.getSize_44_quantity());
+            table.addCell(packingListEntry.getSize_45_quantity());
+            table.addCell(packingListEntry.getSize_46_quantity());
+            table.addCell(packingListEntry.getSize_47_quantity());
+            table.addCell(packingListEntry.getTotal());
+            table.addCell(packingListEntry.getCourierName() != null ? packingListEntry.getCourierName() : "");
+            table.addCell(packingListEntry.getTrackingNumber() != null ? packingListEntry.getTrackingNumber() : "");
+            table.addCell(packingListEntry.getShippedDate() != null ? packingListEntry.getShippedDate() : "");
 
-        jobCardList.forEach(timeSheetDto -> {
-            table.addCell(timeSheetDto.getBoxNumber());
-            table.addCell(timeSheetDto.getBrand());
-            table.addCell(timeSheetDto.getPoNumber());
-            table.addCell(timeSheetDto.getSku());
-            table.addCell(timeSheetDto.getLeather());
-            table.addCell(timeSheetDto.getSize_40_quantity());
-            table.addCell(timeSheetDto.getSize_41_quantity());
-            table.addCell(timeSheetDto.getSize_42_quantity());
-            table.addCell(timeSheetDto.getSize_43_quantity());
-            table.addCell(timeSheetDto.getSize_44_quantity());
-            table.addCell(timeSheetDto.getSize_45_quantity());
-            table.addCell(timeSheetDto.getSize_46_quantity());
-            table.addCell(timeSheetDto.getSize_47_quantity());
-            table.addCell(timeSheetDto.getTotal());
-            table.addCell(timeSheetDto.getCourierName()!=null?timeSheetDto.getCourierName():"");
-            table.addCell(timeSheetDto.getTrackingNumber()!=null?timeSheetDto.getTrackingNumber():"");
-            table.addCell(timeSheetDto.getShippedDate()!=null?timeSheetDto.getShippedDate():"");
         });
 
 
-        return new PdfUtils("D:\\PackingList\\"+fileName.substring(0,fileName.length()-5)).SaveAsPdf(table);
+        return new PdfUtils("D:\\PackingList\\" + fileName.substring(0, fileName.length() - 5)).SaveAsPdf(table);
 
     }
 
