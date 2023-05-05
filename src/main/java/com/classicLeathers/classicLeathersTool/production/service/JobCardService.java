@@ -1522,33 +1522,54 @@ public class JobCardService {
         table.addHeaderCell("Tracking Number");
         table.addHeaderCell("Dispatch Date");
         table.setTextAlignment(TextAlignment.CENTER);
-        packingListEntryList.forEach(packingListEntry -> {
-            table.addCell(packingListEntry.getBoxNumber());
-            table.addCell(packingListEntry.getBrand());
-            if (!packingListEntry.getBatchNumber().contains("PO")) {
-                table.addCell(packingListEntry.getPoNumber());
-            } else {
-                table.addCell(packingListEntry.getBatchNumber().split("_")[1]);
+
+        String courierName = "";
+        String trackingNumber = "";
+        String dispatchDate = "";
+        for (int i = 0; i < packingListEntryList.size(); i++) {
+            PackingListEntry p = packingListEntryList.get(i);
+            if ((!p.getBatchNumber().contains("PO")) && (
+                    courierName.equals("") || trackingNumber.equals("") || dispatchDate.equals(""))) {
+                courierName = p.getCourierName();
+                trackingNumber = p.getTrackingNumber();
+                dispatchDate = p.getShippedDate();
             }
-            table.addCell(packingListEntry.getSku());
-            table.addCell(packingListEntry.getLeather());
-            table.addCell(packingListEntry.getPrice());
-            table.addCell(packingListEntry.getSize_40_quantity());
-            table.addCell(packingListEntry.getSize_41_quantity());
-            table.addCell(packingListEntry.getSize_42_quantity());
-            table.addCell(packingListEntry.getSize_43_quantity());
-            table.addCell(packingListEntry.getSize_44_quantity());
-            table.addCell(packingListEntry.getSize_45_quantity());
-            table.addCell(packingListEntry.getSize_46_quantity());
-            table.addCell(packingListEntry.getSize_47_quantity());
-            table.addCell(packingListEntry.getTotal());
-            table.addCell(packingListEntry.getCourierName() != null ? packingListEntry.getCourierName() : "");
-            table.addCell(packingListEntry.getTrackingNumber() != null ? packingListEntry.getTrackingNumber() : "");
-            table.addCell(packingListEntry.getShippedDate() != null ? packingListEntry.getShippedDate() : "");
+        }
+        for (int i = 0; i < packingListEntryList.size(); i++) {
+            PackingListEntry packingListEntry = packingListEntryList.get(i);
+            if (!(packingListEntry.getBatchNumber().contains("PO") && fileName.contains(packingListEntry.getBatchNumber().split("_")[1]))) {
+                table.addCell(packingListEntry.getBoxNumber());
+                table.addCell(packingListEntry.getBrand());
+                if (!packingListEntry.getBatchNumber().contains("PO")) {
+                    table.addCell(packingListEntry.getPoNumber());
+                } else {
+                    table.addCell(packingListEntry.getBatchNumber().split("_")[1]);
+                }
+                table.addCell(packingListEntry.getSku());
+                table.addCell(packingListEntry.getLeather());
+                table.addCell(packingListEntry.getPrice());
+                table.addCell(packingListEntry.getSize_40_quantity());
+                table.addCell(packingListEntry.getSize_41_quantity());
+                table.addCell(packingListEntry.getSize_42_quantity());
+                table.addCell(packingListEntry.getSize_43_quantity());
+                table.addCell(packingListEntry.getSize_44_quantity());
+                table.addCell(packingListEntry.getSize_45_quantity());
+                table.addCell(packingListEntry.getSize_46_quantity());
+                table.addCell(packingListEntry.getSize_47_quantity());
+                table.addCell(packingListEntry.getTotal());
+                if (!packingListEntry.getBatchNumber().contains("PO")) {
+                    table.addCell(packingListEntry.getCourierName() != null ? packingListEntry.getCourierName() : "");
+                    table.addCell(packingListEntry.getTrackingNumber() != null ? packingListEntry.getTrackingNumber() : "");
+                    table.addCell(packingListEntry.getShippedDate() != null ? packingListEntry.getShippedDate() : "");
+                } else {
+                    table.addCell(courierName);
+                    table.addCell(trackingNumber);
+                    table.addCell(dispatchDate);
+                }
+            }
+        }
 
-        });
-
-        return new PdfUtils("D:\\PackingList\\"+new SimpleDateFormat("ddMMMyyhhmma").format(new Date())+ "_" + fileName.substring(0, fileName.length() - 5)).SaveAsPdf(table);
+        return new PdfUtils("D:\\PackingList\\" + new SimpleDateFormat("ddMMMyyhhmma").format(new Date()) + "_" + fileName.substring(0, fileName.length() - 5)).SaveAsPdf(table);
 
     }
 
