@@ -71,12 +71,12 @@ public class JobCardController {
     }
 
     @PostMapping(path = "/saveJobCardProgress", consumes = "application/json", produces = "text/plain")
-    public ResponseEntity<String> saveJobCardProgress(@RequestBody JobCardProgress jobCardProgress,
+    public ResponseEntity<String> saveJobCardProgress(@RequestBody List<JobCardProgress> jobCardProgressList,
                                                       @RequestParam String jobCardFileName) {
         try {
-            jobCardService.saveJobCardProgress(jobCardProgress, jobCardFileName);
+            jobCardService.saveJobCardProgress(jobCardProgressList, jobCardFileName);
             return ResponseEntity.ok("");
-        } catch (InvalidCountException e) {
+        } catch (Exception e) {
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
         }
     }
