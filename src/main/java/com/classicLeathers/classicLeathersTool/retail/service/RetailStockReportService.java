@@ -14,7 +14,7 @@ public class RetailStockReportService {
     public List<DrivingShoeStockEntry> getDrivingShoeStockReport() {
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\STOCK AUDIT REPORTS_V2.xlsx", 0);
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\STOCK AUDIT REPORTS_MAY.xlsx", 0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

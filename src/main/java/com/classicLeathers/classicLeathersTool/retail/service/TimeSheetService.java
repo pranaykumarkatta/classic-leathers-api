@@ -91,10 +91,10 @@ public class TimeSheetService {
             }
 
             long secs = workingTime / 1000;
-            int hours = (int) (secs / 3600);
-            int mins = (int) ((secs % 3600) / 60);
+            float hours = (float) (secs / 3600);
+            float mins = (float) ((secs % 3600) / 60);
             dto.setPresent(present);
-            dto.setTotalWorkingHours(hours + " : " + mins);
+            dto.setTotalWorkingHours(String.format("%.2f", (hours + (mins / 60))));
             dto.setRowNumber(rowNumber);
             finalTimeSheetDtos.add(dto);
         }
@@ -184,7 +184,7 @@ public class TimeSheetService {
 
     public String exportData(Integer monthNumber) {
         Table table = new Table(3);
-        Cell cell = new Cell(1,3);
+        Cell cell = new Cell(1, 3);
         cell.add(new Paragraph("TimeSheet Data"));
         table.addHeaderCell(cell);
         table.addHeaderCell("Date");
@@ -199,7 +199,7 @@ public class TimeSheetService {
         });
 
 
-        return new PdfUtils("TimeSheet_"+monthNumber).SaveAsPdf(table);
+        return new PdfUtils("TimeSheet_" + monthNumber).SaveAsPdf(table);
 
 
     }
