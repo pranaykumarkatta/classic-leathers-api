@@ -753,12 +753,12 @@ public class JobCardService {
         });
         List<String> invalidBoxDetailsList = new ArrayList<>();
         packingJobCardProgressMap.values().forEach(jobCardProgress -> {
-            if (Integer.parseInt(jobCardProgress.getCount()) < 15 && batchNumber.equals(jobCardProgress.getBatchNumber())) {
+            if (Integer.parseInt(jobCardProgress.getCount()) < 18 && batchNumber.equals(jobCardProgress.getBatchNumber())) {
                 invalidBoxDetailsList.add(jobCardProgress.getPackingBoxNumber() + " : contains " + jobCardProgress.getCount() + " Pairs");
             }
         });
         if (invalidBoxDetailsList.size() > 0)
-            throw new InvalidCountException("Boxes has < 15 Pairs : \n" + invalidBoxDetailsList.toString());
+            throw new InvalidCountException("Boxes has < 18 Pairs : \n" + invalidBoxDetailsList.toString());
     }
 
     private void validateSelfJobCardProgressEntry(JobCardProgress jobCardProgress, String jobCardFileName) throws
@@ -1270,15 +1270,15 @@ public class JobCardService {
 
     private void validatePackingDetails(JobCardProgress jobCardProgress, String jobCardFileName) throws
             InvalidCountException {
-        if (Integer.parseInt(jobCardProgress.getCount()) > 15) {
-            throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= 15 for each box");
+        if (Integer.parseInt(jobCardProgress.getCount()) > 18) {
+            throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= 18 for each box");
         } else {
             Map<String, Integer> boxVolumeCountMap = getPackingBoxDetails(jobCardFileName);
             String s = jobCardProgress.getBatchNumber() + "_" + jobCardProgress.getPackingBoxNumber();
             if (boxVolumeCountMap.keySet().contains(s)
-                    && ((boxVolumeCountMap.get(s) + Integer.parseInt(jobCardProgress.getCount())) > 15)) {
+                    && ((boxVolumeCountMap.get(s) + Integer.parseInt(jobCardProgress.getCount())) > 18)) {
                 throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= " +
-                        (15 - boxVolumeCountMap.get(s)) + " for the box " + jobCardProgress.getPackingBoxNumber() + " in batch " + jobCardProgress.getBatchNumber());
+                        (18 - boxVolumeCountMap.get(s)) + " for the box " + jobCardProgress.getPackingBoxNumber() + " in batch " + jobCardProgress.getBatchNumber());
             }
         }
     }

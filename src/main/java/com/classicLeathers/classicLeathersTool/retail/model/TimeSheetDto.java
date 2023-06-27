@@ -1,6 +1,7 @@
 package com.classicLeathers.classicLeathersTool.retail.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class TimeSheetDto implements Comparable{
     private String date;
@@ -9,6 +10,9 @@ public class TimeSheetDto implements Comparable{
     private String totalWorkingHours;
     private String rowNumber;
     private String isTodayEntry;
+    private String latestInTime;
+    private String latestOutTime;
+    private List<String> eventlogList;
 
     public String getDate() {
         return date;
@@ -56,6 +60,30 @@ public class TimeSheetDto implements Comparable{
 
     public void setIsTodayEntry(String isTodayEntry) {
         this.isTodayEntry = isTodayEntry;
+    }
+
+    public String getLatestInTime() {
+        return latestInTime;
+    }
+
+    public void setLatestInTime(String latestInTime) {
+        this.latestInTime = latestInTime;
+    }
+
+    public String getLatestOutTime() {
+        return latestOutTime;
+    }
+
+    public void setLatestOutTime(String latestOutTime) {
+        this.latestOutTime = latestOutTime;
+    }
+
+    public List<String> getEventlogList() {
+        return eventlogList;
+    }
+
+    public void setEventlogList(List<String> eventlogList) {
+        this.eventlogList = eventlogList;
     }
 
     @Override

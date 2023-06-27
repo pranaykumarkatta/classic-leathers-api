@@ -60,6 +60,7 @@ public class TimeSheetService {
         }
         List<TimeSheetDto> finalTimeSheetDtos = new ArrayList<>();
         for (String mapKey : map.keySet()) {
+            List<String> eventLogs = new ArrayList<>();
             TimeSheetDto dto = new TimeSheetDto();
             String[] strings = mapKey.split("_");
             dto.setIsTodayEntry("" + (new SimpleDateFormat("MM-d-yyyy").format(new Date(strings[0]))
@@ -75,10 +76,16 @@ public class TimeSheetService {
                     present = "No";
                 }
                 if (timeSheet.getPresent().equals("Yes") &&
+                        !timeSheet.getInTime().equals("NA") && !timeSheet.getInTime().equals("Invalid")) {
+                        dto.setLatestInTime(timeSheet.getInTime());
+                        dto.setLatestOutTime(timeSheet.getOutTime());
+                }
+                if (timeSheet.getPresent().equals("Yes") &&
                         !timeSheet.getInTime().equals("NA") && !timeSheet.getInTime().equals("Invalid")
                         && !timeSheet.getOutTime().equals("NA") && !timeSheet.getOutTime().equals("Invalid")) {
 
                     try {
+                        eventLogs.add(timeSheet.getInTime() +" :: "+timeSheet.getOutTime());
                         workingTime = workingTime + new SimpleDateFormat("h:mm a").parse(timeSheet.getOutTime()).getTime() -
                                 new SimpleDateFormat("h:mm a").parse(timeSheet.getInTime()).getTime();
 
@@ -96,6 +103,7 @@ public class TimeSheetService {
             dto.setPresent(present);
             dto.setTotalWorkingHours(String.format("%.2f", (hours + (mins / 60))));
             dto.setRowNumber(rowNumber);
+            dto.setEventlogList(eventLogs);
             finalTimeSheetDtos.add(dto);
         }
 
