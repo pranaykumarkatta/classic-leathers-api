@@ -7,6 +7,7 @@ import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,9 +50,16 @@ public class RetailStockReportService {
                 drivingShoeStockEntryList.add(drivingShoeStockEntry);
             }
         }
-        ;
 
-        return adjustStockLevel(drivingShoeStockEntryList, getDrivingShoeSalesByMonth());
+        List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
+
+        //update i=0 from next year
+        for (int i = 3; i < 12; i++) {
+            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4)%12)
+                drivingShoeSalesEntryList.addAll(getDrivingShoeSalesByMonth(i));
+        }
+
+        return adjustStockLevel(drivingShoeStockEntryList, drivingShoeSalesEntryList);
     }
 
     private List<DrivingShoeStockEntry> adjustStockLevel(List<DrivingShoeStockEntry> drivingShoeStockEntryList,
@@ -69,14 +77,15 @@ public class RetailStockReportService {
         drivingShoeStockEntryList.forEach(obj -> {
             String key = obj.getBrand() + "_" + obj.getSku() + "_" + obj.getLeather();
             DrivingShoeStockEntry saleEntry = drivingShoeSalesEntryMap.get(key);
-            obj.setSize_40_SalesStockInfo("STOCKED_IN : "+obj.getSize_40_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_40_quantity()));
-            obj.setSize_41_SalesStockInfo("STOCKED_IN : "+obj.getSize_41_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_41_quantity()));
-            obj.setSize_42_SalesStockInfo("STOCKED_IN : "+obj.getSize_42_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_42_quantity()));
-            obj.setSize_43_SalesStockInfo("STOCKED_IN : "+obj.getSize_43_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_43_quantity()));
-            obj.setSize_44_SalesStockInfo("STOCKED_IN : "+obj.getSize_44_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_44_quantity()));
-            obj.setSize_45_SalesStockInfo("STOCKED_IN : "+obj.getSize_45_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_45_quantity()));
-            obj.setSize_46_SalesStockInfo("STOCKED_IN : "+obj.getSize_46_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_46_quantity()));
-            obj.setSize_47_SalesStockInfo("STOCKED_IN : "+obj.getSize_47_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_47_quantity()));
+            obj.setSize_40_SalesStockInfo("STOCKED_IN : " + obj.getSize_40_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_40_quantity()));
+            obj.setSize_41_SalesStockInfo("STOCKED_IN : " + obj.getSize_41_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_41_quantity()));
+            obj.setSize_42_SalesStockInfo("STOCKED_IN : " + obj.getSize_42_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_42_quantity()));
+            obj.setSize_43_SalesStockInfo("STOCKED_IN : " + obj.getSize_43_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_43_quantity()));
+            obj.setSize_44_SalesStockInfo("STOCKED_IN : " + obj.getSize_44_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_44_quantity()));
+            obj.setSize_45_SalesStockInfo("STOCKED_IN : " + obj.getSize_45_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_45_quantity()));
+            obj.setSize_46_SalesStockInfo("STOCKED_IN : " + obj.getSize_46_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_46_quantity()));
+            obj.setSize_47_SalesStockInfo("STOCKED_IN : " + obj.getSize_47_quantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getSize_47_quantity()));
+            obj.setTotal_Quantity_SalesStockInfo("STOCKED_IN : " + obj.getTotalQuantity() + "   SOLED_OUT : " + (saleEntry == null ? 0 : saleEntry.getTotalQuantity()));
             if (!drivingShoeSalesEntryMap.containsKey(key)) {
                 adjustedDrivingShoeStockEntryList.add(obj);
             } else {
@@ -88,6 +97,7 @@ public class RetailStockReportService {
                 obj.setSize_45_quantity(obj.getSize_45_quantity() - saleEntry.getSize_45_quantity());
                 obj.setSize_46_quantity(obj.getSize_46_quantity() - saleEntry.getSize_46_quantity());
                 obj.setSize_47_quantity(obj.getSize_47_quantity() - saleEntry.getSize_47_quantity());
+                obj.setTotalQuantity(obj.getTotalQuantity() - saleEntry.getTotalQuantity());
 
                 if (obj.getSize_40_quantity() < 0 || obj.getSize_41_quantity() < 0 || obj.getSize_42_quantity() < 0 ||
                         obj.getSize_43_quantity() < 0 || obj.getSize_44_quantity() < 0 || obj.getSize_45_quantity() < 0 ||
@@ -97,14 +107,12 @@ public class RetailStockReportService {
                 adjustedDrivingShoeStockEntryList.add(obj);
             }
         });
-
-
         return adjustedDrivingShoeStockEntryList;
     }
 
-    private List<DrivingShoeStockEntry> getDrivingShoeSalesByMonth() {
+    private List<DrivingShoeStockEntry> getDrivingShoeSalesByMonth(int sheetNumber) {
         List<RetailSalesEntryDto> retailDrivingSalesEntryDtoList = new ArrayList<>();
-        List<RetailSalesEntryDto> retailSalesEntryDtoList = retailSalesReportService.getSalesDataByMonth(3);
+        List<RetailSalesEntryDto> retailSalesEntryDtoList = retailSalesReportService.getSalesDataByMonth(sheetNumber);
         retailDrivingSalesEntryDtoList = retailSalesEntryDtoList.stream().filter(retailSalesEntryDto -> (retailSalesEntryDto.getCategory().contains("LF")
                 && retailSalesEntryDto.getSize() != "NA")).collect(Collectors.toList());
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
@@ -139,6 +147,7 @@ public class RetailStockReportService {
                     drivingShoeStockEntry.setSize_47_quantity(Integer.parseInt(retailSalesEntryDto.getQuantity()));
                     break;
             }
+            drivingShoeStockEntry.setTotalQuantity(Integer.parseInt(retailSalesEntryDto.getQuantity()));
             drivingShoeSalesEntryList.add(drivingShoeStockEntry);
         });
         Map<String, DrivingShoeStockEntry> drivingShoeSalesEntryMap = new HashMap();
@@ -147,21 +156,29 @@ public class RetailStockReportService {
             if (drivingShoeSalesEntryMap.keySet().contains(key)) {
                 DrivingShoeStockEntry existingEntry = drivingShoeSalesEntryMap.get(key);
                 if (obj.getSize_40_quantity() > 0) {
-                    existingEntry.setSize_40_quantity(existingEntry.getSize_40_quantity() + 1);
+                    existingEntry.setSize_40_quantity(existingEntry.getSize_40_quantity() + obj.getSize_40_quantity());
+                    existingEntry.setTotalQuantity(existingEntry.getTotalQuantity() + obj.getSize_40_quantity());
                 } else if (obj.getSize_41_quantity() > 0) {
-                    existingEntry.setSize_41_quantity(existingEntry.getSize_41_quantity() + 1);
+                    existingEntry.setSize_41_quantity(existingEntry.getSize_41_quantity() + obj.getSize_41_quantity());
+                    existingEntry.setTotalQuantity(existingEntry.getTotalQuantity() + obj.getSize_41_quantity());
                 } else if (obj.getSize_42_quantity() > 0) {
-                    existingEntry.setSize_42_quantity(existingEntry.getSize_42_quantity() + 1);
+                    existingEntry.setSize_42_quantity(existingEntry.getSize_42_quantity() + obj.getSize_42_quantity());
+                    existingEntry.setTotalQuantity(existingEntry.getTotalQuantity() + obj.getSize_42_quantity());
                 } else if (obj.getSize_43_quantity() > 0) {
-                    existingEntry.setSize_43_quantity(existingEntry.getSize_43_quantity() + 1);
+                    existingEntry.setSize_43_quantity(existingEntry.getSize_43_quantity() + obj.getSize_43_quantity());
+                    existingEntry.setTotalQuantity(existingEntry.getTotalQuantity() + obj.getSize_43_quantity());
                 } else if (obj.getSize_44_quantity() > 0) {
-                    existingEntry.setSize_44_quantity(existingEntry.getSize_44_quantity() + 1);
+                    existingEntry.setSize_44_quantity(existingEntry.getSize_44_quantity() + obj.getSize_44_quantity());
+                    existingEntry.setTotalQuantity(existingEntry.getTotalQuantity() + obj.getSize_44_quantity());
                 } else if (obj.getSize_45_quantity() > 0) {
-                    existingEntry.setSize_45_quantity(existingEntry.getSize_45_quantity() + 1);
+                    existingEntry.setSize_45_quantity(existingEntry.getSize_45_quantity() + obj.getSize_45_quantity());
+                    existingEntry.setTotalQuantity(existingEntry.getTotalQuantity() + obj.getSize_45_quantity());
                 } else if (obj.getSize_46_quantity() > 0) {
-                    existingEntry.setSize_46_quantity(existingEntry.getSize_46_quantity() + 1);
+                    existingEntry.setSize_46_quantity(existingEntry.getSize_46_quantity() + obj.getSize_46_quantity());
+                    existingEntry.setTotalQuantity(existingEntry.getTotalQuantity() + obj.getSize_46_quantity());
                 } else if (obj.getSize_47_quantity() > 0) {
-                    existingEntry.setSize_47_quantity(existingEntry.getSize_47_quantity() + 1);
+                    existingEntry.setSize_47_quantity(existingEntry.getSize_47_quantity() + obj.getSize_47_quantity());
+                    existingEntry.setTotalQuantity(existingEntry.getTotalQuantity() + obj.getSize_47_quantity());
                 }
             } else {
                 drivingShoeSalesEntryMap.put(key, obj);

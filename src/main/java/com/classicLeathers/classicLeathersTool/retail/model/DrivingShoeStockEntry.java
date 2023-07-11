@@ -22,6 +22,7 @@ public class DrivingShoeStockEntry {
     private String size_45_SalesStockInfo;
     private String size_46_SalesStockInfo;
     private String size_47_SalesStockInfo;
+    private String total_Quantity_SalesStockInfo;
     private boolean validEntry = true;
 
     public String getRowNumber() {
@@ -190,6 +191,14 @@ public class DrivingShoeStockEntry {
 
     public void setSize_47_SalesStockInfo(String size_47_SalesStockInfo) {
         this.size_47_SalesStockInfo = size_47_SalesStockInfo;
+    }
+
+    public String getTotal_Quantity_SalesStockInfo() {
+        return total_Quantity_SalesStockInfo;
+    }
+
+    public void setTotal_Quantity_SalesStockInfo(String total_Quantity_SalesStockInfo) {
+        this.total_Quantity_SalesStockInfo = total_Quantity_SalesStockInfo;
     }
 
     public boolean isValidEntry() {
