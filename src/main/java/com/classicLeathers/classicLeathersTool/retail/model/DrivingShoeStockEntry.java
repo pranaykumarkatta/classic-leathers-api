@@ -5,15 +5,24 @@ public class DrivingShoeStockEntry {
     private String sku;
     private String leather;
     private String brand;
-    private String size_40_quantity;
-    private String size_41_quantity;
-    private String size_42_quantity;
-    private String size_43_quantity;
-    private String size_44_quantity;
-    private String size_45_quantity;
-    private String size_46_quantity;
-    private String size_47_quantity;
-    private String totalQuantity;
+    private Integer size_40_quantity = 0;
+    private Integer size_41_quantity = 0;
+    private Integer size_42_quantity = 0;
+    private Integer size_43_quantity = 0;
+    private Integer size_44_quantity = 0;
+    private Integer size_45_quantity = 0;
+    private Integer size_46_quantity = 0;
+    private Integer size_47_quantity = 0;
+    private Integer totalQuantity;
+    private String size_40_SalesStockInfo;
+    private String size_41_SalesStockInfo;
+    private String size_42_SalesStockInfo;
+    private String size_43_SalesStockInfo;
+    private String size_44_SalesStockInfo;
+    private String size_45_SalesStockInfo;
+    private String size_46_SalesStockInfo;
+    private String size_47_SalesStockInfo;
+    private boolean validEntry = true;
 
     public String getRowNumber() {
         return rowNumber;
@@ -47,75 +56,147 @@ public class DrivingShoeStockEntry {
         this.brand = brand;
     }
 
-    public String getSize_40_quantity() {
+    public Integer getSize_40_quantity() {
         return size_40_quantity;
     }
 
-    public void setSize_40_quantity(String size_40_quantity) {
+    public void setSize_40_quantity(Integer size_40_quantity) {
         this.size_40_quantity = size_40_quantity;
     }
 
-    public String getSize_41_quantity() {
+    public Integer getSize_41_quantity() {
         return size_41_quantity;
     }
 
-    public void setSize_41_quantity(String size_41_quantity) {
+    public void setSize_41_quantity(Integer size_41_quantity) {
         this.size_41_quantity = size_41_quantity;
     }
 
-    public String getSize_42_quantity() {
+    public Integer getSize_42_quantity() {
         return size_42_quantity;
     }
 
-    public void setSize_42_quantity(String size_42_quantity) {
+    public void setSize_42_quantity(Integer size_42_quantity) {
         this.size_42_quantity = size_42_quantity;
     }
 
-    public String getSize_43_quantity() {
+    public Integer getSize_43_quantity() {
         return size_43_quantity;
     }
 
-    public void setSize_43_quantity(String size_43_quantity) {
+    public void setSize_43_quantity(Integer size_43_quantity) {
         this.size_43_quantity = size_43_quantity;
     }
 
-    public String getSize_44_quantity() {
+    public Integer getSize_44_quantity() {
         return size_44_quantity;
     }
 
-    public void setSize_44_quantity(String size_44_quantity) {
+    public void setSize_44_quantity(Integer size_44_quantity) {
         this.size_44_quantity = size_44_quantity;
     }
 
-    public String getSize_45_quantity() {
+    public Integer getSize_45_quantity() {
         return size_45_quantity;
     }
 
-    public void setSize_45_quantity(String size_45_quantity) {
+    public void setSize_45_quantity(Integer size_45_quantity) {
         this.size_45_quantity = size_45_quantity;
     }
 
-    public String getSize_46_quantity() {
+    public Integer getSize_46_quantity() {
         return size_46_quantity;
     }
 
-    public void setSize_46_quantity(String size_46_quantity) {
+    public void setSize_46_quantity(Integer size_46_quantity) {
         this.size_46_quantity = size_46_quantity;
     }
 
-    public String getSize_47_quantity() {
+    public Integer getSize_47_quantity() {
         return size_47_quantity;
     }
 
-    public void setSize_47_quantity(String size_47_quantity) {
+    public void setSize_47_quantity(Integer size_47_quantity) {
         this.size_47_quantity = size_47_quantity;
     }
 
-    public String getTotalQuantity() {
+    public Integer getTotalQuantity() {
         return totalQuantity;
     }
 
-    public void setTotalQuantity(String totalQuantity) {
+    public void setTotalQuantity(Integer totalQuantity) {
         this.totalQuantity = totalQuantity;
+    }
+
+    public String getSize_40_SalesStockInfo() {
+        return size_40_SalesStockInfo;
+    }
+
+    public void setSize_40_SalesStockInfo(String size_40_SalesStockInfo) {
+        this.size_40_SalesStockInfo = size_40_SalesStockInfo;
+    }
+
+    public String getSize_41_SalesStockInfo() {
+        return size_41_SalesStockInfo;
+    }
+
+    public void setSize_41_SalesStockInfo(String size_41_SalesStockInfo) {
+        this.size_41_SalesStockInfo = size_41_SalesStockInfo;
+    }
+
+    public String getSize_42_SalesStockInfo() {
+        return size_42_SalesStockInfo;
+    }
+
+    public void setSize_42_SalesStockInfo(String size_42_SalesStockInfo) {
+        this.size_42_SalesStockInfo = size_42_SalesStockInfo;
+    }
+
+    public String getSize_43_SalesStockInfo() {
+        return size_43_SalesStockInfo;
+    }
+
+    public void setSize_43_SalesStockInfo(String size_43_SalesStockInfo) {
+        this.size_43_SalesStockInfo = size_43_SalesStockInfo;
+    }
+
+    public String getSize_44_SalesStockInfo() {
+        return size_44_SalesStockInfo;
+    }
+
+    public void setSize_44_SalesStockInfo(String size_44_SalesStockInfo) {
+        this.size_44_SalesStockInfo = size_44_SalesStockInfo;
+    }
+
+    public String getSize_45_SalesStockInfo() {
+        return size_45_SalesStockInfo;
+    }
+
+    public void setSize_45_SalesStockInfo(String size_45_SalesStockInfo) {
+        this.size_45_SalesStockInfo = size_45_SalesStockInfo;
+    }
+
+    public String getSize_46_SalesStockInfo() {
+        return size_46_SalesStockInfo;
+    }
+
+    public void setSize_46_SalesStockInfo(String size_46_SalesStockInfo) {
+        this.size_46_SalesStockInfo = size_46_SalesStockInfo;
+    }
+
+    public String getSize_47_SalesStockInfo() {
+        return size_47_SalesStockInfo;
+    }
+
+    public void setSize_47_SalesStockInfo(String size_47_SalesStockInfo) {
+        this.size_47_SalesStockInfo = size_47_SalesStockInfo;
+    }
+
+    public boolean isValidEntry() {
+        return validEntry;
+    }
+
+    public void setValidEntry(boolean validEntry) {
+        this.validEntry = validEntry;
     }
 }

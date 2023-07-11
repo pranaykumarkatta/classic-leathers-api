@@ -31,11 +31,16 @@ public class FileUtils {
                         fileData = fileData + cell.getStringCellValue() + ",";
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
-                        fileData = fileData + cell.getNumericCellValue() + ",";
+                        fileData = fileData + Math.round(cell.getNumericCellValue()) + ",";
                         break;
                     case Cell.CELL_TYPE_FORMULA:
-                        fileData = fileData + cell.getStringCellValue() + ",";
-                        break;
+                        try {
+                            fileData = fileData + cell.getStringCellValue() + ",";
+                            break;
+                        } catch (IllegalStateException e) {
+                            fileData = fileData + Math.round(cell.getNumericCellValue()) + ",";
+                            break;
+                        }
                     default:
                 }
             }
