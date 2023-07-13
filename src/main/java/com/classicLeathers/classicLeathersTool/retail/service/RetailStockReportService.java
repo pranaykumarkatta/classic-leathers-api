@@ -1,7 +1,6 @@
 package com.classicLeathers.classicLeathersTool.retail.service;
 
 import com.classicLeathers.classicLeathersTool.FileUtils;
-import com.classicLeathers.classicLeathersTool.production.InvalidCountException;
 import com.classicLeathers.classicLeathersTool.retail.model.DrivingShoeStockEntry;
 import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +45,7 @@ public class RetailStockReportService {
                 drivingShoeStockEntry.setSize_46_quantity(Integer.parseInt(cellData[10]));
                 drivingShoeStockEntry.setSize_47_quantity(Integer.parseInt(cellData[11]));
                 drivingShoeStockEntry.setTotalQuantity(Integer.parseInt(cellData[12]));
+                drivingShoeStockEntry.setActualOrderedQuantity(Integer.parseInt(cellData[12]));
 
                 drivingShoeStockEntryList.add(drivingShoeStockEntry);
             }
@@ -55,7 +55,7 @@ public class RetailStockReportService {
 
         //update i=0 from next year
         for (int i = 3; i < 12; i++) {
-            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4)%12)
+            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
                 drivingShoeSalesEntryList.addAll(getDrivingShoeSalesByMonth(i));
         }
 

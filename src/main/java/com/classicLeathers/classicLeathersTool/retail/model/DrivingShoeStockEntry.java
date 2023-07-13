@@ -14,6 +14,7 @@ public class DrivingShoeStockEntry {
     private Integer size_46_quantity = 0;
     private Integer size_47_quantity = 0;
     private Integer totalQuantity;
+    private Integer actualOrderedQuantity;
     private String size_40_SalesStockInfo;
     private String size_41_SalesStockInfo;
     private String size_42_SalesStockInfo;
@@ -127,6 +128,14 @@ public class DrivingShoeStockEntry {
 
     public void setTotalQuantity(Integer totalQuantity) {
         this.totalQuantity = totalQuantity;
+    }
+
+    public Integer getActualOrderedQuantity() {
+        return actualOrderedQuantity;
+    }
+
+    public void setActualOrderedQuantity(Integer actualOrderedQuantity) {
+        this.actualOrderedQuantity = actualOrderedQuantity;
     }
 
     public String getSize_40_SalesStockInfo() {
