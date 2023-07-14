@@ -32,18 +32,19 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.setCustomerName(cellData[1]);
                 retailSalesEntryDto.setGender(cellData[2]);
                 retailSalesEntryDto.setMobileNumber(cellData[3]);
-                retailSalesEntryDto.setCategory(cellData[4]);
-                retailSalesEntryDto.setProductDetails(cellData[5]);
-                retailSalesEntryDto.setQuantity(cellData[6]);
-                retailSalesEntryDto.setSize(cellData[7]);
-                retailSalesEntryDto.setMrp(cellData[8]);
-                retailSalesEntryDto.setDiscount(cellData[9]);
-                retailSalesEntryDto.setSalePrice(cellData[10]);
-                retailSalesEntryDto.setModeOfPayment(cellData[11]);
-                retailSalesEntryDto.setCashPayment(cellData[12]);
-                retailSalesEntryDto.setgPayPayment(cellData[13]);
-                retailSalesEntryDto.setSwipePayment(cellData[14]);
-                retailSalesEntryDto.setUpdatedBy(cellData[15]);
+                retailSalesEntryDto.setBrand(cellData[4].toUpperCase());
+                retailSalesEntryDto.setCategory(cellData[5].toUpperCase());
+                retailSalesEntryDto.setProductDetails(cellData[6].toUpperCase());
+                retailSalesEntryDto.setQuantity(cellData[7]);
+                retailSalesEntryDto.setSize(cellData[8]);
+                retailSalesEntryDto.setMrp(cellData[9]);
+                retailSalesEntryDto.setDiscount(cellData[10]);
+                retailSalesEntryDto.setSalePrice(cellData[11]);
+                retailSalesEntryDto.setModeOfPayment(cellData[12]);
+                retailSalesEntryDto.setCashPayment(cellData[13]);
+                retailSalesEntryDto.setgPayPayment(cellData[14]);
+                retailSalesEntryDto.setSwipePayment(cellData[15]);
+                retailSalesEntryDto.setUpdatedBy(cellData[16]);
                 retailSalesEntryDto.setIsTodaySale(""+(new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
                         .equals((new SimpleDateFormat("MMM-d-yyyy").format(new Date())))));
                 retailSalesEntryDtoList.add(retailSalesEntryDto);
@@ -60,6 +61,7 @@ public class RetailSalesReportService {
         Object[] data = new Object[]{retailSalesEntryDto.getSaleDate(),retailSalesEntryDto.getCustomerName(),
                 retailSalesEntryDto.getGender(),
                 retailSalesEntryDto.getMobileNumber(),
+                retailSalesEntryDto.getBrand(),
                 retailSalesEntryDto.getCategory(),
                 retailSalesEntryDto.getProductDetails(),
                 retailSalesEntryDto.getQuantity(),

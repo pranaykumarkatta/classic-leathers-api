@@ -43,6 +43,7 @@ public class RetailSalesReportController {
         newSalesEntryDto.setgPayPayment(retailSalesEntryDto.getgPayPayment());
         newSalesEntryDto.setSwipePayment(retailSalesEntryDto.getSwipePayment());
         newSalesEntryDto.setUpdatedBy(retailSalesEntryDto.getUpdatedBy());
+        newSalesEntryDto.setBrand(retailSalesEntryDto.getBrand());
         retailSalesReportService.addRetailSalesEntry(newSalesEntryDto);
     }
 

@@ -115,12 +115,15 @@ public class RetailStockReportService {
     private List<DrivingShoeStockEntry> getDrivingShoeSalesByMonth(int sheetNumber) {
         List<RetailSalesEntryDto> retailDrivingSalesEntryDtoList = new ArrayList<>();
         List<RetailSalesEntryDto> retailSalesEntryDtoList = retailSalesReportService.getSalesDataByMonth(sheetNumber);
-        retailDrivingSalesEntryDtoList = retailSalesEntryDtoList.stream().filter(retailSalesEntryDto -> (retailSalesEntryDto.getCategory().contains("LF")
-                && retailSalesEntryDto.getSize() != "NA")).collect(Collectors.toList());
+        retailDrivingSalesEntryDtoList = retailSalesEntryDtoList.stream().filter(retailSalesEntryDto -> (
+                (retailSalesEntryDto.getCategory().contains("LF") || retailSalesEntryDto.getCategory().contains("KORA") ||
+                        retailSalesEntryDto.getCategory().contains("WAVES") || retailSalesEntryDto.getCategory().contains("A_0")
+                        || retailSalesEntryDto.getCategory().contains("_BAG"))
+                        && retailSalesEntryDto.getSize() != "NA")).collect(Collectors.toList());
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
         retailDrivingSalesEntryDtoList.forEach(retailSalesEntryDto -> {
             DrivingShoeStockEntry drivingShoeStockEntry = new DrivingShoeStockEntry();
-            drivingShoeStockEntry.setBrand("99CRAFTS");
+            drivingShoeStockEntry.setBrand(retailSalesEntryDto.getBrand());
             drivingShoeStockEntry.setSku(retailSalesEntryDto.getCategory());
             drivingShoeStockEntry.setLeather(retailSalesEntryDto.getProductDetails());
             switch (retailSalesEntryDto.getSize()) {

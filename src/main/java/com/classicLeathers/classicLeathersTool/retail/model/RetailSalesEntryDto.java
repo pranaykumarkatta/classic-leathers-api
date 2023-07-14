@@ -20,6 +20,7 @@ public class RetailSalesEntryDto implements Comparable {
     private String gPayPayment;
     private String swipePayment;
     private String updatedBy;
+    private String brand;
 
     private String isTodaySale;
     public String getSaleDate() {
@@ -156,6 +157,14 @@ public class RetailSalesEntryDto implements Comparable {
 
     public void setIsTodaySale(String isTodaySale) {
         this.isTodaySale = isTodaySale;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     @Override
