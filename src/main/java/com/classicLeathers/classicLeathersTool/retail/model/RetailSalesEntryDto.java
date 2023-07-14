@@ -1,6 +1,7 @@
 package com.classicLeathers.classicLeathersTool.retail.model;
 
 import java.util.Date;
+import java.util.Locale;
 
 public class RetailSalesEntryDto implements Comparable {
 
@@ -21,6 +22,8 @@ public class RetailSalesEntryDto implements Comparable {
     private String swipePayment;
     private String updatedBy;
     private String brand;
+
+    private String searchString;
 
     private String isTodaySale;
     public String getSaleDate() {
@@ -167,6 +170,13 @@ public class RetailSalesEntryDto implements Comparable {
         this.brand = brand;
     }
 
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = brand.toUpperCase() + " " + Category.toUpperCase() + " " + productDetails.toUpperCase();
+    }
     @Override
     public int compareTo(Object o) {
         Date thisDate = new Date(this.saleDate);

@@ -2,9 +2,10 @@ package com.classicLeathers.classicLeathersTool.retail.model;
 
 public class DrivingShoeStockEntry {
     private String rowNumber;
+    private String brand;
     private String sku;
     private String leather;
-    private String brand;
+    private String searchString;
     private Integer size_40_quantity = 0;
     private Integer size_41_quantity = 0;
     private Integer size_42_quantity = 0;
@@ -56,6 +57,14 @@ public class DrivingShoeStockEntry {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = this.brand.toUpperCase() + " " + this.sku.toUpperCase() + " " + this.leather.toUpperCase();
     }
 
     public Integer getSize_40_quantity() {

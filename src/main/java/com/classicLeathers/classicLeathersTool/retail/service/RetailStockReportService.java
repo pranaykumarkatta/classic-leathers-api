@@ -36,6 +36,7 @@ public class RetailStockReportService {
                 drivingShoeStockEntry.setSku(cellData[1]);
                 drivingShoeStockEntry.setLeather(cellData[2]);
                 drivingShoeStockEntry.setBrand(cellData[3]);
+                drivingShoeStockEntry.setSearchString(drivingShoeStockEntry.getSearchString());
                 drivingShoeStockEntry.setSize_40_quantity(Integer.parseInt(cellData[4]));
                 drivingShoeStockEntry.setSize_41_quantity(Integer.parseInt(cellData[5]));
                 drivingShoeStockEntry.setSize_42_quantity(Integer.parseInt(cellData[6]));
@@ -126,6 +127,7 @@ public class RetailStockReportService {
             drivingShoeStockEntry.setBrand(retailSalesEntryDto.getBrand());
             drivingShoeStockEntry.setSku(retailSalesEntryDto.getCategory());
             drivingShoeStockEntry.setLeather(retailSalesEntryDto.getProductDetails());
+            drivingShoeStockEntry.setSearchString(retailSalesEntryDto.getSearchString());
             switch (retailSalesEntryDto.getSize()) {
                 case "40":
                     drivingShoeStockEntry.setSize_40_quantity(Integer.parseInt(retailSalesEntryDto.getQuantity()));
