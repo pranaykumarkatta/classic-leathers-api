@@ -126,7 +126,7 @@ public class RetailStockReportService {
             DrivingShoeStockEntry drivingShoeStockEntry = new DrivingShoeStockEntry();
             drivingShoeStockEntry.setBrand(retailSalesEntryDto.getBrand());
             drivingShoeStockEntry.setSku(retailSalesEntryDto.getCategory());
-            drivingShoeStockEntry.setLeather(retailSalesEntryDto.getProductDetails());
+            drivingShoeStockEntry.setLeather(retailSalesEntryDto.getLeather());
             drivingShoeStockEntry.setSearchString(retailSalesEntryDto.getSearchString());
             switch (retailSalesEntryDto.getSize()) {
                 case "40":

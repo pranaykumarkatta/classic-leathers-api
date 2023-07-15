@@ -10,6 +10,7 @@ public class RetailSalesEntryDto implements Comparable {
     private String gender;
     private String mobileNumber;
     private String Category;
+    private String leather;
     private String productDetails;
     private String quantity;
     private String size;
@@ -64,6 +65,14 @@ public class RetailSalesEntryDto implements Comparable {
 
     public void setCategory(String category) {
         Category = category;
+    }
+
+    public String getLeather() {
+        return leather;
+    }
+
+    public void setLeather(String leather) {
+        this.leather = leather;
     }
 
     public String getProductDetails() {

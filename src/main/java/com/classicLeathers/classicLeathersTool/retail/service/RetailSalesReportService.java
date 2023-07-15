@@ -34,17 +34,18 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.setMobileNumber(cellData[3]);
                 retailSalesEntryDto.setBrand(cellData[4].toUpperCase());
                 retailSalesEntryDto.setCategory(cellData[5].toUpperCase());
-                retailSalesEntryDto.setProductDetails(cellData[6].toUpperCase());
-                retailSalesEntryDto.setQuantity(cellData[7]);
-                retailSalesEntryDto.setSize(cellData[8]);
-                retailSalesEntryDto.setMrp(cellData[9]);
-                retailSalesEntryDto.setDiscount(cellData[10]);
-                retailSalesEntryDto.setSalePrice(cellData[11]);
-                retailSalesEntryDto.setModeOfPayment(cellData[12]);
-                retailSalesEntryDto.setCashPayment(cellData[13]);
-                retailSalesEntryDto.setgPayPayment(cellData[14]);
-                retailSalesEntryDto.setSwipePayment(cellData[15]);
-                retailSalesEntryDto.setUpdatedBy(cellData[16]);
+                retailSalesEntryDto.setLeather(cellData[6].toUpperCase());
+                retailSalesEntryDto.setProductDetails(cellData[7].toUpperCase());
+                retailSalesEntryDto.setQuantity(cellData[8]);
+                retailSalesEntryDto.setSize(cellData[9]);
+                retailSalesEntryDto.setMrp(cellData[10]);
+                retailSalesEntryDto.setDiscount(cellData[11]);
+                retailSalesEntryDto.setSalePrice(cellData[12]);
+                retailSalesEntryDto.setModeOfPayment(cellData[13]);
+                retailSalesEntryDto.setCashPayment(cellData[14]);
+                retailSalesEntryDto.setgPayPayment(cellData[15]);
+                retailSalesEntryDto.setSwipePayment(cellData[16]);
+                retailSalesEntryDto.setUpdatedBy(cellData[17]);
                 retailSalesEntryDto.setIsTodaySale(""+(new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
                         .equals((new SimpleDateFormat("MMM-d-yyyy").format(new Date())))));
                 retailSalesEntryDtoList.add(retailSalesEntryDto);
@@ -63,6 +64,7 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.getMobileNumber(),
                 retailSalesEntryDto.getBrand(),
                 retailSalesEntryDto.getCategory(),
+                retailSalesEntryDto.getLeather(),
                 retailSalesEntryDto.getProductDetails(),
                 retailSalesEntryDto.getQuantity(),
                 retailSalesEntryDto.getSize(),
