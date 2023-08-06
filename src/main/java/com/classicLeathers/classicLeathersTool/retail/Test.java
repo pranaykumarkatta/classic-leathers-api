@@ -24,8 +24,11 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
-        String s;
-        Integer.parseInt(new Test().getS());
+        String msgBody = "Dear <CUSTOMER_NAME>,\n    Thank's for your purchase @CLASSIC LEATHERS. \n" +
+                "Invoice Details # <INVOICE_NUMBER>\nBrand : <BRAND_NAME>\nBrand : <BRAND_NAME> \nSku : <SKU> \nPrice Value: <PRICE> \n\nKeep shopping with us!! Have a great day.";
+        System.out.println(msgBody);
+//        String s;
+//        Integer.parseInt(new Test().getS());
 //        File file = new File(
 //                "C:\\Users\\Dell\\OneDrive\\CLASSIC_DOCS\\RETAIL_DOCS\\STOCK AUDIT REPORTS_V1.xlsx");
 //

@@ -118,8 +118,8 @@ public class RetailStockReportService {
         List<RetailSalesEntryDto> retailSalesEntryDtoList = retailSalesReportService.getSalesDataByMonth(sheetNumber);
         retailDrivingSalesEntryDtoList = retailSalesEntryDtoList.stream().filter(retailSalesEntryDto -> (
                 (retailSalesEntryDto.getCategory().contains("LF") || retailSalesEntryDto.getCategory().contains("KORA") ||
-                        retailSalesEntryDto.getCategory().contains("WAVES") || retailSalesEntryDto.getCategory().contains("A_0")
-                        || retailSalesEntryDto.getCategory().contains("_BAG"))
+                        retailSalesEntryDto.getCategory().contains("WAVES") || retailSalesEntryDto.getCategory().contains("A_0")||
+                        retailSalesEntryDto.getCategory().contains("MIRAT") || retailSalesEntryDto.getCategory().contains("_BAG"))
                         && retailSalesEntryDto.getSize() != "NA")).collect(Collectors.toList());
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
         retailDrivingSalesEntryDtoList.forEach(retailSalesEntryDto -> {
