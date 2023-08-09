@@ -2,8 +2,11 @@ package com.classicLeathers.classicLeathersTool.retail.model;
 
 public class Presentation {
     private String month;
-    private String category;
+    private String totalSalesCategory;
     private Integer totalSales;
+    private Integer hour;
+    private Integer totalHourlySales;
+    private Integer hourlyStepInCount;
 
     public String getMonth() {
         return month;
@@ -13,12 +16,12 @@ public class Presentation {
         this.month = month;
     }
 
-    public String getCategory() {
-        return category;
+    public String getTotalSalesCategory() {
+        return totalSalesCategory;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setTotalSalesCategory(String totalSalesCategory) {
+        this.totalSalesCategory = totalSalesCategory;
     }
 
     public Integer getTotalSales() {
@@ -27,5 +30,29 @@ public class Presentation {
 
     public void setTotalSales(Integer totalSales) {
         this.totalSales = totalSales;
+    }
+
+    public Integer getHour() {
+        return hour;
+    }
+
+    public void setHour(Integer hour) {
+        this.hour = hour;
+    }
+
+    public Integer getTotalHourlySales() {
+        return totalHourlySales == null ? 0 : totalHourlySales;
+    }
+
+    public void setTotalHourlySales(Integer totalHourlySales) {
+        this.totalHourlySales = totalHourlySales;
+    }
+
+    public Integer getHourlyStepInCount() {
+        return hourlyStepInCount == null ? 0 : hourlyStepInCount;
+    }
+
+    public void setHourlyStepInCount(Integer hourlyStepInCount) {
+        this.hourlyStepInCount = hourlyStepInCount;
     }
 }
