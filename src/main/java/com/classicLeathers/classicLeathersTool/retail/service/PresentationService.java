@@ -3,7 +3,6 @@ package com.classicLeathers.classicLeathersTool.retail.service;
 import com.classicLeathers.classicLeathersTool.retail.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -14,6 +13,9 @@ import java.util.*;
 public class PresentationService {
     @Autowired
     private RetailSalesReportService retailSalesReportService;
+
+    @Autowired
+    private RetailStockReportService retailStockReportService;
 
     public List<TotalSalesDto> getTotalSalesData(Boolean showDriving, Boolean showKora, Boolean showWaves,
                                                  Boolean ShowASeries, Boolean showMirat, Boolean showHandBag,
@@ -38,6 +40,31 @@ public class PresentationService {
         return getHourlyStepInDTOData(buildHourlySalesPresentationList(getSalesData()), showHour8Data, showHour9Data, showHour10Data, showHour11Data,
                 showHour12Data, showHour13Data, showHour14Data, showHour15Data, showHour16Data, showHour17Data, showHour18Data, showHour19Data,
                 showHour20Data, showHour21Data, showHour22Data, showHour00Data);
+    }
+
+    public List<ProfitDto> getProfitData(Boolean showDrivingProfit, Boolean showKoraProfit, Boolean showWavesProfit,
+                                         Boolean ShowASeriesProfit, Boolean showMiratProfit, Boolean showHandBagProfit,
+                                         Boolean showBeltAndWalletProfit, Boolean showNAProfit) {
+        return getProfitDTOData(buildTotalSalesPresentationList(getSalesData()), showDrivingProfit, showKoraProfit, showWavesProfit,
+                ShowASeriesProfit, showMiratProfit, showHandBagProfit, showBeltAndWalletProfit, showNAProfit);
+    }
+
+    private Map<String, Integer> getCostPriceData(Integer monthNumber) {
+        Map<String, Integer> map = new HashMap<>();
+        retailStockReportService.getStockData().forEach(drivingShoeStockEntry -> {
+            Date stockInDate;
+            try {
+                stockInDate = (new SimpleDateFormat("d-MMM-yy").parse(drivingShoeStockEntry.getStockInDate()));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            Integer month = Integer.valueOf((new SimpleDateFormat("MM").format(stockInDate)));
+            String year = (new SimpleDateFormat("yy").format(stockInDate));
+            if (month <= monthNumber)
+                map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getSku() + "_" + drivingShoeStockEntry.getLeather(),
+                        drivingShoeStockEntry.getCostPrice());
+        });
+        return map;
     }
 
     private Map<String, List<RetailSalesEntryDto>> getSalesData() {
@@ -77,31 +104,45 @@ public class PresentationService {
             Presentation naPresentation = new Presentation();
             naPresentation.setMonth(month);
             naPresentation.setTotalSalesCategory("NA");
+            Map<String, Integer> costPriceDataMap = getCostPriceData(Integer.valueOf(month.split("_")[0]));
             retailSalesEntryDtos.get(month).forEach(retailSalesEntryDto -> {
+                Integer costPrice = costPriceDataMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
+                if (costPrice == null) {
+                    costPrice = (int) (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .35);
+                    System.out.println("Loading default values for : " + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
+                }
                 if (retailSalesEntryDto.getCategory().contains("LF")) {
                     drivingPresentation.setTotalSales(drivingPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    drivingPresentation.setTotalCostPrice(drivingPresentation.getTotalCostPrice() + costPrice);
                 } else if (retailSalesEntryDto.getCategory().contains("KORA")) {
                     koraPresentation.setTotalSales(koraPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    koraPresentation.setTotalCostPrice(koraPresentation.getTotalCostPrice() + costPrice);
                 } else if (retailSalesEntryDto.getCategory().contains("WAVES")) {
                     wavesPresentation.setTotalSales(wavesPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    wavesPresentation.setTotalCostPrice(wavesPresentation.getTotalCostPrice() + costPrice);
                 } else if (retailSalesEntryDto.getCategory().contains("A_0")) {
                     aSeriesPresentation.setTotalSales(aSeriesPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    aSeriesPresentation.setTotalCostPrice(aSeriesPresentation.getTotalCostPrice() + costPrice);
                 } else if (retailSalesEntryDto.getCategory().contains("MIRAT")) {
                     miratPresentation.setTotalSales(miratPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    miratPresentation.setTotalCostPrice(miratPresentation.getTotalCostPrice() + costPrice);
                 } else if (retailSalesEntryDto.getCategory().contains("_BAG") || retailSalesEntryDto.getCategory().contains("LHB")) {
                     bagsPresentation.setTotalSales(bagsPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    bagsPresentation.setTotalCostPrice(bagsPresentation.getTotalCostPrice() + costPrice);
                 } else if (retailSalesEntryDto.getCategory().contains("BLT") || retailSalesEntryDto.getCategory().contains("WLT")) {
                     beltsWalletsPresentation.setTotalSales(beltsWalletsPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    beltsWalletsPresentation.setTotalCostPrice(beltsWalletsPresentation.getTotalCostPrice() + costPrice);
                 } else {
                     naPresentation.setTotalSales(naPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    naPresentation.setTotalCostPrice(naPresentation.getTotalCostPrice() + costPrice);
                 }
             });
             presentations.add(drivingPresentation);
@@ -109,7 +150,6 @@ public class PresentationService {
             presentations.add(wavesPresentation);
             presentations.add(aSeriesPresentation);
             presentations.add(miratPresentation);
-            presentations.add(bagsPresentation);
             presentations.add(bagsPresentation);
             presentations.add(beltsWalletsPresentation);
             presentations.add(naPresentation);
@@ -171,6 +211,79 @@ public class PresentationService {
                 -> o1.getMonth().compareTo(
                 o2.getMonth()));
         return totalSalesList;
+    }
+
+    private List<ProfitDto> getProfitDTOData(List<Presentation> presentations,
+                                             Boolean showDriving, Boolean showKora, Boolean showWaves,
+                                             Boolean showASeries, Boolean showMirat, Boolean showHandBag,
+                                             Boolean showBeltAndWallet, Boolean showNA) {
+        Map<String, ProfitDto> profitDtoMap = new HashMap<>();
+
+        presentations.forEach(presentation -> {
+            if (profitDtoMap.keySet().contains(presentation.getMonth())) {
+                if (presentation.getTotalSalesCategory().contains("Driving")) {
+                    profitDtoMap.get(presentation.getMonth()).setDrivingSalePrice(showDriving ? presentation.getTotalSales() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setDrivingSalePrice(showDriving ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Kora")) {
+                    profitDtoMap.get(presentation.getMonth()).setKoraSalePrice(showKora ? presentation.getTotalSales() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setKoraCostPrice(showKora ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Waves")) {
+                    profitDtoMap.get(presentation.getMonth()).setWavesSalePrice(showWaves ? presentation.getTotalSales() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setWavesCostPrice(showWaves ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("A-Series")) {
+                    profitDtoMap.get(presentation.getMonth()).setaSeriesSalePrice(showASeries ? presentation.getTotalSales() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setaSeriesCostPrice(showASeries ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Mirat")) {
+                    profitDtoMap.get(presentation.getMonth()).setMiratSalePrice(showMirat ? presentation.getTotalSales() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setMiratCostPrice(showMirat ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Hand Bags")) {
+                    profitDtoMap.get(presentation.getMonth()).setHandBagSalePrice(showHandBag ? presentation.getTotalSales() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setHandBagCostPrice(showHandBag ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Belts And Wallets")) {
+                    profitDtoMap.get(presentation.getMonth()).setBeltsAndWalletsSalePrice(showBeltAndWallet ? presentation.getTotalSales() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setBeltsAndWalletsCostPrice(showBeltAndWallet ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("NA")) {
+                    profitDtoMap.get(presentation.getMonth()).setNaSalesSalePrice(showNA ? presentation.getTotalSales() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setNaSalesCostPrice(showNA ? presentation.getTotalCostPrice() : 0);
+                }
+            } else {
+                ProfitDto profitDto = new ProfitDto();
+                profitDto.setMonth(presentation.getMonth());
+                if (presentation.getTotalSalesCategory().contains("Driving")) {
+                    profitDto.setDrivingSalePrice(showDriving ? presentation.getTotalSales() : 0);
+                    profitDto.setDrivingCostPrice(showDriving ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Kora")) {
+                    profitDto.setKoraSalePrice(showKora ? presentation.getTotalSales() : 0);
+                    profitDto.setKoraCostPrice(showKora ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Waves")) {
+                    profitDto.setWavesSalePrice(showWaves ? presentation.getTotalSales() : 0);
+                    profitDto.setWavesCostPrice(showWaves ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("A-Series")) {
+                    profitDto.setaSeriesSalePrice(showASeries ? presentation.getTotalSales() : 0);
+                    profitDto.setaSeriesCostPrice(showASeries ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Mirat")) {
+                    profitDto.setMiratSalePrice(showMirat ? presentation.getTotalSales() : 0);
+                    profitDto.setMiratCostPrice(showMirat ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Hand Bags")) {
+                    profitDto.setHandBagSalePrice(showHandBag ? presentation.getTotalSales() : 0);
+                    profitDto.setHandBagCostPrice(showHandBag ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Belts And Wallets")) {
+                    profitDto.setBeltsAndWalletsSalePrice(showBeltAndWallet ? presentation.getTotalSales() : 0);
+                    profitDto.setBeltsAndWalletsCostPrice(showBeltAndWallet ? presentation.getTotalCostPrice() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("NA")) {
+                    profitDto.setNaSalesSalePrice(showNA ? presentation.getTotalSales() : 0);
+                    profitDto.setNaSalesCostPrice(showNA ? presentation.getTotalCostPrice() : 0);
+                }
+                profitDtoMap.put(presentation.getMonth(), profitDto);
+            }
+        });
+
+        List<ProfitDto> profitDtos = new ArrayList<>(profitDtoMap.values());
+
+        profitDtos.sort((o1, o2)
+                -> o1.getMonth().compareTo(
+                o2.getMonth()));
+        return profitDtos;
     }
 
     private List<Presentation> buildHourlySalesPresentationList(Map<String, List<RetailSalesEntryDto>> retailSalesEntryDtos) {
@@ -235,67 +348,68 @@ public class PresentationService {
                 if (hour == 8) {
                     hour_8_presentation.setTotalHourlySales(hour_8_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_8_presentation.setHourlyStepInCount(hour_8_presentation.getHourlyStepInCount()+1);
+                    hour_8_presentation.setHourlyStepInCount(hour_8_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 9) {
                     hour_9_presentation.setTotalHourlySales(hour_9_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_9_presentation.setHourlyStepInCount(hour_9_presentation.getHourlyStepInCount()+1);
+                    hour_9_presentation.setHourlyStepInCount(hour_9_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 10) {
                     hour_10_presentation.setTotalHourlySales(hour_10_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_10_presentation.setHourlyStepInCount(hour_10_presentation.getHourlyStepInCount()+1);
+                    hour_10_presentation.setHourlyStepInCount(hour_10_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 11) {
                     hour_11_presentation.setTotalHourlySales(hour_11_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_11_presentation.setHourlyStepInCount(hour_11_presentation.getHourlyStepInCount()+1);
+                    hour_11_presentation.setHourlyStepInCount(hour_11_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 12) {
                     hour_12_presentation.setTotalHourlySales(hour_12_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_12_presentation.setHourlyStepInCount(hour_12_presentation.getHourlyStepInCount()+1);
+                    hour_12_presentation.setHourlyStepInCount(hour_12_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 13) {
                     hour_13_presentation.setTotalHourlySales(hour_13_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_13_presentation.setHourlyStepInCount(hour_13_presentation.getHourlyStepInCount()+1);
+                    hour_13_presentation.setHourlyStepInCount(hour_13_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 14) {
                     hour_14_presentation.setTotalHourlySales(hour_14_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_14_presentation.setHourlyStepInCount(hour_14_presentation.getHourlyStepInCount()+1);
+                    hour_14_presentation.setHourlyStepInCount(hour_14_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 15) {
                     hour_15_presentation.setTotalHourlySales(hour_15_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_15_presentation.setHourlyStepInCount(hour_15_presentation.getHourlyStepInCount()+1);
+                    hour_15_presentation.setHourlyStepInCount(hour_15_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 16) {
                     hour_16_presentation.setTotalHourlySales(hour_16_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_16_presentation.setHourlyStepInCount(hour_16_presentation.getHourlyStepInCount()+1);
+                    hour_16_presentation.setHourlyStepInCount(hour_16_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 17) {
                     hour_17_presentation.setTotalHourlySales(hour_17_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_17_presentation.setHourlyStepInCount(hour_17_presentation.getHourlyStepInCount()+1);
+                    hour_17_presentation.setHourlyStepInCount(hour_17_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 18) {
                     hour_18_presentation.setTotalHourlySales(hour_18_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_18_presentation.setHourlyStepInCount(hour_18_presentation.getHourlyStepInCount()+1);
+                    hour_18_presentation.setHourlyStepInCount(hour_18_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 19) {
                     hour_19_presentation.setTotalHourlySales(hour_19_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_19_presentation.setHourlyStepInCount(hour_19_presentation.getHourlyStepInCount()+1);
+                    hour_19_presentation.setHourlyStepInCount(hour_19_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 20) {
                     hour_20_presentation.setTotalHourlySales(hour_20_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_20_presentation.setHourlyStepInCount(hour_20_presentation.getHourlyStepInCount()+1);
+                    hour_20_presentation.setHourlyStepInCount(hour_20_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 21) {
                     hour_21_presentation.setTotalHourlySales(hour_21_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_21_presentation.setHourlyStepInCount(hour_21_presentation.getHourlyStepInCount()+1);
+                    hour_21_presentation.setHourlyStepInCount(hour_21_presentation.getHourlyStepInCount() + 1);
                 } else if (hour == 22) {
                     hour_22_presentation.setTotalHourlySales(hour_22_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_22_presentation.setHourlyStepInCount(hour_22_presentation.getHourlyStepInCount()+1);
+                    hour_22_presentation.setHourlyStepInCount(hour_22_presentation.getHourlyStepInCount() + 1);
                 } else {
                     hour_0_presentation.setTotalHourlySales(hour_0_presentation.getTotalHourlySales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
-                    hour_0_presentation.setHourlyStepInCount(hour_0_presentation.getHourlyStepInCount()+1);                }
+                    hour_0_presentation.setHourlyStepInCount(hour_0_presentation.getHourlyStepInCount() + 1);
+                }
             });
             presentations.add(hour_8_presentation);
             presentations.add(hour_9_presentation);
@@ -326,73 +440,73 @@ public class PresentationService {
         presentations.forEach(presentation -> {
             if (hourlySalesDtoMap.keySet().contains(presentation.getMonth())) {
                 if (presentation.getHour().equals(8)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_8_Sales(showHour8Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_8_Sales(showHour8Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(9)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_9_Sales(showHour9Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_9_Sales(showHour9Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(10)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_10_Sales(showHour10Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_10_Sales(showHour10Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(11)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_11_Sales(showHour11Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_11_Sales(showHour11Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(12)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_12_Sales(showHour12Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_12_Sales(showHour12Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(13)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_13_Sales(showHour13Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_13_Sales(showHour13Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(14)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_14_Sales(showHour14Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_14_Sales(showHour14Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(15)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_15_Sales(showHour15Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_15_Sales(showHour15Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(16)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_16_Sales(showHour16Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_16_Sales(showHour16Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(17)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_17_Sales(showHour17Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_17_Sales(showHour17Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(18)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_18_Sales(showHour18Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_18_Sales(showHour18Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(19)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_19_Sales(showHour19Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_19_Sales(showHour19Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(20)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_20_Sales(showHour20Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_20_Sales(showHour20Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(21)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_21_Sales(showHour21Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_21_Sales(showHour21Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(22)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_22_Sales(showHour22Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_22_Sales(showHour22Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(0)) {
-                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_0_Sales(showHour00Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDtoMap.get(presentation.getMonth()).setHour_0_Sales(showHour00Data ? presentation.getTotalHourlySales() : 0);
                 }
             } else {
                 HourlySalesDto hourlySalesDto = new HourlySalesDto();
                 hourlySalesDto.setMonth(presentation.getMonth());
                 if (presentation.getHour().equals(8)) {
-                    hourlySalesDto.setHour_8_Sales(showHour8Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_8_Sales(showHour8Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(9)) {
-                    hourlySalesDto.setHour_9_Sales(showHour9Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_9_Sales(showHour9Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(10)) {
-                    hourlySalesDto.setHour_10_Sales(showHour10Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_10_Sales(showHour10Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(11)) {
-                    hourlySalesDto.setHour_11_Sales(showHour11Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_11_Sales(showHour11Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(12)) {
-                    hourlySalesDto.setHour_12_Sales(showHour12Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_12_Sales(showHour12Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(13)) {
-                    hourlySalesDto.setHour_13_Sales(showHour13Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_13_Sales(showHour13Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(14)) {
-                    hourlySalesDto.setHour_14_Sales(showHour14Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_14_Sales(showHour14Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(15)) {
-                    hourlySalesDto.setHour_15_Sales(showHour15Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_15_Sales(showHour15Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(16)) {
-                    hourlySalesDto.setHour_16_Sales(showHour16Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_16_Sales(showHour16Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(17)) {
-                    hourlySalesDto.setHour_17_Sales(showHour17Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_17_Sales(showHour17Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(18)) {
-                    hourlySalesDto.setHour_18_Sales(showHour18Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_18_Sales(showHour18Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(19)) {
-                    hourlySalesDto.setHour_19_Sales(showHour19Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_19_Sales(showHour19Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(20)) {
-                    hourlySalesDto.setHour_20_Sales(showHour20Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_20_Sales(showHour20Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(21)) {
-                    hourlySalesDto.setHour_21_Sales(showHour21Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_21_Sales(showHour21Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(22)) {
-                    hourlySalesDto.setHour_22_Sales(showHour22Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_22_Sales(showHour22Data ? presentation.getTotalHourlySales() : 0);
                 } else if (presentation.getHour().equals(0)) {
-                    hourlySalesDto.setHour_0_Sales(showHour00Data?presentation.getTotalHourlySales():0);
+                    hourlySalesDto.setHour_0_Sales(showHour00Data ? presentation.getTotalHourlySales() : 0);
                 }
                 hourlySalesDtoMap.put(presentation.getMonth(), hourlySalesDto);
             }
@@ -404,89 +518,90 @@ public class PresentationService {
                 o2.getMonth()));
         return hourlySalesList;
     }
- private List<HourlyStepInDto> getHourlyStepInDTOData(List<Presentation> presentations, Boolean showHour8Data, Boolean showHour9Data, Boolean showHour10Data, Boolean showHour11Data,
-                                                       Boolean showHour12Data, Boolean showHour13Data, Boolean showHour14Data, Boolean showHour15Data,
-                                                       Boolean showHour16Data, Boolean showHour17Data, Boolean showHour18Data, Boolean showHour19Data,
-                                                       Boolean showHour20Data, Boolean showHour21Data, Boolean showHour22Data, Boolean showHour00Data) {
+
+    private List<HourlyStepInDto> getHourlyStepInDTOData(List<Presentation> presentations, Boolean showHour8Data, Boolean showHour9Data, Boolean showHour10Data, Boolean showHour11Data,
+                                                         Boolean showHour12Data, Boolean showHour13Data, Boolean showHour14Data, Boolean showHour15Data,
+                                                         Boolean showHour16Data, Boolean showHour17Data, Boolean showHour18Data, Boolean showHour19Data,
+                                                         Boolean showHour20Data, Boolean showHour21Data, Boolean showHour22Data, Boolean showHour00Data) {
         Map<String, HourlyStepInDto> hourlyStepInDtoHashMap = new HashMap<>();
 
         presentations.forEach(presentation -> {
             if (hourlyStepInDtoHashMap.keySet().contains(presentation.getMonth())) {
                 if (presentation.getHour().equals(8)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_8_count(showHour8Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_8_count(showHour8Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(9)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_9_count(showHour9Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_9_count(showHour9Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(10)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_10_count(showHour10Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_10_count(showHour10Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(11)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_11_count(showHour11Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_11_count(showHour11Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(12)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_12_count(showHour12Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_12_count(showHour12Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(13)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_13_count(showHour13Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_13_count(showHour13Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(14)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_14_count(showHour14Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_14_count(showHour14Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(15)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_15_count(showHour15Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_15_count(showHour15Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(16)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_16_count(showHour16Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_16_count(showHour16Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(17)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_17_count(showHour17Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_17_count(showHour17Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(18)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_18_count(showHour18Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_18_count(showHour18Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(19)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_19_count(showHour19Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_19_count(showHour19Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(20)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_20_count(showHour20Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_20_count(showHour20Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(21)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_21_count(showHour21Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_21_count(showHour21Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(22)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_22_count(showHour22Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_22_count(showHour22Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(0)) {
-                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_0_count(showHour00Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDtoHashMap.get(presentation.getMonth()).setHour_0_count(showHour00Data ? presentation.getHourlyStepInCount() : 0);
                 }
             } else {
                 HourlyStepInDto hourlyStepInDto = new HourlyStepInDto();
                 hourlyStepInDto.setMonth(presentation.getMonth());
                 if (presentation.getHour().equals(8)) {
-                    hourlyStepInDto.setHour_8_count(showHour8Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_8_count(showHour8Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(9)) {
-                    hourlyStepInDto.setHour_9_count(showHour9Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_9_count(showHour9Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(10)) {
-                    hourlyStepInDto.setHour_10_count(showHour10Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_10_count(showHour10Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(11)) {
-                    hourlyStepInDto.setHour_11_count(showHour11Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_11_count(showHour11Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(12)) {
-                    hourlyStepInDto.setHour_12_count(showHour12Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_12_count(showHour12Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(13)) {
-                    hourlyStepInDto.setHour_13_count(showHour13Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_13_count(showHour13Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(14)) {
-                    hourlyStepInDto.setHour_14_count(showHour14Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_14_count(showHour14Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(15)) {
-                    hourlyStepInDto.setHour_15_count(showHour15Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_15_count(showHour15Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(16)) {
-                    hourlyStepInDto.setHour_16_count(showHour16Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_16_count(showHour16Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(17)) {
-                    hourlyStepInDto.setHour_17_count(showHour17Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_17_count(showHour17Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(18)) {
-                    hourlyStepInDto.setHour_18_count(showHour18Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_18_count(showHour18Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(19)) {
-                    hourlyStepInDto.setHour_19_count(showHour19Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_19_count(showHour19Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(20)) {
-                    hourlyStepInDto.setHour_20_count(showHour20Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_20_count(showHour20Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(21)) {
-                    hourlyStepInDto.setHour_21_count(showHour21Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_21_count(showHour21Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(22)) {
-                    hourlyStepInDto.setHour_22_count(showHour22Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_22_count(showHour22Data ? presentation.getHourlyStepInCount() : 0);
                 } else if (presentation.getHour().equals(0)) {
-                    hourlyStepInDto.setHour_0_count(showHour00Data?presentation.getHourlyStepInCount():0);
+                    hourlyStepInDto.setHour_0_count(showHour00Data ? presentation.getHourlyStepInCount() : 0);
                 }
                 hourlyStepInDtoHashMap.put(presentation.getMonth(), hourlyStepInDto);
             }
         });
         List<HourlyStepInDto> hourlyStepInDtos = new ArrayList<>(hourlyStepInDtoHashMap.values());
 
-     hourlyStepInDtos.sort((o1, o2)
+        hourlyStepInDtos.sort((o1, o2)
                 -> o1.getMonth().compareTo(
                 o2.getMonth()));
         return hourlyStepInDtos;

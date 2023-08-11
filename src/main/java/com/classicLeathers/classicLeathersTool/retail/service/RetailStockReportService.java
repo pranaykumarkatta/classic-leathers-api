@@ -16,7 +16,7 @@ public class RetailStockReportService {
     @Autowired
     private RetailSalesReportService retailSalesReportService;
 
-    public List<DrivingShoeStockEntry> getDrivingShoeStockReport() {
+    public List<DrivingShoeStockEntry> getStockData() {
         String fileData = "";
         try {
             fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\STOCK_AUDIT_REPORTS_V2.xlsx", 0);
@@ -47,11 +47,18 @@ public class RetailStockReportService {
                 drivingShoeStockEntry.setSize_47_quantity(Integer.parseInt(cellData[11]));
                 drivingShoeStockEntry.setTotalQuantity(Integer.parseInt(cellData[12]));
                 drivingShoeStockEntry.setActualOrderedQuantity(Integer.parseInt(cellData[12]));
+                drivingShoeStockEntry.setCostPrice(Integer.parseInt(cellData[13]));
+                drivingShoeStockEntry.setStockInDate(cellData[15]);
 
                 drivingShoeStockEntryList.add(drivingShoeStockEntry);
             }
         }
+        return drivingShoeStockEntryList;
+    }
 
+    public List<DrivingShoeStockEntry> getDrivingShoeStockReport() {
+
+        List<DrivingShoeStockEntry> drivingShoeStockEntryList = getStockData();
         drivingShoeStockEntryList = mergeDrivingShoeStockEntries(drivingShoeStockEntryList).stream()
                 .sorted((o1, o2) -> o1.getSku().compareTo(o2.getSku())).collect(Collectors.toList());
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
@@ -118,8 +125,8 @@ public class RetailStockReportService {
         List<RetailSalesEntryDto> retailSalesEntryDtoList = retailSalesReportService.getSalesDataByMonth(sheetNumber);
         retailDrivingSalesEntryDtoList = retailSalesEntryDtoList.stream().filter(retailSalesEntryDto -> (
                 (retailSalesEntryDto.getCategory().contains("LF") || retailSalesEntryDto.getCategory().contains("KORA") ||
-                        retailSalesEntryDto.getCategory().contains("WAVES") || retailSalesEntryDto.getCategory().contains("A_0")||
-                        retailSalesEntryDto.getCategory().contains("MIRAT") || retailSalesEntryDto.getCategory().contains("_BAG")||
+                        retailSalesEntryDto.getCategory().contains("WAVES") || retailSalesEntryDto.getCategory().contains("A_0") ||
+                        retailSalesEntryDto.getCategory().contains("MIRAT") || retailSalesEntryDto.getCategory().contains("_BAG") ||
                         retailSalesEntryDto.getCategory().contains("WLT"))
                         && retailSalesEntryDto.getSize() != "NA")).collect(Collectors.toList());
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();

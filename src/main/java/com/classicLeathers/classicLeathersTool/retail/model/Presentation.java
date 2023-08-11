@@ -4,6 +4,7 @@ public class Presentation {
     private String month;
     private String totalSalesCategory;
     private Integer totalSales;
+    private Integer totalCostPrice;
     private Integer hour;
     private Integer totalHourlySales;
     private Integer hourlyStepInCount;
@@ -42,6 +43,14 @@ public class Presentation {
 
     public Integer getTotalHourlySales() {
         return totalHourlySales == null ? 0 : totalHourlySales;
+    }
+
+    public Integer getTotalCostPrice() {
+        return totalCostPrice == null ? 0 : totalCostPrice;
+    }
+
+    public void setTotalCostPrice(Integer totalCostPrice) {
+        this.totalCostPrice = totalCostPrice;
     }
 
     public void setTotalHourlySales(Integer totalHourlySales) {

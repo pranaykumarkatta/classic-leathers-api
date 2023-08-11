@@ -1,5 +1,7 @@
 package com.classicLeathers.classicLeathersTool.retail.model;
 
+import java.util.Date;
+
 public class DrivingShoeStockEntry {
     private String rowNumber;
     private String brand;
@@ -26,6 +28,8 @@ public class DrivingShoeStockEntry {
     private String size_47_SalesStockInfo;
     private String total_Quantity_SalesStockInfo;
     private boolean validEntry = true;
+    private String stockInDate;
+    private Integer costPrice;
 
     public String getRowNumber() {
         return rowNumber;
@@ -225,5 +229,21 @@ public class DrivingShoeStockEntry {
 
     public void setValidEntry(boolean validEntry) {
         this.validEntry = validEntry;
+    }
+
+    public String getStockInDate() {
+        return stockInDate;
+    }
+
+    public void setStockInDate(String stockInDate) {
+        this.stockInDate = stockInDate;
+    }
+
+    public Integer getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(Integer costPrice) {
+        this.costPrice = costPrice;
     }
 }
