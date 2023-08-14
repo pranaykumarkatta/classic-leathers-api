@@ -22,6 +22,7 @@ public class RetailSalesEntryDto implements Comparable {
     private String gPayPayment;
     private String swipePayment;
     private String updatedBy;
+    private String stepInType;
     private String brand;
 
     private String searchString;
@@ -186,6 +187,15 @@ public class RetailSalesEntryDto implements Comparable {
     public void setSearchString(String searchString) {
         this.searchString = brand.toUpperCase() + " " + Category.toUpperCase() + " " + productDetails.toUpperCase();
     }
+
+    public String getStepInType() {
+        return stepInType;
+    }
+
+    public void setStepInType(String stepInType) {
+        this.stepInType = stepInType;
+    }
+
     @Override
     public int compareTo(Object o) {
         Date thisDate = new Date(this.saleDate);

@@ -136,6 +136,7 @@ public class PresentationService {
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     bagsPresentation.setTotalCostPrice(bagsPresentation.getTotalCostPrice() + costPrice);
                 } else if (retailSalesEntryDto.getCategory().contains("BLT") || retailSalesEntryDto.getCategory().contains("WLT")) {
+                    costPrice = (int) (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .25);
                     beltsWalletsPresentation.setTotalSales(beltsWalletsPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     beltsWalletsPresentation.setTotalCostPrice(beltsWalletsPresentation.getTotalCostPrice() + costPrice);

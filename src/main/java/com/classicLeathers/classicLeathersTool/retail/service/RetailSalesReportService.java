@@ -46,6 +46,7 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.setgPayPayment(cellData[15]);
                 retailSalesEntryDto.setSwipePayment(cellData[16]);
                 retailSalesEntryDto.setUpdatedBy(cellData[17]);
+                retailSalesEntryDto.setStepInType(cellData[18]);
                 retailSalesEntryDto.setIsTodaySale(""+(new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
                         .equals((new SimpleDateFormat("MMM-d-yyyy").format(new Date())))));
                 retailSalesEntryDtoList.add(retailSalesEntryDto);
@@ -75,7 +76,8 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.getCashPayment(),
                 retailSalesEntryDto.getgPayPayment(),
                 retailSalesEntryDto.getSwipePayment(),
-                retailSalesEntryDto.getUpdatedBy()
+                retailSalesEntryDto.getUpdatedBy(),
+                retailSalesEntryDto.getStepInType()
         };
         try {
             new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx",sheetNO,data);
