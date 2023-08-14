@@ -20,7 +20,7 @@ public class PresentationService {
     public List<TotalSalesDto> getTotalSalesData(Boolean showDriving, Boolean showKora, Boolean showWaves,
                                                  Boolean ShowASeries, Boolean showMirat, Boolean showHandBag,
                                                  Boolean showBeltAndWallet, Boolean showNA) {
-        return getTotalSalesDTOData(buildTotalSalesPresentationList(getSalesData()), showDriving, showKora, showWaves,
+        return getTotalSalesDTOData(buildTotalSalesPresentationList(getSalesData(0)), showDriving, showKora, showWaves,
                 ShowASeries, showMirat, showHandBag, showBeltAndWallet, showNA);
     }
 
@@ -28,7 +28,7 @@ public class PresentationService {
                                                    Boolean showHour12Data, Boolean showHour13Data, Boolean showHour14Data, Boolean showHour15Data,
                                                    Boolean showHour16Data, Boolean showHour17Data, Boolean showHour18Data, Boolean showHour19Data,
                                                    Boolean showHour20Data, Boolean showHour21Data, Boolean showHour22Data, Boolean showHour00Data) {
-        return getHourlySalesDTOData(buildHourlySalesPresentationList(getSalesData()), showHour8Data, showHour9Data, showHour10Data, showHour11Data,
+        return getHourlySalesDTOData(buildHourlySalesPresentationList(getSalesData(0)), showHour8Data, showHour9Data, showHour10Data, showHour11Data,
                 showHour12Data, showHour13Data, showHour14Data, showHour15Data, showHour16Data, showHour17Data, showHour18Data, showHour19Data,
                 showHour20Data, showHour21Data, showHour22Data, showHour00Data);
     }
@@ -37,7 +37,7 @@ public class PresentationService {
                                                      Boolean showHour12Data, Boolean showHour13Data, Boolean showHour14Data, Boolean showHour15Data,
                                                      Boolean showHour16Data, Boolean showHour17Data, Boolean showHour18Data, Boolean showHour19Data,
                                                      Boolean showHour20Data, Boolean showHour21Data, Boolean showHour22Data, Boolean showHour00Data) {
-        return getHourlyStepInDTOData(buildHourlySalesPresentationList(getSalesData()), showHour8Data, showHour9Data, showHour10Data, showHour11Data,
+        return getHourlyStepInDTOData(buildHourlySalesPresentationList(getSalesData(0)), showHour8Data, showHour9Data, showHour10Data, showHour11Data,
                 showHour12Data, showHour13Data, showHour14Data, showHour15Data, showHour16Data, showHour17Data, showHour18Data, showHour19Data,
                 showHour20Data, showHour21Data, showHour22Data, showHour00Data);
     }
@@ -45,8 +45,12 @@ public class PresentationService {
     public List<ProfitDto> getProfitData(Boolean showDrivingProfit, Boolean showKoraProfit, Boolean showWavesProfit,
                                          Boolean ShowASeriesProfit, Boolean showMiratProfit, Boolean showHandBagProfit,
                                          Boolean showBeltAndWalletProfit, Boolean showNAProfit) {
-        return getProfitDTOData(buildTotalSalesPresentationList(getSalesData()), showDrivingProfit, showKoraProfit, showWavesProfit,
+        return getProfitDTOData(buildTotalSalesPresentationList(getSalesData(0)), showDrivingProfit, showKoraProfit, showWavesProfit,
                 ShowASeriesProfit, showMiratProfit, showHandBagProfit, showBeltAndWalletProfit, showNAProfit);
+    }
+
+    public List<DailySalesDto> getDailySales(Integer monthNumber) {
+        return getDailySalesDto(getSalesData(monthNumber).get(monthNumber.toString()));
     }
 
     private Map<String, Integer> getCostPriceData(Integer monthNumber) {
@@ -67,12 +71,16 @@ public class PresentationService {
         return map;
     }
 
-    private Map<String, List<RetailSalesEntryDto>> getSalesData() {
+    private Map<String, List<RetailSalesEntryDto>> getSalesData(Integer monthNumber) {
         Map<String, List<RetailSalesEntryDto>> retailSalesEntryDtos = new HashMap<>();
         //update i=0 from next year
-        for (int i = 0; i < 12; i++) {
-            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
-                retailSalesEntryDtos.put((i + 4) + "_" + new DateFormatSymbols().getMonths()[i + 3], retailSalesReportService.getSalesDataByMonth(i));
+        if (monthNumber == 0) {
+            for (int i = 0; i < 12; i++) {
+                if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
+                    retailSalesEntryDtos.put((i + 4) + "_" + new DateFormatSymbols().getMonths()[i + 3], retailSalesReportService.getSalesDataByMonth(i));
+            }
+        } else {
+            retailSalesEntryDtos.put(monthNumber.toString(), retailSalesReportService.getSalesDataByMonth(monthNumber - 4));
         }
         return retailSalesEntryDtos;
     }
@@ -606,6 +614,34 @@ public class PresentationService {
                 -> o1.getMonth().compareTo(
                 o2.getMonth()));
         return hourlyStepInDtos;
+    }
+
+    private List<DailySalesDto> getDailySalesDto(List<RetailSalesEntryDto> retailSalesEntryDtolist) {
+        Map<Integer, DailySalesDto> dailySalesDtoMap = new HashMap<>();
+
+        retailSalesEntryDtolist.forEach(retailSalesEntryDto -> {
+            Date salesDate;
+            try {
+                salesDate = (new SimpleDateFormat("MMM-d-yyyy h:mm a").parse(retailSalesEntryDto.getSaleDate()));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            Integer day = Integer.valueOf((new SimpleDateFormat("d").format(salesDate)));
+            if (dailySalesDtoMap.keySet().contains(day)) {
+                dailySalesDtoMap.get(day).setSales(dailySalesDtoMap.get(day).getSales() + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+            } else {
+                DailySalesDto dailySalesDto = new DailySalesDto();
+                dailySalesDto.setDay(day);
+                dailySalesDto.setSales(Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                dailySalesDtoMap.put(day, dailySalesDto);
+            }
+        });
+        List<DailySalesDto> dailySalesDtos = new ArrayList<>(dailySalesDtoMap.values());
+
+        dailySalesDtos.sort((o1, o2)
+                -> o1.getDay().compareTo(
+                o2.getDay()));
+        return dailySalesDtos;
     }
 
 }

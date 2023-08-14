@@ -1,9 +1,6 @@
 package com.classicLeathers.classicLeathersTool.retail.controller;
 
-import com.classicLeathers.classicLeathersTool.retail.model.HourlySalesDto;
-import com.classicLeathers.classicLeathersTool.retail.model.HourlyStepInDto;
-import com.classicLeathers.classicLeathersTool.retail.model.ProfitDto;
-import com.classicLeathers.classicLeathersTool.retail.model.TotalSalesDto;
+import com.classicLeathers.classicLeathersTool.retail.model.*;
 import com.classicLeathers.classicLeathersTool.retail.service.PresentationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +60,10 @@ public class PresentationController {
                                                          @RequestParam Boolean showBeltAndWalletProfit, @RequestParam Boolean showNAProfit) {
         return ResponseEntity.ok(presentationService.getProfitData(showDrivingProfit, showKoraProfit, showWavesProfit,
                 showASeriesProfit, showMiratProfit, showHandBagProfit, showBeltAndWalletProfit, showNAProfit));
+    }
+
+    @GetMapping("/dailySales")
+    public ResponseEntity<List<DailySalesDto>> getDailySales(@RequestParam Integer monthNumber) {
+        return ResponseEntity.ok(presentationService.getDailySales(monthNumber));
     }
 }
