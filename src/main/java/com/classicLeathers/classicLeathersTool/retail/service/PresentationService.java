@@ -50,7 +50,7 @@ public class PresentationService {
     }
 
     public List<DailySalesDto> getDailySales(Integer monthNumber) {
-        return getDailySalesDto(getSalesData(monthNumber).get(monthNumber.toString()));
+        return getDailySalesDto(getSalesData(monthNumber).get(monthNumber.toString()), monthNumber);
     }
 
     private Map<String, Integer> getCostPriceData(Integer monthNumber) {
@@ -117,7 +117,8 @@ public class PresentationService {
                 Integer costPrice = costPriceDataMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
                 if (costPrice == null) {
                     costPrice = (int) (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .35);
-                    System.out.println("Loading default values for : " + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
+                    if (month.contains("8_"))
+                        System.out.println("Loading default values for : " + month + " : " + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
                 }
                 if (retailSalesEntryDto.getCategory().contains("LF")) {
                     drivingPresentation.setTotalSales(drivingPresentation.getTotalSales()
@@ -144,7 +145,6 @@ public class PresentationService {
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     bagsPresentation.setTotalCostPrice(bagsPresentation.getTotalCostPrice() + costPrice);
                 } else if (retailSalesEntryDto.getCategory().contains("BLT") || retailSalesEntryDto.getCategory().contains("WLT")) {
-                    costPrice = (int) (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .25);
                     beltsWalletsPresentation.setTotalSales(beltsWalletsPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     beltsWalletsPresentation.setTotalCostPrice(beltsWalletsPresentation.getTotalCostPrice() + costPrice);
@@ -616,8 +616,8 @@ public class PresentationService {
         return hourlyStepInDtos;
     }
 
-    private List<DailySalesDto> getDailySalesDto(List<RetailSalesEntryDto> retailSalesEntryDtolist) {
-        Map<Integer, DailySalesDto> dailySalesDtoMap = new HashMap<>();
+    private List<DailySalesDto> getDailySalesDto(List<RetailSalesEntryDto> retailSalesEntryDtolist, Integer monthNumber) {
+        Map<Integer, DailySalesDto> dailySalesDtoMap = getDefaultDailySalesDto(monthNumber);
 
         retailSalesEntryDtolist.forEach(retailSalesEntryDto -> {
             Date salesDate;
@@ -642,6 +642,21 @@ public class PresentationService {
                 -> o1.getDay().compareTo(
                 o2.getDay()));
         return dailySalesDtos;
+    }
+
+    private Map<Integer, DailySalesDto> getDefaultDailySalesDto(Integer monthNumber) {
+        Map<Integer, DailySalesDto> dailySalesDtoMap = new HashMap<>();
+        Integer day = Integer.valueOf((new SimpleDateFormat("d").format(new Date())));
+        Integer month = Integer.valueOf((new SimpleDateFormat("M").format(new Date())));
+        for (int i = 1; i < 32; i++) {
+            if (i <= day || month != monthNumber) {
+                DailySalesDto dailySalesDto = new DailySalesDto();
+                dailySalesDto.setDay(i);
+                dailySalesDto.setSales(0);
+                dailySalesDtoMap.put(i, dailySalesDto);
+            }
+        }
+        return dailySalesDtoMap;
     }
 
 }
