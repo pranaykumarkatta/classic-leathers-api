@@ -127,6 +127,7 @@ public class RetailStockReportService {
                 (retailSalesEntryDto.getCategory().contains("LF") || retailSalesEntryDto.getCategory().contains("KORA") ||
                         retailSalesEntryDto.getCategory().contains("WAVES") || retailSalesEntryDto.getCategory().contains("A_0") ||
                         retailSalesEntryDto.getCategory().contains("MIRAT") || retailSalesEntryDto.getCategory().contains("_BAG") ||
+                        retailSalesEntryDto.getCategory().contains("FORMAL") ||
                         retailSalesEntryDto.getCategory().contains("D_") || retailSalesEntryDto.getCategory().contains("CASUAL_") ||
                         retailSalesEntryDto.getCategory().contains("018_JUSTON")||retailSalesEntryDto.getCategory().contains("WLT"))
                         && retailSalesEntryDto.getSize() != "NA")).collect(Collectors.toList());
