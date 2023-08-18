@@ -25,28 +25,30 @@ public class RetailSalesReportController {
     }
 
     @PostMapping(consumes = "application/json")
-    public void addRetailSalesEntry(@RequestBody RetailSalesEntryDto retailSalesEntryDto) throws ParseException {
-        RetailSalesEntryDto newSalesEntryDto = new RetailSalesEntryDto();
-        newSalesEntryDto.setSaleDate(new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()));
-        newSalesEntryDto.setCustomerName(retailSalesEntryDto.getCustomerName());
-        newSalesEntryDto.setGender(retailSalesEntryDto.getGender());
-        newSalesEntryDto.setMobileNumber(retailSalesEntryDto.getMobileNumber());
-        newSalesEntryDto.setCategory(retailSalesEntryDto.getCategory());
-        newSalesEntryDto.setProductDetails(retailSalesEntryDto.getProductDetails());
-        newSalesEntryDto.setQuantity(retailSalesEntryDto.getQuantity());
-        newSalesEntryDto.setSize(retailSalesEntryDto.getSize());
-        newSalesEntryDto.setMrp(retailSalesEntryDto.getMrp());
-        newSalesEntryDto.setDiscount(retailSalesEntryDto.getDiscount());
-        newSalesEntryDto.setSalePrice(retailSalesEntryDto.getSalePrice());
-        newSalesEntryDto.setModeOfPayment(retailSalesEntryDto.getModeOfPayment());
-        newSalesEntryDto.setCashPayment(retailSalesEntryDto.getCashPayment());
-        newSalesEntryDto.setgPayPayment(retailSalesEntryDto.getgPayPayment());
-        newSalesEntryDto.setSwipePayment(retailSalesEntryDto.getSwipePayment());
-        newSalesEntryDto.setUpdatedBy(retailSalesEntryDto.getUpdatedBy());
-        newSalesEntryDto.setStepInType(retailSalesEntryDto.getStepInType());
-        newSalesEntryDto.setBrand(retailSalesEntryDto.getBrand());
-        newSalesEntryDto.setLeather(retailSalesEntryDto.getLeather());
-        retailSalesReportService.addRetailSalesEntry(newSalesEntryDto);
+    public void addRetailSalesEntry(@RequestBody List<RetailSalesEntryDto> retailSalesEntryDtoList) throws ParseException {
+        retailSalesEntryDtoList.forEach(retailSalesEntryDto -> {
+            RetailSalesEntryDto newSalesEntryDto = new RetailSalesEntryDto();
+            newSalesEntryDto.setSaleDate(new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()));
+            newSalesEntryDto.setCustomerName(retailSalesEntryDto.getCustomerName());
+            newSalesEntryDto.setGender(retailSalesEntryDto.getGender());
+            newSalesEntryDto.setMobileNumber(retailSalesEntryDto.getMobileNumber());
+            newSalesEntryDto.setCategory(retailSalesEntryDto.getCategory());
+            newSalesEntryDto.setProductDetails(retailSalesEntryDto.getProductDetails());
+            newSalesEntryDto.setQuantity(retailSalesEntryDto.getQuantity());
+            newSalesEntryDto.setSize(retailSalesEntryDto.getSize());
+            newSalesEntryDto.setMrp(retailSalesEntryDto.getMrp());
+            newSalesEntryDto.setDiscount(retailSalesEntryDto.getDiscount());
+            newSalesEntryDto.setSalePrice(retailSalesEntryDto.getSalePrice());
+            newSalesEntryDto.setModeOfPayment(retailSalesEntryDto.getModeOfPayment());
+            newSalesEntryDto.setCashPayment(retailSalesEntryDto.getCashPayment());
+            newSalesEntryDto.setgPayPayment(retailSalesEntryDto.getgPayPayment());
+            newSalesEntryDto.setSwipePayment(retailSalesEntryDto.getSwipePayment());
+            newSalesEntryDto.setUpdatedBy(retailSalesEntryDto.getUpdatedBy());
+            newSalesEntryDto.setStepInType(retailSalesEntryDto.getStepInType());
+            newSalesEntryDto.setBrand(retailSalesEntryDto.getBrand());
+            newSalesEntryDto.setLeather(retailSalesEntryDto.getLeather());
+            retailSalesReportService.addRetailSalesEntry(newSalesEntryDto);
+        });
     }
 
 }
