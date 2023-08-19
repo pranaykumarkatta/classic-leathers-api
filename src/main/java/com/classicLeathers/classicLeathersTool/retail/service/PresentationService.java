@@ -64,7 +64,7 @@ public class PresentationService {
             }
             Integer month = Integer.valueOf((new SimpleDateFormat("MM").format(stockInDate)));
             String year = (new SimpleDateFormat("yy").format(stockInDate));
-            if (month <= monthNumber)
+            if (month <= monthNumber && drivingShoeStockEntry.getTotalQuantity() > 1)
                 map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getSku() + "_" + drivingShoeStockEntry.getLeather(),
                         drivingShoeStockEntry.getCostPrice());
         });
