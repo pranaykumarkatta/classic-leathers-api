@@ -30,6 +30,8 @@ public class DrivingShoeStockEntry {
     private boolean validEntry = true;
     private String stockInDate;
     private Integer costPrice;
+    private String level_0_Category;
+    private String level_1_Category;
 
     public String getRowNumber() {
         return rowNumber;
@@ -245,5 +247,21 @@ public class DrivingShoeStockEntry {
 
     public void setCostPrice(Integer costPrice) {
         this.costPrice = costPrice;
+    }
+
+    public String getLevel_0_Category() {
+        return level_0_Category;
+    }
+
+    public void setLevel_0_Category(String level_0_Category) {
+        this.level_0_Category = level_0_Category;
+    }
+
+    public String getLevel_1_Category() {
+        return level_1_Category;
+    }
+
+    public void setLevel_1_Category(String level_1_Category) {
+        this.level_1_Category = level_1_Category;
     }
 }

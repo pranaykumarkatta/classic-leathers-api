@@ -49,11 +49,63 @@ public class RetailStockReportService {
                 drivingShoeStockEntry.setActualOrderedQuantity(Integer.parseInt(cellData[12]));
                 drivingShoeStockEntry.setCostPrice(Integer.parseInt(cellData[13]));
                 drivingShoeStockEntry.setStockInDate(cellData[15]);
+                drivingShoeStockEntry.setLevel_0_Category(cellData[19]);
+                drivingShoeStockEntry.setLevel_1_Category(cellData[20]);
 
                 drivingShoeStockEntryList.add(drivingShoeStockEntry);
             }
         }
         return drivingShoeStockEntryList;
+    }
+
+    public Map<String, Set<String>> getStockAvailabilityData() {
+        Map<String, Set<String>> map = new HashMap<>();
+        getStockData().forEach(drivingShoeStockEntry -> {
+            if (map.containsKey(drivingShoeStockEntry.getBrand())) {
+                map.get(drivingShoeStockEntry.getBrand()).add(drivingShoeStockEntry.getLevel_0_Category());
+            } else {
+                if (drivingShoeStockEntry.getTotalQuantity() > 0) {
+                    Set<String> set = new TreeSet<>();
+                    set.add(drivingShoeStockEntry.getLevel_0_Category());
+                    map.put(drivingShoeStockEntry.getBrand(), set);
+                }
+            }
+            if (map.containsKey(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category())) {
+                map.get(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category())
+                        .add(drivingShoeStockEntry.getLevel_1_Category());
+            } else {
+                if (drivingShoeStockEntry.getTotalQuantity() > 0) {
+                    Set<String> set = new TreeSet<>();
+                    set.add(drivingShoeStockEntry.getLevel_1_Category());
+                    map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category(), set);
+                }
+            }
+            if (map.containsKey(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                    + drivingShoeStockEntry.getLevel_1_Category())) {
+                map.get(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                        + drivingShoeStockEntry.getLevel_1_Category()).add(drivingShoeStockEntry.getSku());
+            } else {
+                if (drivingShoeStockEntry.getTotalQuantity() > 0) {
+                    Set<String> set = new TreeSet<>();
+                    set.add(drivingShoeStockEntry.getSku());
+                    map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                            + drivingShoeStockEntry.getLevel_1_Category(), set);
+                }
+            }
+            if (map.containsKey(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                    + drivingShoeStockEntry.getLevel_1_Category()+"_"+drivingShoeStockEntry.getSku())) {
+                map.get(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                        + drivingShoeStockEntry.getLevel_1_Category()+"_"+drivingShoeStockEntry.getSku()).add(drivingShoeStockEntry.getLeather());
+            } else {
+                if (drivingShoeStockEntry.getTotalQuantity() > 0) {
+                    Set<String> set = new TreeSet<>();
+                    set.add(drivingShoeStockEntry.getLeather());
+                    map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                            + drivingShoeStockEntry.getLevel_1_Category()+"_"+drivingShoeStockEntry.getSku(), set);
+                }
+            }
+        });
+        return map;
     }
 
     public List<DrivingShoeStockEntry> getDrivingShoeStockReport() {
@@ -129,7 +181,7 @@ public class RetailStockReportService {
                         retailSalesEntryDto.getCategory().contains("MIRAT") || retailSalesEntryDto.getCategory().contains("_BAG") ||
                         retailSalesEntryDto.getCategory().contains("FORMAL") ||
                         retailSalesEntryDto.getCategory().contains("D_") || retailSalesEntryDto.getCategory().contains("CASUAL_") ||
-                        retailSalesEntryDto.getCategory().contains("018_JUSTON")||retailSalesEntryDto.getCategory().contains("WLT"))
+                        retailSalesEntryDto.getCategory().contains("018_JUSTON") || retailSalesEntryDto.getCategory().contains("WLT"))
                         && retailSalesEntryDto.getSize() != "NA")).collect(Collectors.toList());
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
         retailDrivingSalesEntryDtoList.forEach(retailSalesEntryDto -> {
