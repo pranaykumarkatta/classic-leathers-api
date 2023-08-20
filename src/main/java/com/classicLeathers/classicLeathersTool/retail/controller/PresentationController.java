@@ -18,12 +18,13 @@ public class PresentationController {
     private PresentationService presentationService;
 
     @GetMapping("/totalSales")
-    public ResponseEntity<List<TotalSalesDto>> getTotalSalesData(@RequestParam Boolean showDriving, @RequestParam Boolean showKora,
-                                                                 @RequestParam Boolean showWaves, @RequestParam Boolean ShowASeries,
-                                                                 @RequestParam Boolean showMirat, @RequestParam Boolean showHandBag,
-                                                                 @RequestParam Boolean showBeltAndWallet, @RequestParam Boolean showNA) {
-        return ResponseEntity.ok(presentationService.getTotalSalesData(showDriving, showKora, showWaves,
-                ShowASeries, showMirat, showHandBag, showBeltAndWallet, showNA));
+    public ResponseEntity<List<TotalSalesDto>> getTotalSalesData(@RequestParam Boolean showDriving, @RequestParam Boolean showMirat,
+                                                                 @RequestParam Boolean showFormal, @RequestParam Boolean showCasual,
+                                                                 @RequestParam Boolean showSlippers, @RequestParam Boolean showHandBag,
+                                                                 @RequestParam Boolean showBeltAndWallet, @RequestParam Boolean showOther,
+                                                                 @RequestParam Boolean showNA) {
+        return ResponseEntity.ok(presentationService.getTotalSalesData(showDriving, showMirat,showFormal,showCasual,
+                showSlippers, showHandBag, showBeltAndWallet,showOther,showNA));
     }
 
     @GetMapping("/hourlySales")
