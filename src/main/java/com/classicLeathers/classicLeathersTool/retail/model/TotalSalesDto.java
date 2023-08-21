@@ -15,6 +15,8 @@ public class TotalSalesDto {
     private Integer handBagSales;
     private Integer beltsAndWalletsSale;
     private Integer serviceSales;
+    private Integer ladiesFootwearSales;
+    private Integer kidsFootwearSales;
     private Integer ottoSales;
     private Integer naSalesSale;
 
@@ -136,6 +138,22 @@ public class TotalSalesDto {
 
     public void setServiceSales(Integer serviceSales) {
         this.serviceSales = serviceSales;
+    }
+
+    public Integer getLadiesFootwearSales() {
+        return ladiesFootwearSales == null ? 0 : ladiesFootwearSales;
+    }
+
+    public void setLadiesFootwearSales(Integer ladiesFootwearSales) {
+        this.ladiesFootwearSales = ladiesFootwearSales;
+    }
+
+    public Integer getKidsFootwearSales() {
+        return kidsFootwearSales == null ? 0 : kidsFootwearSales;
+    }
+
+    public void setKidsFootwearSales(Integer kidsFootwearSales) {
+        this.kidsFootwearSales = kidsFootwearSales;
     }
 
     public Integer getNaSalesSale() {

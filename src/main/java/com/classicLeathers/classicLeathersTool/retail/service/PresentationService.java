@@ -130,6 +130,12 @@ public class PresentationService {
             Presentation ottoPresentation = new Presentation();
             ottoPresentation.setMonth(month);
             ottoPresentation.setTotalSalesCategory("OTTO");
+            Presentation ladiesFootwearPresentation = new Presentation();
+            ladiesFootwearPresentation.setMonth(month);
+            ladiesFootwearPresentation.setTotalSalesCategory("Ladies Slippers");
+            Presentation kidsFootwearPresentation = new Presentation();
+            kidsFootwearPresentation.setMonth(month);
+            kidsFootwearPresentation.setTotalSalesCategory("Kids Slippers");
             Presentation naPresentation = new Presentation();
             naPresentation.setMonth(month);
             naPresentation.setTotalSalesCategory("NA");
@@ -139,7 +145,7 @@ public class PresentationService {
                 if (costPrice == null) {
                     costPrice = (int) (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .35);
                     if (month.contains("8_"))
-                        System.out.println("Loading default values for : " + month + " : " + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
+                        System.out.println("Loading default values for : " + retailSalesEntryDto.getSaleDate() + " : " + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
                 }
                 if (retailSalesEntryDto.getCategory().contains("LF")) {
                     drivingPresentation.setTotalSales(drivingPresentation.getTotalSales()
@@ -197,6 +203,14 @@ public class PresentationService {
                     ottoPresentation.setTotalSales(ottoPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     ottoPresentation.setTotalCostPrice(ottoPresentation.getTotalCostPrice() + costPrice);
+                }  else if (retailSalesEntryDto.getCategory().contains("LADIES") ) {
+                    ladiesFootwearPresentation.setTotalSales(ladiesFootwearPresentation.getTotalSales()
+                            + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    ladiesFootwearPresentation.setTotalCostPrice(ladiesFootwearPresentation.getTotalCostPrice() + costPrice);
+                }  else if (retailSalesEntryDto.getCategory().contains("KIDS") ) {
+                    kidsFootwearPresentation.setTotalSales(kidsFootwearPresentation.getTotalSales()
+                            + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                    kidsFootwearPresentation.setTotalCostPrice(kidsFootwearPresentation.getTotalCostPrice() + costPrice);
                 } else {
                     naPresentation.setTotalSales(naPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
@@ -217,6 +231,8 @@ public class PresentationService {
             presentations.add(beltsWalletsPresentation);
             presentations.add(servicePresentation);
             presentations.add(ottoPresentation);
+            presentations.add(ladiesFootwearPresentation);
+            presentations.add(kidsFootwearPresentation);
             presentations.add(naPresentation);
         });
         return presentations;
@@ -258,6 +274,10 @@ public class PresentationService {
                     totalSalesMap.get(presentation.getMonth()).setOttoSales(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Service")) {
                     totalSalesMap.get(presentation.getMonth()).setServiceSales(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Kids Slippers")) {
+                    totalSalesMap.get(presentation.getMonth()).setKidsFootwearSales(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Ladies Slippers")) {
+                    totalSalesMap.get(presentation.getMonth()).setLadiesFootwearSales(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("NA")) {
                     totalSalesMap.get(presentation.getMonth()).setNaSalesSale(showNA ? presentation.getTotalSales() : 0);
                 }
@@ -290,6 +310,10 @@ public class PresentationService {
                     totalSalesDto.setOttoSales(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Service")) {
                     totalSalesDto.setServiceSales(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Kids Slippers")) {
+                    totalSalesDto.setKidsFootwearSales(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Ladies Slippers")) {
+                    totalSalesDto.setLadiesFootwearSales(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("NA")) {
                     totalSalesDto.setNaSalesSale(showNA ? presentation.getTotalSales() : 0);
                 }
