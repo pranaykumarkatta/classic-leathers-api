@@ -15,7 +15,7 @@ public class RetailSalesReportService {
     public List<RetailSalesEntryDto> getSalesDataByMonth(Integer sheetNumber) {
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2 - Copy.xlsx", sheetNumber);
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx", sheetNumber);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -80,7 +80,7 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.getStepInType()
         };
         try {
-            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2 - Copy.xlsx",sheetNO,data);
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx",sheetNO,data);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
