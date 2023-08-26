@@ -93,15 +93,15 @@ public class RetailStockReportService {
                 }
             }
             if (map.containsKey(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
-                    + drivingShoeStockEntry.getLevel_1_Category()+"_"+drivingShoeStockEntry.getSku())) {
+                    + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku())) {
                 map.get(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
-                        + drivingShoeStockEntry.getLevel_1_Category()+"_"+drivingShoeStockEntry.getSku()).add(drivingShoeStockEntry.getLeather());
+                        + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku()).add(drivingShoeStockEntry.getLeather());
             } else {
                 if (drivingShoeStockEntry.getTotalQuantity() > 0) {
                     Set<String> set = new TreeSet<>();
                     set.add(drivingShoeStockEntry.getLeather());
                     map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
-                            + drivingShoeStockEntry.getLevel_1_Category()+"_"+drivingShoeStockEntry.getSku(), set);
+                            + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku(), set);
                 }
             }
         });
@@ -245,5 +245,33 @@ public class RetailStockReportService {
             }
         });
         return new ArrayList<>(drivingShoeSalesEntryMap.values());
+    }
+
+    public String exportStockReport() {
+        int i = 0;
+        getDrivingShoeStockReport().forEach(drivingShoeStockEntry -> {
+            Object[] data = new Object[]{i+"",
+                    drivingShoeStockEntry.getSku(),
+                    drivingShoeStockEntry.getLeather(),
+                    drivingShoeStockEntry.getLeather(),
+                    drivingShoeStockEntry.getBrand(),
+                    drivingShoeStockEntry.getSize_40_quantity().toString(),
+                    drivingShoeStockEntry.getSize_41_quantity().toString(),
+                    drivingShoeStockEntry.getSize_42_quantity().toString(),
+                    drivingShoeStockEntry.getSize_43_quantity().toString(),
+                    drivingShoeStockEntry.getSize_44_quantity().toString(),
+                    drivingShoeStockEntry.getSize_45_quantity().toString(),
+                    drivingShoeStockEntry.getSize_46_quantity().toString(),
+                    drivingShoeStockEntry.getSize_47_quantity().toString(),
+                    drivingShoeStockEntry.getTotalQuantity().toString()
+            };
+            try {
+                new FileUtils().WriteData("D:\\onedrive\\Tag_classicLeathers\\Reports\\STOCK_AUDIT_REPORTS_V2.xlsx", 0, data);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return "Report saved successfully";
     }
 }

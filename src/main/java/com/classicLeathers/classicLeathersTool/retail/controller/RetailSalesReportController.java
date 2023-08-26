@@ -1,11 +1,13 @@
 package com.classicLeathers.classicLeathersTool.retail.controller;
 
+import com.classicLeathers.classicLeathersTool.FileUtils;
 import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
 import com.classicLeathers.classicLeathersTool.retail.service.RetailSalesReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +27,7 @@ public class RetailSalesReportController {
     }
 
     @PostMapping(consumes = "application/json")
-    public void addRetailSalesEntry(@RequestBody List<RetailSalesEntryDto> retailSalesEntryDtoList) throws ParseException {
+    public void addRetailSalesEntry(@RequestBody List<RetailSalesEntryDto> retailSalesEntryDtoList, @RequestParam String invoiceNumber) throws ParseException {
         retailSalesEntryDtoList.forEach(retailSalesEntryDto -> {
             RetailSalesEntryDto newSalesEntryDto = new RetailSalesEntryDto();
             newSalesEntryDto.setSaleDate(new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()));
@@ -49,6 +51,11 @@ public class RetailSalesReportController {
             newSalesEntryDto.setLeather(retailSalesEntryDto.getLeather());
             retailSalesReportService.addRetailSalesEntry(newSalesEntryDto);
         });
+        try {
+            new FileUtils().saveInvoice(retailSalesEntryDtoList, invoiceNumber);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
