@@ -24,6 +24,7 @@ public class RetailSalesEntryDto implements Comparable {
     private String updatedBy;
     private String stepInType;
     private String brand;
+    private String invoiceNumber;
 
     private String searchString;
 
@@ -194,6 +195,14 @@ public class RetailSalesEntryDto implements Comparable {
 
     public void setStepInType(String stepInType) {
         this.stepInType = stepInType;
+    }
+
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 
     @Override

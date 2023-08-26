@@ -49,7 +49,7 @@ public class RetailSalesReportController {
             newSalesEntryDto.setStepInType(retailSalesEntryDto.getStepInType());
             newSalesEntryDto.setBrand(retailSalesEntryDto.getBrand());
             newSalesEntryDto.setLeather(retailSalesEntryDto.getLeather());
-            retailSalesReportService.addRetailSalesEntry(newSalesEntryDto);
+            retailSalesReportService.addRetailSalesEntry(newSalesEntryDto,invoiceNumber);
         });
         try {
             new FileUtils().saveInvoice(retailSalesEntryDtoList, invoiceNumber);
