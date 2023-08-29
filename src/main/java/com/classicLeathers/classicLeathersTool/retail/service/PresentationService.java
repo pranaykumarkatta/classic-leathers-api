@@ -3,6 +3,7 @@ package com.classicLeathers.classicLeathersTool.retail.service;
 import com.classicLeathers.classicLeathersTool.retail.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -17,11 +18,11 @@ public class PresentationService {
     @Autowired
     private RetailStockReportService retailStockReportService;
 
-    public List<TotalSalesDto> getTotalSalesData(Boolean showDriving, Boolean showMirat,Boolean showFormal,Boolean showCasual,
+    public List<TotalSalesDto> getTotalSalesData(Boolean showDriving, Boolean showMirat, Boolean showFormal, Boolean showCasual,
                                                  Boolean showSlippers, Boolean showHandBag, Boolean showBeltAndWallet,
-                                                 Boolean showOther,Boolean showNA) {
-        return getTotalSalesDTOData(buildTotalSalesPresentationList(getSalesData(0)), showDriving, showMirat,showFormal,showCasual,
-                showSlippers, showHandBag, showBeltAndWallet,showOther,showNA);
+                                                 Boolean showOther, Boolean showNA) {
+        return getTotalSalesDTOData(buildTotalSalesPresentationList(getSalesData(0)), showDriving, showMirat, showFormal, showCasual,
+                showSlippers, showHandBag, showBeltAndWallet, showOther, showNA);
     }
 
     public List<HourlySalesDto> getHourlySalesData(Boolean showHour8Data, Boolean showHour9Data, Boolean showHour10Data, Boolean showHour11Data,
@@ -42,11 +43,13 @@ public class PresentationService {
                 showHour20Data, showHour21Data, showHour22Data, showHour00Data);
     }
 
-    public List<ProfitDto> getProfitData(Boolean showDrivingProfit, Boolean showKoraProfit, Boolean showWavesProfit,
-                                         Boolean ShowASeriesProfit, Boolean showMiratProfit, Boolean showHandBagProfit,
-                                         Boolean showBeltAndWalletProfit, Boolean showNAProfit) {
-        return getProfitDTOData(buildTotalSalesPresentationList(getSalesData(0)), showDrivingProfit, showKoraProfit, showWavesProfit,
-                ShowASeriesProfit, showMiratProfit, showHandBagProfit, showBeltAndWalletProfit, showNAProfit);
+    public List<ProfitDto> getProfitData(@RequestParam Boolean showDriving, @RequestParam Boolean showMirat,
+                                         @RequestParam Boolean showFormal, @RequestParam Boolean showCasual,
+                                         @RequestParam Boolean showSlippers, @RequestParam Boolean showHandBag,
+                                         @RequestParam Boolean showBeltAndWallet, @RequestParam Boolean showOther,
+                                         @RequestParam Boolean showNA) {
+        return getProfitDTOData(buildTotalSalesPresentationList(getSalesData(0)), showDriving, showMirat,showFormal,showCasual,
+                showSlippers, showHandBag, showBeltAndWallet,showOther,showNA);
     }
 
     public List<DailySalesDto> getDailySales(Integer monthNumber) {
@@ -178,7 +181,7 @@ public class PresentationService {
                     aSeriesPresentation.setTotalSales(aSeriesPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     aSeriesPresentation.setTotalCostPrice(aSeriesPresentation.getTotalCostPrice() + costPrice);
-                }   else if (retailSalesEntryDto.getCategory().contains("JUSTON")) {
+                } else if (retailSalesEntryDto.getCategory().contains("JUSTON")) {
                     justonPresentation.setTotalSales(justonPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     justonPresentation.setTotalCostPrice(justonPresentation.getTotalCostPrice() + costPrice);
@@ -194,19 +197,19 @@ public class PresentationService {
                     beltsWalletsPresentation.setTotalSales(beltsWalletsPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     beltsWalletsPresentation.setTotalCostPrice(beltsWalletsPresentation.getTotalCostPrice() + costPrice);
-                } else if (retailSalesEntryDto.getCategory().contains("SERVICE") ) {
+                } else if (retailSalesEntryDto.getCategory().contains("SERVICE")) {
                     servicePresentation.setTotalSales(servicePresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     servicePresentation.setTotalCostPrice(servicePresentation.getTotalCostPrice() + costPrice);
-                }  else if (retailSalesEntryDto.getCategory().contains("OTTO") ) {
+                } else if (retailSalesEntryDto.getCategory().contains("OTTO")) {
                     ottoPresentation.setTotalSales(ottoPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     ottoPresentation.setTotalCostPrice(ottoPresentation.getTotalCostPrice() + costPrice);
-                }  else if (retailSalesEntryDto.getCategory().contains("LADIES") ) {
+                } else if (retailSalesEntryDto.getCategory().contains("LADIES")) {
                     ladiesFootwearPresentation.setTotalSales(ladiesFootwearPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     ladiesFootwearPresentation.setTotalCostPrice(ladiesFootwearPresentation.getTotalCostPrice() + costPrice);
-                }  else if (retailSalesEntryDto.getCategory().contains("KIDS") ) {
+                } else if (retailSalesEntryDto.getCategory().contains("KIDS")) {
                     kidsFootwearPresentation.setTotalSales(kidsFootwearPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     kidsFootwearPresentation.setTotalCostPrice(kidsFootwearPresentation.getTotalCostPrice() + costPrice);
@@ -238,9 +241,9 @@ public class PresentationService {
     }
 
     private List<TotalSalesDto> getTotalSalesDTOData(List<Presentation> presentations,
-                                                     Boolean showDriving, Boolean showMirat,Boolean showFormal,Boolean showCasual,
+                                                     Boolean showDriving, Boolean showMirat, Boolean showFormal, Boolean showCasual,
                                                      Boolean showSlippers, Boolean showHandBag, Boolean showBeltAndWallet,
-                                                     Boolean showOther,Boolean showNA) {
+                                                     Boolean showOther, Boolean showNA) {
         Map<String, TotalSalesDto> totalSalesMap = new HashMap<>();
 
         presentations.forEach(presentation -> {
@@ -263,7 +266,7 @@ public class PresentationService {
                     totalSalesMap.get(presentation.getMonth()).setaSeriesSales(showSlippers ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Juston")) {
                     totalSalesMap.get(presentation.getMonth()).setJustonSales(showSlippers ? presentation.getTotalSales() : 0);
-                }  else if (presentation.getTotalSalesCategory().contains("Crocs")) {
+                } else if (presentation.getTotalSalesCategory().contains("Crocs")) {
                     totalSalesMap.get(presentation.getMonth()).setCrocsSales(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Hand Bags")) {
                     totalSalesMap.get(presentation.getMonth()).setHandBagSales(showHandBag ? presentation.getTotalSales() : 0);
@@ -328,37 +331,63 @@ public class PresentationService {
     }
 
     private List<ProfitDto> getProfitDTOData(List<Presentation> presentations,
-                                             Boolean showDriving, Boolean showKora, Boolean showWaves,
-                                             Boolean showASeries, Boolean showMirat, Boolean showHandBag,
-                                             Boolean showBeltAndWallet, Boolean showNA) {
+                                             Boolean showDriving, Boolean showMirat, Boolean showFormal, Boolean showCasual,
+                                             Boolean showSlippers, Boolean showHandBag, Boolean showBeltAndWallet,
+                                             Boolean showOther, Boolean showNA) {
         Map<String, ProfitDto> profitDtoMap = new HashMap<>();
-
         presentations.forEach(presentation -> {
             if (profitDtoMap.keySet().contains(presentation.getMonth())) {
                 if (presentation.getTotalSalesCategory().contains("Driving")) {
+                    profitDtoMap.get(presentation.getMonth()).setDrivingCostPrice(showDriving ? presentation.getTotalCostPrice() : 0);
                     profitDtoMap.get(presentation.getMonth()).setDrivingSalePrice(showDriving ? presentation.getTotalSales() : 0);
-                    profitDtoMap.get(presentation.getMonth()).setDrivingSalePrice(showDriving ? presentation.getTotalCostPrice() : 0);
-                } else if (presentation.getTotalSalesCategory().contains("Kora")) {
-                    profitDtoMap.get(presentation.getMonth()).setKoraSalePrice(showKora ? presentation.getTotalSales() : 0);
-                    profitDtoMap.get(presentation.getMonth()).setKoraCostPrice(showKora ? presentation.getTotalCostPrice() : 0);
-                } else if (presentation.getTotalSalesCategory().contains("Waves")) {
-                    profitDtoMap.get(presentation.getMonth()).setWavesSalePrice(showWaves ? presentation.getTotalSales() : 0);
-                    profitDtoMap.get(presentation.getMonth()).setWavesCostPrice(showWaves ? presentation.getTotalCostPrice() : 0);
-                } else if (presentation.getTotalSalesCategory().contains("A-Series")) {
-                    profitDtoMap.get(presentation.getMonth()).setaSeriesSalePrice(showASeries ? presentation.getTotalSales() : 0);
-                    profitDtoMap.get(presentation.getMonth()).setaSeriesCostPrice(showASeries ? presentation.getTotalCostPrice() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Mirat")) {
-                    profitDtoMap.get(presentation.getMonth()).setMiratSalePrice(showMirat ? presentation.getTotalSales() : 0);
                     profitDtoMap.get(presentation.getMonth()).setMiratCostPrice(showMirat ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setMiratSalePrice(showMirat ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Other Formals")) {
+                    profitDtoMap.get(presentation.getMonth()).setOtherFormalCostPrice(showFormal ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setOtherFormalSalePrice(showFormal ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Other Casuals")) {
+                    profitDtoMap.get(presentation.getMonth()).setOtherCasualsCostPrice(showCasual ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setOtherCasualsSalePrice(showCasual ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("CAT")) {
+                    profitDtoMap.get(presentation.getMonth()).setCatCostPrice(showFormal ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setCatSalePrice(showFormal ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Kora")) {
+                    profitDtoMap.get(presentation.getMonth()).setKoraCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setKoraSalePrice(showSlippers ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Waves")) {
+                    profitDtoMap.get(presentation.getMonth()).setWavesCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setWavesSalePrice(showSlippers ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("A-Series")) {
+                    profitDtoMap.get(presentation.getMonth()).setaSeriesCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setaSeriesSalePrice(showSlippers ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Juston")) {
+                    profitDtoMap.get(presentation.getMonth()).setJustonCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setJustonSalePrice(showSlippers ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Crocs")) {
+                    profitDtoMap.get(presentation.getMonth()).setCatCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setCrocsSalePrice(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Hand Bags")) {
-                    profitDtoMap.get(presentation.getMonth()).setHandBagSalePrice(showHandBag ? presentation.getTotalSales() : 0);
                     profitDtoMap.get(presentation.getMonth()).setHandBagCostPrice(showHandBag ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setHandBagSalePrice(showHandBag ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Belts And Wallets")) {
-                    profitDtoMap.get(presentation.getMonth()).setBeltsAndWalletsSalePrice(showBeltAndWallet ? presentation.getTotalSales() : 0);
                     profitDtoMap.get(presentation.getMonth()).setBeltsAndWalletsCostPrice(showBeltAndWallet ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setBeltsAndWalletsSalePrice(showBeltAndWallet ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("OTTO")) {
+                    profitDtoMap.get(presentation.getMonth()).setOttoCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setOttoSalePrice(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Service")) {
+                    profitDtoMap.get(presentation.getMonth()).setServiceCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setServiceSalePrice(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Kids Slippers")) {
+                    profitDtoMap.get(presentation.getMonth()).setKidsFootwearCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setKidsFootwearSalePrice(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Ladies Slippers")) {
+                    profitDtoMap.get(presentation.getMonth()).setLadiesFootwearCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setLadiesFootwearSalePrice(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("NA")) {
-                    profitDtoMap.get(presentation.getMonth()).setNaSalesSalePrice(showNA ? presentation.getTotalSales() : 0);
                     profitDtoMap.get(presentation.getMonth()).setNaSalesCostPrice(showNA ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setNaSalesSalePrice(showNA ? presentation.getTotalSales() : 0);
                 }
             } else {
                 ProfitDto profitDto = new ProfitDto();
@@ -366,32 +395,58 @@ public class PresentationService {
                 if (presentation.getTotalSalesCategory().contains("Driving")) {
                     profitDto.setDrivingSalePrice(showDriving ? presentation.getTotalSales() : 0);
                     profitDto.setDrivingCostPrice(showDriving ? presentation.getTotalCostPrice() : 0);
-                } else if (presentation.getTotalSalesCategory().contains("Kora")) {
-                    profitDto.setKoraSalePrice(showKora ? presentation.getTotalSales() : 0);
-                    profitDto.setKoraCostPrice(showKora ? presentation.getTotalCostPrice() : 0);
-                } else if (presentation.getTotalSalesCategory().contains("Waves")) {
-                    profitDto.setWavesSalePrice(showWaves ? presentation.getTotalSales() : 0);
-                    profitDto.setWavesCostPrice(showWaves ? presentation.getTotalCostPrice() : 0);
-                } else if (presentation.getTotalSalesCategory().contains("A-Series")) {
-                    profitDto.setaSeriesSalePrice(showASeries ? presentation.getTotalSales() : 0);
-                    profitDto.setaSeriesCostPrice(showASeries ? presentation.getTotalCostPrice() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Mirat")) {
-                    profitDto.setMiratSalePrice(showMirat ? presentation.getTotalSales() : 0);
                     profitDto.setMiratCostPrice(showMirat ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setMiratSalePrice(showMirat ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Other Formals")) {
+                    profitDto.setOtherFormalCostPrice(showFormal ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setOtherFormalSalePrice(showFormal ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Other Casuals")) {
+                    profitDto.setOtherCasualsCostPrice(showCasual ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setOtherCasualsSalePrice(showCasual ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("CAT")) {
+                    profitDto.setCatCostPrice(showFormal ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setCatSalePrice(showFormal ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Kora")) {
+                    profitDto.setKoraCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setKoraSalePrice(showSlippers ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Waves")) {
+                    profitDto.setWavesCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setWavesSalePrice(showSlippers ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("A-Series")) {
+                    profitDto.setaSeriesCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setaSeriesSalePrice(showSlippers ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Juston")) {
+                    profitDto.setJustonCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setJustonSalePrice(showSlippers ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Crocs")) {
+                    profitDto.setCatCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setCrocsSalePrice(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Hand Bags")) {
-                    profitDto.setHandBagSalePrice(showHandBag ? presentation.getTotalSales() : 0);
                     profitDto.setHandBagCostPrice(showHandBag ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setHandBagSalePrice(showHandBag ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Belts And Wallets")) {
-                    profitDto.setBeltsAndWalletsSalePrice(showBeltAndWallet ? presentation.getTotalSales() : 0);
                     profitDto.setBeltsAndWalletsCostPrice(showBeltAndWallet ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setBeltsAndWalletsSalePrice(showBeltAndWallet ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("OTTO")) {
+                    profitDto.setOttoCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setOttoSalePrice(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Service")) {
+                    profitDto.setServiceCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setServiceSalePrice(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Kids Slippers")) {
+                    profitDto.setKidsFootwearCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setKidsFootwearSalePrice(showOther ? presentation.getTotalSales() : 0);
+                } else if (presentation.getTotalSalesCategory().contains("Ladies Slippers")) {
+                    profitDto.setLadiesFootwearCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setLadiesFootwearSalePrice(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("NA")) {
-                    profitDto.setNaSalesSalePrice(showNA ? presentation.getTotalSales() : 0);
-                    profitDto.setNaSalesCostPrice(showNA ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setNaSalesCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDto.setNaSalesSalePrice(showOther ? presentation.getTotalSales() : 0);
                 }
                 profitDtoMap.put(presentation.getMonth(), profitDto);
             }
         });
-
         List<ProfitDto> profitDtos = new ArrayList<>(profitDtoMap.values());
 
         profitDtos.sort((o1, o2)

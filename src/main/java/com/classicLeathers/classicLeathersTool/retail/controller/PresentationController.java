@@ -56,11 +56,13 @@ public class PresentationController {
     }
 
     @GetMapping("/profitGraph")
-    public ResponseEntity<List<ProfitDto>> getProfitData(@RequestParam Boolean showDrivingProfit, @RequestParam Boolean showKoraProfit, @RequestParam Boolean showWavesProfit,
-                                                         @RequestParam Boolean showASeriesProfit, @RequestParam Boolean showMiratProfit, @RequestParam Boolean showHandBagProfit,
-                                                         @RequestParam Boolean showBeltAndWalletProfit, @RequestParam Boolean showNAProfit) {
-        return ResponseEntity.ok(presentationService.getProfitData(showDrivingProfit, showKoraProfit, showWavesProfit,
-                showASeriesProfit, showMiratProfit, showHandBagProfit, showBeltAndWalletProfit, showNAProfit));
+    public ResponseEntity<List<ProfitDto>> getProfitData(@RequestParam Boolean showDriving, @RequestParam Boolean showMirat,
+                                                         @RequestParam Boolean showFormal, @RequestParam Boolean showCasual,
+                                                         @RequestParam Boolean showSlippers, @RequestParam Boolean showHandBag,
+                                                         @RequestParam Boolean showBeltAndWallet, @RequestParam Boolean showOther,
+                                                         @RequestParam Boolean showNA) {
+        return ResponseEntity.ok(presentationService.getProfitData(showDriving, showMirat,showFormal,showCasual,
+                showSlippers, showHandBag, showBeltAndWallet,showOther,showNA));
     }
 
     @GetMapping("/dailySales")

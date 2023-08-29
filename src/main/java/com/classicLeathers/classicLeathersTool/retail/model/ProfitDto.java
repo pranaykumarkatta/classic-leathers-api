@@ -4,18 +4,36 @@ public class ProfitDto {
     private String month;
     private Integer drivingCostPrice;
     private Integer drivingSalePrice;
+    private Integer miratCostPrice;
+    private Integer miratSalePrice;
+    private Integer otherFormalCostPrice;
+    private Integer otherFormalSalePrice;
+    private Integer otherCasualsSalePrice;
+    private Integer otherCasualsCostPrice;
+    private Integer catSalePrice;
+    private Integer catCostPrice;
     private Integer koraCostPrice;
     private Integer koraSalePrice;
     private Integer wavesCostPrice;
     private Integer wavesSalePrice;
     private Integer aSeriesCostPrice;
     private Integer aSeriesSalePrice;
-    private Integer miratCostPrice;
-    private Integer miratSalePrice;
+    private Integer justonCostPrice;
+    private Integer justonSalePrice;
+    private Integer crocsCostPrice;
+    private Integer crocsSalePrice;
     private Integer handBagCostPrice;
     private Integer handBagSalePrice;
     private Integer beltsAndWalletsCostPrice;
     private Integer beltsAndWalletsSalePrice;
+    private Integer ladiesFootwearSalePrice;
+    private Integer ladiesFootwearCostPrice;
+    private Integer kidsFootwearSalePrice;
+    private Integer kidsFootwearCostPrice;
+    private Integer ottoSalePrice;
+    private Integer ottoCostPrice;
+    private Integer serviceSalePrice;
+    private Integer serviceCostPrice;
     private Integer naSalesCostPrice;
     private Integer naSalesSalePrice;
 
@@ -41,6 +59,70 @@ public class ProfitDto {
 
     public void setDrivingSalePrice(Integer drivingSalePrice) {
         this.drivingSalePrice = drivingSalePrice;
+    }
+
+    public Integer getMiratCostPrice() {
+        return miratCostPrice;
+    }
+
+    public void setMiratCostPrice(Integer miratCostPrice) {
+        this.miratCostPrice = miratCostPrice;
+    }
+
+    public Integer getMiratSalePrice() {
+        return miratSalePrice;
+    }
+
+    public void setMiratSalePrice(Integer miratSalePrice) {
+        this.miratSalePrice = miratSalePrice;
+    }
+
+    public Integer getOtherFormalCostPrice() {
+        return otherFormalCostPrice;
+    }
+
+    public void setOtherFormalCostPrice(Integer otherFormalCostPrice) {
+        this.otherFormalCostPrice = otherFormalCostPrice;
+    }
+
+    public Integer getOtherFormalSalePrice() {
+        return otherFormalSalePrice;
+    }
+
+    public void setOtherFormalSalePrice(Integer otherFormalSalePrice) {
+        this.otherFormalSalePrice = otherFormalSalePrice;
+    }
+
+    public Integer getOtherCasualsSalePrice() {
+        return otherCasualsSalePrice;
+    }
+
+    public void setOtherCasualsSalePrice(Integer otherCasualsSalePrice) {
+        this.otherCasualsSalePrice = otherCasualsSalePrice;
+    }
+
+    public Integer getOtherCasualsCostPrice() {
+        return otherCasualsCostPrice;
+    }
+
+    public void setOtherCasualsCostPrice(Integer otherCasualsCostPrice) {
+        this.otherCasualsCostPrice = otherCasualsCostPrice;
+    }
+
+    public Integer getCatSalePrice() {
+        return catSalePrice;
+    }
+
+    public void setCatSalePrice(Integer catSalePrice) {
+        this.catSalePrice = catSalePrice;
+    }
+
+    public Integer getCatCostPrice() {
+        return catCostPrice;
+    }
+
+    public void setCatCostPrice(Integer catCostPrice) {
+        this.catCostPrice = catCostPrice;
     }
 
     public Integer getKoraCostPrice() {
@@ -91,20 +173,36 @@ public class ProfitDto {
         this.aSeriesSalePrice = aSeriesSalePrice;
     }
 
-    public Integer getMiratCostPrice() {
-        return miratCostPrice;
+    public Integer getJustonCostPrice() {
+        return justonCostPrice;
     }
 
-    public void setMiratCostPrice(Integer miratCostPrice) {
-        this.miratCostPrice = miratCostPrice;
+    public void setJustonCostPrice(Integer justonCostPrice) {
+        this.justonCostPrice = justonCostPrice;
     }
 
-    public Integer getMiratSalePrice() {
-        return miratSalePrice;
+    public Integer getJustonSalePrice() {
+        return justonSalePrice;
     }
 
-    public void setMiratSalePrice(Integer miratSalePrice) {
-        this.miratSalePrice = miratSalePrice;
+    public void setJustonSalePrice(Integer justonSalePrice) {
+        this.justonSalePrice = justonSalePrice;
+    }
+
+    public Integer getCrocsCostPrice() {
+        return crocsCostPrice;
+    }
+
+    public void setCrocsCostPrice(Integer crocsCostPrice) {
+        this.crocsCostPrice = crocsCostPrice;
+    }
+
+    public Integer getCrocsSalePrice() {
+        return crocsSalePrice;
+    }
+
+    public void setCrocsSalePrice(Integer crocsSalePrice) {
+        this.crocsSalePrice = crocsSalePrice;
     }
 
     public Integer getHandBagCostPrice() {
@@ -153,5 +251,69 @@ public class ProfitDto {
 
     public void setNaSalesSalePrice(Integer naSalesSalePrice) {
         this.naSalesSalePrice = naSalesSalePrice;
+    }
+
+    public Integer getLadiesFootwearSalePrice() {
+        return ladiesFootwearSalePrice;
+    }
+
+    public void setLadiesFootwearSalePrice(Integer ladiesFootwearSalePrice) {
+        this.ladiesFootwearSalePrice = ladiesFootwearSalePrice;
+    }
+
+    public Integer getLadiesFootwearCostPrice() {
+        return ladiesFootwearCostPrice;
+    }
+
+    public void setLadiesFootwearCostPrice(Integer ladiesFootwearCostPrice) {
+        this.ladiesFootwearCostPrice = ladiesFootwearCostPrice;
+    }
+
+    public Integer getKidsFootwearSalePrice() {
+        return kidsFootwearSalePrice;
+    }
+
+    public void setKidsFootwearSalePrice(Integer kidsFootwearSalePrice) {
+        this.kidsFootwearSalePrice = kidsFootwearSalePrice;
+    }
+
+    public Integer getKidsFootwearCostPrice() {
+        return kidsFootwearCostPrice;
+    }
+
+    public void setKidsFootwearCostPrice(Integer kidsFootwearCostPrice) {
+        this.kidsFootwearCostPrice = kidsFootwearCostPrice;
+    }
+
+    public Integer getOttoSalePrice() {
+        return ottoSalePrice;
+    }
+
+    public void setOttoSalePrice(Integer ottoSalePrice) {
+        this.ottoSalePrice = ottoSalePrice;
+    }
+
+    public Integer getServiceSalePrice() {
+        return serviceSalePrice;
+    }
+
+    public void setServiceSalePrice(Integer serviceSalePrice) {
+        this.serviceSalePrice = serviceSalePrice;
+    }
+
+    public Integer getServiceCostPrice() {
+        return serviceCostPrice;
+    }
+
+    public void setServiceCostPrice(Integer serviceCostPrice) {
+        this.serviceCostPrice = serviceCostPrice;
+    }
+
+    public Integer getOttoCostPrice() {
+        return ottoCostPrice;
+    }
+
+    public void setOttoCostPrice(Integer ottoCostPrice) {
+        this.ottoCostPrice = ottoCostPrice;
     }
 }
