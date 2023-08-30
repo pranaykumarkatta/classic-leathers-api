@@ -273,7 +273,7 @@ public class FileUtils {
                 "\t</div>\n" +
                 "</body>\n" +
                 "</html>\n";
-        HtmlConverter.convertToPdf(htmlInvoiceString, new FileOutputStream("D:\\onedrive\\Tag_classicLeathers\\Invoices\\" + invoiceNumber + ".pdf"));
+        HtmlConverter.convertToPdf(htmlInvoiceString, new FileOutputStream("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\Invoices\\" + invoiceNumber + ".pdf"));
     }
 
 }
