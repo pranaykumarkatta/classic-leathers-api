@@ -7,6 +7,7 @@ public class DrivingShoeStockEntry {
     private String brand;
     private String sku;
     private String leather;
+    private String productDescription;
     private String searchString;
     private Integer size_40_quantity = 0;
     private Integer size_41_quantity = 0;
@@ -55,6 +56,14 @@ public class DrivingShoeStockEntry {
 
     public void setLeather(String leather) {
         this.leather = leather;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 
     public String getBrand() {

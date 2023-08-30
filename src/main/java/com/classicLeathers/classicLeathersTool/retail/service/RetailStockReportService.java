@@ -51,6 +51,7 @@ public class RetailStockReportService {
                 drivingShoeStockEntry.setStockInDate(cellData[15]);
                 drivingShoeStockEntry.setLevel_0_Category(cellData[19]);
                 drivingShoeStockEntry.setLevel_1_Category(cellData[20]);
+                drivingShoeStockEntry.setProductDescription(cellData[21]);
 
                 drivingShoeStockEntryList.add(drivingShoeStockEntry);
             }
@@ -102,6 +103,20 @@ public class RetailStockReportService {
                     set.add(drivingShoeStockEntry.getLeather());
                     map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
                             + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku(), set);
+                }
+            }
+            if (map.containsKey(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                    + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku()+ "_" + drivingShoeStockEntry.getLeather())) {
+                map.get(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                        + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku()+ "_" + drivingShoeStockEntry.getLeather())
+                        .add(drivingShoeStockEntry.getProductDescription());
+            } else {
+                if (drivingShoeStockEntry.getTotalQuantity() > 0) {
+                    Set<String> set = new TreeSet<>();
+                    set.add(drivingShoeStockEntry.getProductDescription());
+                    map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
+                            + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku()+ "_" + drivingShoeStockEntry.getLeather()
+                            , set);
                 }
             }
         });
