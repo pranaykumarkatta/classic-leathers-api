@@ -146,7 +146,7 @@ public class PresentationService {
                 Integer costPrice = costPriceDataMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
                 if (costPrice == null) {
                     costPrice = (int) (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .35);
-                    if (month.contains("8_"))
+                    if (month.contains("9_"))
                         System.out.println("Loading default values for : " + retailSalesEntryDto.getSaleDate() + " : " + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
                 }
                 if (retailSalesEntryDto.getCategory().contains("LF")) {

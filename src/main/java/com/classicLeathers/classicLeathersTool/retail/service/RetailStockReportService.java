@@ -281,7 +281,7 @@ public class RetailStockReportService {
                     drivingShoeStockEntry.getTotalQuantity().toString()
             };
             try {
-                new FileUtils().WriteData("D:\\onedrive\\Tag_classicLeathers\\Reports\\STOCK_AUDIT_REPORTS_V2.xlsx", 0, data);
+                new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\STOCK_AUDIT_REPORTS_V2.xlsx", 0, data);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
