@@ -131,7 +131,7 @@ public class RetailStockReportService {
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
 
         //update i=0 from next year
-        for (int i = 3; i < 12; i++) {
+        for (int i = 5; i < 12; i++) {
             if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
                 drivingShoeSalesEntryList.addAll(getDrivingShoeSalesByMonth(i));
         }
@@ -196,7 +196,8 @@ public class RetailStockReportService {
                         retailSalesEntryDto.getCategory().contains("MIRAT") || retailSalesEntryDto.getCategory().contains("_BAG") ||
                         retailSalesEntryDto.getCategory().contains("FORMAL") ||
                         retailSalesEntryDto.getCategory().contains("D_") || retailSalesEntryDto.getCategory().contains("CASUAL_") ||
-                        retailSalesEntryDto.getCategory().contains("018_JUSTON") || retailSalesEntryDto.getCategory().contains("WLT"))
+                        retailSalesEntryDto.getCategory().contains("018_JUSTON") ||
+                        retailSalesEntryDto.getCategory().contains("WLT") || retailSalesEntryDto.getCategory().contains("BLT"))
                         && retailSalesEntryDto.getSize() != "NA")).collect(Collectors.toList());
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
         retailDrivingSalesEntryDtoList.forEach(retailSalesEntryDto -> {
