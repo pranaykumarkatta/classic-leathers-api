@@ -62,6 +62,15 @@ public class RetailStockReportService {
     public Map<String, Set<String>> getStockAvailabilityData() {
         Map<String, Set<String>> map = new HashMap<>();
         getStockData().forEach(drivingShoeStockEntry -> {
+            if (map.containsKey("brand")) {
+                map.get("brand").add(drivingShoeStockEntry.getBrand());
+            } else {
+                if (drivingShoeStockEntry.getTotalQuantity() > 0) {
+                    Set<String> set = new TreeSet<>();
+                    set.add(drivingShoeStockEntry.getBrand());
+                    map.put("brand", set);
+                }
+            }
             if (map.containsKey(drivingShoeStockEntry.getBrand())) {
                 map.get(drivingShoeStockEntry.getBrand()).add(drivingShoeStockEntry.getLevel_0_Category());
             } else {
@@ -106,16 +115,16 @@ public class RetailStockReportService {
                 }
             }
             if (map.containsKey(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
-                    + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku()+ "_" + drivingShoeStockEntry.getLeather())) {
+                    + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku() + "_" + drivingShoeStockEntry.getLeather())) {
                 map.get(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
-                        + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku()+ "_" + drivingShoeStockEntry.getLeather())
+                                + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku() + "_" + drivingShoeStockEntry.getLeather())
                         .add(drivingShoeStockEntry.getProductDescription());
             } else {
                 if (drivingShoeStockEntry.getTotalQuantity() > 0) {
                     Set<String> set = new TreeSet<>();
                     set.add(drivingShoeStockEntry.getProductDescription());
                     map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getLevel_0_Category() + "_"
-                            + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku()+ "_" + drivingShoeStockEntry.getLeather()
+                                    + drivingShoeStockEntry.getLevel_1_Category() + "_" + drivingShoeStockEntry.getSku() + "_" + drivingShoeStockEntry.getLeather()
                             , set);
                 }
             }
@@ -264,11 +273,8 @@ public class RetailStockReportService {
     }
 
     public String exportStockReport() {
-        int i = 0;
         getDrivingShoeStockReport().forEach(drivingShoeStockEntry -> {
-            Object[] data = new Object[]{i+"",
-                    drivingShoeStockEntry.getSku(),
-                    drivingShoeStockEntry.getLeather(),
+            Object[] data = new Object[]{ drivingShoeStockEntry.getSku(),
                     drivingShoeStockEntry.getLeather(),
                     drivingShoeStockEntry.getBrand(),
                     drivingShoeStockEntry.getSize_40_quantity().toString(),
@@ -282,12 +288,43 @@ public class RetailStockReportService {
                     drivingShoeStockEntry.getTotalQuantity().toString()
             };
             try {
-                new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\STOCK_AUDIT_REPORTS_V2.xlsx", 0, data);
+                new FileUtils().WriteData("D:\\onedrive\\Tag_classicLeathers\\Reports\\STOCK_AUDIT_REPORT.xlsx", 0, data);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
         return "Report saved successfully";
+    }
+
+    public void saveStockEntry(DrivingShoeStockEntry drivingShoeStockEntry) {
+        Object[] data = new Object[]{drivingShoeStockEntry.getSku(),
+                drivingShoeStockEntry.getLeather(),
+                drivingShoeStockEntry.getBrand(),
+                drivingShoeStockEntry.getSize_40_quantity(),
+                drivingShoeStockEntry.getSize_41_quantity(),
+                drivingShoeStockEntry.getSize_42_quantity(),
+                drivingShoeStockEntry.getSize_43_quantity(),
+                drivingShoeStockEntry.getSize_44_quantity(),
+                drivingShoeStockEntry.getSize_45_quantity(),
+                drivingShoeStockEntry.getSize_46_quantity(),
+                drivingShoeStockEntry.getSize_47_quantity(),
+                drivingShoeStockEntry.getTotalQuantity(),
+                drivingShoeStockEntry.getCostPrice(),
+                drivingShoeStockEntry.getTotalQuantity() * drivingShoeStockEntry.getCostPrice(),
+                new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                drivingShoeStockEntry.getEntryType(),
+                drivingShoeStockEntry.getTo(),
+                drivingShoeStockEntry.getFrom(),
+                drivingShoeStockEntry.getLevel_0_Category(),
+                drivingShoeStockEntry.getLevel_1_Category(),
+                drivingShoeStockEntry.getProductDescription(),
+
+        };
+        try {
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\STOCK_AUDIT_REPORTS_V2.xlsx", 0, data);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

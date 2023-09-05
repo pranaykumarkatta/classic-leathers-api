@@ -31,6 +31,9 @@ public class DrivingShoeStockEntry {
     private boolean validEntry = true;
     private String stockInDate;
     private Integer costPrice;
+    private String entryType;
+    private String from;
+    private String to;
     private String level_0_Category;
     private String level_1_Category;
 
@@ -256,6 +259,30 @@ public class DrivingShoeStockEntry {
 
     public void setCostPrice(Integer costPrice) {
         this.costPrice = costPrice;
+    }
+
+    public String getEntryType() {
+        return entryType;
+    }
+
+    public void setEntryType(String entryType) {
+        this.entryType = entryType;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public String getLevel_0_Category() {
