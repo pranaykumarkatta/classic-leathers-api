@@ -15,7 +15,12 @@ public class RetailCustomerSalesHistoryService {
     private RetailSalesReportService retailSalesReportService;
 
     public List<RetailCustomerSalesHistoryDto> getRetailCustomerSalesHistory(Long mobileNumber) {
-        List<RetailCustomerSalesHistoryDto> retailSalesEntryDtoList = buildRetailCustomerSalesHistoryDto(getSalesData(-1), mobileNumber);
+        List<RetailSalesEntryDto> retailSalesEntryDtos = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
+                retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i));
+        }
+        List<RetailCustomerSalesHistoryDto> retailSalesEntryDtoList = buildRetailCustomerSalesHistoryDto(retailSalesEntryDtos, mobileNumber);
         return retailSalesEntryDtoList;
     }
 

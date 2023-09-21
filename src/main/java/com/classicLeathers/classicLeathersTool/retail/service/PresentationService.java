@@ -365,7 +365,7 @@ public class PresentationService {
                     profitDtoMap.get(presentation.getMonth()).setJustonCostPrice(showSlippers ? presentation.getTotalCostPrice() : 0);
                     profitDtoMap.get(presentation.getMonth()).setJustonSalePrice(showSlippers ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Crocs")) {
-                    profitDtoMap.get(presentation.getMonth()).setCatCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
+                    profitDtoMap.get(presentation.getMonth()).setCrocsCostPrice(showOther ? presentation.getTotalCostPrice() : 0);
                     profitDtoMap.get(presentation.getMonth()).setCrocsSalePrice(showOther ? presentation.getTotalSales() : 0);
                 } else if (presentation.getTotalSalesCategory().contains("Hand Bags")) {
                     profitDtoMap.get(presentation.getMonth()).setHandBagCostPrice(showHandBag ? presentation.getTotalCostPrice() : 0);

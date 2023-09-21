@@ -231,10 +231,11 @@ public class FileUtils {
                 "\t\t\t\t<td class=\"small_label\"><b>GST Amount</b></td>\n" +
                 "\t\t\t\t<td class=\"small_label\"><b>Total</b></td>\n" +
                 "\t\t\t</tr> \n";
-        int i = 1;
+        int i = 0;
         int totalGST = 0;
         int totalSales = 0;
         for (RetailSalesEntryDto retailSalesEntryDto : retailSalesEntryDtoList) {
+            i++;
             int mrp = Integer.parseInt(retailSalesEntryDto.getMrp());
             int discount = Integer.parseInt(retailSalesEntryDto.getDiscount());
             int salePrice = (mrp - discount)*Integer.parseInt(retailSalesEntryDto.getQuantity());
