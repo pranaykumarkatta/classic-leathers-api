@@ -1,9 +1,5 @@
 package com.classicLeathers.classicLeathersTool.retail.model;
-
-import sun.misc.InnocuousThread;
-
 public class ProductSalesHistoryDto {
-
     private String brand;
     private String Category;
     private String leather;

@@ -1,6 +1,10 @@
 package com.classicLeathers.classicLeathersTool.retail.model;
 
-public class ExpenseDto {
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
+
+public class ExpenseDto implements Comparable{
     private String date;
     private String updatedBy;
     private String expenseType;
@@ -63,5 +67,19 @@ public class ExpenseDto {
 
     public void setPaymentReference(String paymentReference) {
         this.paymentReference = paymentReference;
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        Date thisDate = new Date(this.getDate());
+        Date oDate = new Date(((ExpenseDto) o).getDate());
+        if (thisDate.after(oDate) || ((thisDate.equals(oDate)))) {
+            return 1;
+        }
+        if (thisDate.before(oDate) || ((thisDate.equals(oDate)))) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

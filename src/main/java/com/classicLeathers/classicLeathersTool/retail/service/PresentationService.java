@@ -79,7 +79,7 @@ public class PresentationService {
         if (monthNumber == 0) {
             for (int i = 0; i < 12; i++) {
                 if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
-                    retailSalesEntryDtos.put((i + 4) + "_" + new DateFormatSymbols().getMonths()[i + 3], retailSalesReportService.getSalesDataByMonth(i));
+                    retailSalesEntryDtos.put(String.format("%02d", i + 4) + "_" + new DateFormatSymbols().getMonths()[i + 3], retailSalesReportService.getSalesDataByMonth(i));
             }
         } else {
             retailSalesEntryDtos.put(monthNumber.toString(), retailSalesReportService.getSalesDataByMonth(monthNumber - 4));
@@ -146,7 +146,7 @@ public class PresentationService {
                 Integer costPrice = costPriceDataMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
                 if (costPrice == null) {
                     costPrice = (int) (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .35);
-                    if (month.contains("9_"))
+                    if (month.contains("10_"))
                         System.out.println("Loading default values for : " + retailSalesEntryDto.getSaleDate() + " : " + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather());
                 }
                 if (retailSalesEntryDto.getCategory().contains("LF")) {

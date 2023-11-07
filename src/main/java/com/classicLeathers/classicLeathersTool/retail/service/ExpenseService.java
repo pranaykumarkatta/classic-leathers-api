@@ -5,10 +5,8 @@ import com.classicLeathers.classicLeathersTool.retail.model.ExpenseDto;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ExpenseService {
@@ -44,7 +42,9 @@ public class ExpenseService {
                 expenseDtoList.add(expenseDto);
             }
         }
-        return expenseDtoList;
+        return expenseDtoList.stream()
+                .sorted(Collections.reverseOrder())
+                .collect(Collectors.toList());
     }
 
     public void saveExpense(ExpenseDto expenseDto) {
@@ -85,7 +85,7 @@ public class ExpenseService {
             rowData.remove(0);
             for (String row : rowData) {
                 String[] cellData = row.split(",");
-                if (cellData[2].equals("LOAD AMOUNT") && cellData[5].equals("CASH")) {
+                if (cellData[2].equals("LOAD AMOUNT") && cellData[5].equals("CASH") && (cellData[0].contains(new SimpleDateFormat("MMM-").format(new Date())))) {
                     totalCashExpense = totalCashExpense + Integer.parseInt(cellData[3]);
                 }
             }
