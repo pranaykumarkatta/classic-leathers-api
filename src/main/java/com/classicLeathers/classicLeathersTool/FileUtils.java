@@ -65,6 +65,8 @@ public class FileUtils {
             Cell cell = row.createCell(cellid++);
             if (obj instanceof Long) {
                 cell.setCellValue(obj.toString());
+            } else if (obj instanceof Integer) {
+                cell.setCellValue(obj.toString());
             } else {
                 cell.setCellValue((String) obj);
             }
