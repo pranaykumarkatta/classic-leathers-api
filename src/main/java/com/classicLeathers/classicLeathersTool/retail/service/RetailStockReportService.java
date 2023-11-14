@@ -275,7 +275,7 @@ public class RetailStockReportService {
 
     public String exportStockReport() {
         getDrivingShoeStockReport().forEach(drivingShoeStockEntry -> {
-            Object[] data = new Object[]{ drivingShoeStockEntry.getSku(),
+            Object[] data = new Object[]{drivingShoeStockEntry.getSku(),
                     drivingShoeStockEntry.getLeather(),
                     drivingShoeStockEntry.getBrand(),
                     drivingShoeStockEntry.getSize_40_quantity().toString(),
@@ -299,29 +299,56 @@ public class RetailStockReportService {
     }
 
     public void saveStockEntry(DrivingShoeStockEntry drivingShoeStockEntry) {
-        Object[] data = new Object[]{new SimpleDateFormat("yyyyMMdH").format(new Date()).toString(), drivingShoeStockEntry.getSku(),
-                drivingShoeStockEntry.getLeather(),
-                drivingShoeStockEntry.getBrand(),
-                drivingShoeStockEntry.getSize_40_quantity(),
-                drivingShoeStockEntry.getSize_41_quantity(),
-                drivingShoeStockEntry.getSize_42_quantity(),
-                drivingShoeStockEntry.getSize_43_quantity(),
-                drivingShoeStockEntry.getSize_44_quantity(),
-                drivingShoeStockEntry.getSize_45_quantity(),
-                drivingShoeStockEntry.getSize_46_quantity(),
-                drivingShoeStockEntry.getSize_47_quantity(),
-                drivingShoeStockEntry.getTotalQuantity(),
-                drivingShoeStockEntry.getCostPrice(),
-                drivingShoeStockEntry.getTotalQuantity() * drivingShoeStockEntry.getCostPrice(),
-                new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
-                drivingShoeStockEntry.getEntryType(),
-                drivingShoeStockEntry.getTo(),
-                drivingShoeStockEntry.getFrom(),
-                drivingShoeStockEntry.getLevel_0_Category(),
-                drivingShoeStockEntry.getLevel_1_Category(),
-                drivingShoeStockEntry.getProductDescription(),
+        Object[] data = null;
+        if (drivingShoeStockEntry.getEntryType().equals("OUTWARD")) {
+            data = new Object[]{new SimpleDateFormat("yyyyMMdH").format(new Date()).toString(), drivingShoeStockEntry.getSku(),
+                    drivingShoeStockEntry.getLeather(),
+                    drivingShoeStockEntry.getBrand(),
+                    "-" + drivingShoeStockEntry.getSize_40_quantity(),
+                    "-" + drivingShoeStockEntry.getSize_41_quantity(),
+                    "-" + drivingShoeStockEntry.getSize_42_quantity(),
+                    "-" + drivingShoeStockEntry.getSize_43_quantity(),
+                    "-" + drivingShoeStockEntry.getSize_44_quantity(),
+                    "-" + drivingShoeStockEntry.getSize_45_quantity(),
+                    "-" + drivingShoeStockEntry.getSize_46_quantity(),
+                    "-" + drivingShoeStockEntry.getSize_47_quantity(),
+                    "-" + drivingShoeStockEntry.getTotalQuantity(),
+                    "-" + drivingShoeStockEntry.getCostPrice(),
+                    "-" + drivingShoeStockEntry.getTotalQuantity() * drivingShoeStockEntry.getCostPrice(),
+                    new SimpleDateFormat("d-MMM-yyyy").format(new Date()),
+                    drivingShoeStockEntry.getEntryType(),
+                    drivingShoeStockEntry.getTo(),
+                    drivingShoeStockEntry.getFrom(),
+                    drivingShoeStockEntry.getLevel_0_Category(),
+                    drivingShoeStockEntry.getLevel_1_Category(),
+                    drivingShoeStockEntry.getProductDescription(),
 
-        };
+            };
+        } else {
+            data = new Object[]{new SimpleDateFormat("yyyyMMdH").format(new Date()).toString(), drivingShoeStockEntry.getSku(),
+                    drivingShoeStockEntry.getLeather(),
+                    drivingShoeStockEntry.getBrand(),
+                    drivingShoeStockEntry.getSize_40_quantity(),
+                    drivingShoeStockEntry.getSize_41_quantity(),
+                    drivingShoeStockEntry.getSize_42_quantity(),
+                    drivingShoeStockEntry.getSize_43_quantity(),
+                    drivingShoeStockEntry.getSize_44_quantity(),
+                    drivingShoeStockEntry.getSize_45_quantity(),
+                    drivingShoeStockEntry.getSize_46_quantity(),
+                    drivingShoeStockEntry.getSize_47_quantity(),
+                    drivingShoeStockEntry.getTotalQuantity(),
+                    drivingShoeStockEntry.getCostPrice(),
+                    drivingShoeStockEntry.getTotalQuantity() * drivingShoeStockEntry.getCostPrice(),
+                    new SimpleDateFormat("d-MMM-yyyy").format(new Date()),
+                    drivingShoeStockEntry.getEntryType(),
+                    drivingShoeStockEntry.getTo(),
+                    drivingShoeStockEntry.getFrom(),
+                    drivingShoeStockEntry.getLevel_0_Category(),
+                    drivingShoeStockEntry.getLevel_1_Category(),
+                    drivingShoeStockEntry.getProductDescription(),
+
+            };
+        }
         try {
             new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\STOCK_AUDIT_REPORTS_V2.xlsx", 0, data);
         } catch (Exception e) {
