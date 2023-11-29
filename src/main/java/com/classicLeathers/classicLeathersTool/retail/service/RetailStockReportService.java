@@ -202,7 +202,8 @@ public class RetailStockReportService {
         retailDrivingSalesEntryDtoList = retailSalesEntryDtoList.stream().filter(retailSalesEntryDto -> (
                 (retailSalesEntryDto.getCategory().contains("LF") || retailSalesEntryDto.getCategory().contains("KORA") ||
                         retailSalesEntryDto.getCategory().contains("WAVES") || retailSalesEntryDto.getCategory().contains("A_0") ||
-                        retailSalesEntryDto.getCategory().contains("RONALDO_") ||
+                        retailSalesEntryDto.getCategory().contains("RONALDO_") || retailSalesEntryDto.getCategory().contains("PRINCE_") ||
+                        retailSalesEntryDto.getCategory().contains("AMERICAN_") ||
                         retailSalesEntryDto.getCategory().contains("MIRAT") || retailSalesEntryDto.getCategory().contains("_BAG") ||
                         retailSalesEntryDto.getCategory().contains("FORMAL") ||
                         retailSalesEntryDto.getCategory().contains("D_") || retailSalesEntryDto.getCategory().contains("CASUAL_") ||

@@ -27,6 +27,11 @@ public class PresentationController {
                 showSlippers, showHandBag, showBeltAndWallet,showOther,showNA));
     }
 
+    @GetMapping("/avgSales")
+    public ResponseEntity<List<AverageSalesDto>> getAverageSalesData( ) {
+        return ResponseEntity.ok(presentationService.getAverageSalesData());
+    }
+
     @GetMapping("/hourlySales")
     public ResponseEntity<List<HourlySalesDto>> getHourlySalesData(@RequestParam Boolean showHour8Data, @RequestParam Boolean showHour9Data,
                                                                    @RequestParam Boolean showHour10Data, @RequestParam Boolean showHour11Data,

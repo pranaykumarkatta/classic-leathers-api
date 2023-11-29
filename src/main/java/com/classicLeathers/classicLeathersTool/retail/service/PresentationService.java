@@ -25,6 +25,30 @@ public class PresentationService {
                 showSlippers, showHandBag, showBeltAndWallet, showOther, showNA);
     }
 
+    public List<AverageSalesDto> getAverageSalesData() {
+        return getAverageSales(getSalesData(0));
+    }
+
+    private List<AverageSalesDto> getAverageSales(Map<String, List<RetailSalesEntryDto>> retailSalesEntryDtos) {
+        List<AverageSalesDto> averageSalesDtoList = new ArrayList<>();
+        retailSalesEntryDtos.keySet().forEach(month -> {
+            retailSalesEntryDtos.get(month).forEach(retailSalesEntryDto -> {
+                Date saleDate;
+                Integer salesAmount=0;
+                try {
+                    saleDate = (new SimpleDateFormat("MMM-d-yyyy h:mm a").parse(retailSalesEntryDto.getSaleDate()));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                Integer day = Integer.valueOf((new SimpleDateFormat("d").format(saleDate)));
+                AverageSalesDto averageSalesDto = new AverageSalesDto();
+                averageSalesDto.setDayNumber(day);
+            });
+
+        });
+        return averageSalesDtoList;
+    }
+
     public List<HourlySalesDto> getHourlySalesData(Boolean showHour8Data, Boolean showHour9Data, Boolean showHour10Data, Boolean showHour11Data,
                                                    Boolean showHour12Data, Boolean showHour13Data, Boolean showHour14Data, Boolean showHour15Data,
                                                    Boolean showHour16Data, Boolean showHour17Data, Boolean showHour18Data, Boolean showHour19Data,
@@ -181,7 +205,8 @@ public class PresentationService {
                     aSeriesPresentation.setTotalSales(aSeriesPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     aSeriesPresentation.setTotalCostPrice(aSeriesPresentation.getTotalCostPrice() + costPrice);
-                } else if (retailSalesEntryDto.getCategory().contains("JUSTON")) {
+                } else if (retailSalesEntryDto.getCategory().contains("JUSTON")||retailSalesEntryDto.getCategory().contains("RONALDO_")||
+                        retailSalesEntryDto.getCategory().contains("PRINCE_")||retailSalesEntryDto.getCategory().contains("AMERICAN_")) {
                     justonPresentation.setTotalSales(justonPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     justonPresentation.setTotalCostPrice(justonPresentation.getTotalCostPrice() + costPrice);
