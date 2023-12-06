@@ -156,7 +156,7 @@ public class RetailStockReportService {
         drivingShoeStockEntryList.forEach(obj -> {
             drivingShoeStockEntryMap.put(obj.getBrand() + "_" + obj.getSku() + "_" + obj.getLeather(), obj);
         });
-        drivingShoeSalesEntryList.forEach(obj -> {
+        mergeDrivingShoeStockEntries(drivingShoeSalesEntryList).forEach(obj -> {
             drivingShoeSalesEntryMap.put(obj.getBrand() + "_" + obj.getSku() + "_" + obj.getLeather(), obj);
         });
 
