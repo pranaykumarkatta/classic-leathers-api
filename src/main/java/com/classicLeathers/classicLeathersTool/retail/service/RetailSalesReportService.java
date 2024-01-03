@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 @Service
 public class RetailSalesReportService {
 
-    private static int sheetNO = ((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))) - 4) % 12;
+    private static int sheetNO = ((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 1;
     public List<RetailSalesEntryDto> getSalesDataByMonth(Integer sheetNumber) {
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx", sheetNumber);
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx", sheetNumber);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +84,7 @@ public class RetailSalesReportService {
 
         };
         try {
-            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx",sheetNO,data);
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx",sheetNO,data);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

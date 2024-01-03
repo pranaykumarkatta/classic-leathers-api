@@ -140,8 +140,8 @@ public class RetailStockReportService {
         List<DrivingShoeStockEntry> drivingShoeSalesEntryList = new ArrayList<>();
 
         //update i=0 from next year
-        for (int i = 5; i < 12; i++) {
-            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
+        for (int i = 1; i < 13; i++) {
+            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))))
                 drivingShoeSalesEntryList.addAll(getDrivingShoeSalesByMonth(i));
         }
 

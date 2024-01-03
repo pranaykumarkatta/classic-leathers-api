@@ -101,12 +101,12 @@ public class PresentationService {
         Map<String, List<RetailSalesEntryDto>> retailSalesEntryDtos = new HashMap<>();
         //update i=0 from next year
         if (monthNumber == 0) {
-            for (int i = 0; i < 12; i++) {
-                if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
-                    retailSalesEntryDtos.put(String.format("%02d", i + 4) + "_" + new DateFormatSymbols().getMonths()[i + 3], retailSalesReportService.getSalesDataByMonth(i));
+            for (int i = 1; i < 13; i++) {
+                if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))))
+                    retailSalesEntryDtos.put(String.format("%02d", i) + "_" + new DateFormatSymbols().getMonths()[i -1], retailSalesReportService.getSalesDataByMonth(i-1));
             }
         } else {
-            retailSalesEntryDtos.put(monthNumber.toString(), retailSalesReportService.getSalesDataByMonth(monthNumber - 4));
+            retailSalesEntryDtos.put(monthNumber.toString(), retailSalesReportService.getSalesDataByMonth(monthNumber - 1));
         }
         return retailSalesEntryDtos;
     }

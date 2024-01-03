@@ -14,7 +14,7 @@ public class ExpenseService {
     private List<String> loadFileData() {
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023 EXPENSES_V2.xlsx", 0);
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_EXPENSES.xlsx", 0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -57,7 +57,7 @@ public class ExpenseService {
                 expenseDto.getPaymentReference()
         };
         try {
-            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023 EXPENSES_V2.xlsx", 0, expenseData);
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_EXPENSES.xlsx", 0, expenseData);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

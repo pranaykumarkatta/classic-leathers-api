@@ -16,9 +16,9 @@ public class RetailCustomerSalesHistoryService {
 
     public List<RetailCustomerSalesHistoryDto> getRetailCustomerSalesHistory(Long mobileNumber) {
         List<RetailSalesEntryDto> retailSalesEntryDtos = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
-                retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i));
+        for (int i = 1; i < 13; i++) {
+            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))))
+                retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i-1));
         }
         List<RetailCustomerSalesHistoryDto> retailSalesEntryDtoList = buildRetailCustomerSalesHistoryDto(retailSalesEntryDtos, mobileNumber);
         return retailSalesEntryDtoList;
@@ -109,9 +109,9 @@ public class RetailCustomerSalesHistoryService {
         List<RetailSalesEntryDto> retailSalesEntryDtos = new ArrayList<>();
         //update i=0 from next year
         if (sheetNumber < 0) {
-            for (int i = 5; i < 12; i++) {
-                if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 4) % 12)
-                    retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i));
+            for (int i = 1; i < 13; i++) {
+                if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))))
+                    retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i-1));
             }
         } else {
             retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(sheetNumber));
