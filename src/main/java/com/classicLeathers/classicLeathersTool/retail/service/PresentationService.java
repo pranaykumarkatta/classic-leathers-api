@@ -82,18 +82,18 @@ public class PresentationService {
 
     private Map<String, Integer> getCostPriceData(Integer monthNumber) {
         Map<String, Integer> map = new HashMap<>();
-        retailStockReportService.getStockData().forEach(drivingShoeStockEntry -> {
-            Date stockInDate;
-            try {
-                stockInDate = (new SimpleDateFormat("d-MMM-yy").parse(drivingShoeStockEntry.getStockInDate()));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-            Integer month = Integer.valueOf((new SimpleDateFormat("MM").format(stockInDate)));
-            if (month <= monthNumber && drivingShoeStockEntry.getTotalQuantity() > 0)
-                map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getSku() + "_" + drivingShoeStockEntry.getLeather(),
-                        drivingShoeStockEntry.getCostPrice());
-        });
+//        retailStockReportService.getStockData().forEach(drivingShoeStockEntry -> {
+//            Date stockInDate;
+//            try {
+//                stockInDate = (new SimpleDateFormat("d-MMM-yy").parse(drivingShoeStockEntry.getStockInDate()));
+//            } catch (ParseException e) {
+//                throw new RuntimeException(e);
+//            }
+//            Integer month = Integer.valueOf((new SimpleDateFormat("MM").format(stockInDate)));
+//            if (month <= monthNumber && drivingShoeStockEntry.getTotalQuantity() > 0)
+//                map.put(drivingShoeStockEntry.getBrand() + "_" + drivingShoeStockEntry.getSku() + "_" + drivingShoeStockEntry.getLeather(),
+//                        drivingShoeStockEntry.getCostPrice());
+//        });
         return map;
     }
 

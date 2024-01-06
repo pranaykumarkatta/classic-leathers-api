@@ -53,7 +53,55 @@ public class RetailSalesReportService {
                 retailSalesEntryDtoList.add(retailSalesEntryDto);
             }
 
-            return retailSalesEntryDtoList.stream()
+            return retailSalesEntryDtoList.parallelStream()
+                    .sorted(Collections.reverseOrder())
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
+    public List<RetailSalesEntryDto> getSalesDataByMonth2023(Integer sheetNumber) {
+        String fileData = "";
+        try {
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx", sheetNumber);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> rowData = new ArrayList<>();
+        rowData.addAll(Arrays.asList(fileData.split("\n")));
+        if (rowData.size() != 0) {
+            rowData.remove(0);//Remove header data
+            List<RetailSalesEntryDto> retailSalesEntryDtoList= new ArrayList<>();
+            for (String row : rowData) {
+                String[] cellData = row.split(",");
+                RetailSalesEntryDto retailSalesEntryDto = new RetailSalesEntryDto();
+                retailSalesEntryDto.setSaleDate(new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date((cellData[0]))));
+                retailSalesEntryDto.setCustomerName(cellData[1]);
+                retailSalesEntryDto.setGender(cellData[2]);
+                retailSalesEntryDto.setMobileNumber(cellData[3]);
+                retailSalesEntryDto.setBrand(cellData[4].toUpperCase());
+                retailSalesEntryDto.setCategory(cellData[5].toUpperCase());
+                retailSalesEntryDto.setLeather(cellData[6].toUpperCase());
+                retailSalesEntryDto.setProductDetails(cellData[7].toUpperCase());
+                retailSalesEntryDto.setQuantity(cellData[8]);
+                retailSalesEntryDto.setSize(cellData[9]);
+                retailSalesEntryDto.setMrp(cellData[10]);
+                retailSalesEntryDto.setDiscount(cellData[11]);
+                retailSalesEntryDto.setSalePrice(cellData[12]);
+                retailSalesEntryDto.setModeOfPayment(cellData[13]);
+                retailSalesEntryDto.setCashPayment(cellData[14]);
+                retailSalesEntryDto.setgPayPayment(cellData[15]);
+                retailSalesEntryDto.setSwipePayment(cellData[16]);
+                retailSalesEntryDto.setUpdatedBy(cellData[17]);
+                retailSalesEntryDto.setStepInType(cellData[18]);
+                retailSalesEntryDto.setInvoiceNumber(cellData[19]);
+                retailSalesEntryDto.setIsTodaySale(""+(new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
+                        .equals((new SimpleDateFormat("MMM-d-yyyy").format(new Date())))));
+                retailSalesEntryDtoList.add(retailSalesEntryDto);
+            }
+
+            return retailSalesEntryDtoList.parallelStream()
                     .sorted(Collections.reverseOrder())
                     .collect(Collectors.toList());
         }

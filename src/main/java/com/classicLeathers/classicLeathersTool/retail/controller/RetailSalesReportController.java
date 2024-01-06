@@ -29,12 +29,12 @@ public class RetailSalesReportController {
     @PostMapping(consumes = "application/json")
     public void addRetailSalesEntry(@RequestBody List<RetailSalesEntryDto> retailSalesEntryDtoList, @RequestParam String invoiceNumber) throws ParseException {
         retailSalesEntryDtoList.forEach(retailSalesEntryDto -> {
+            String[] strs = retailSalesEntryDto.getCategory().split("_");
             RetailSalesEntryDto newSalesEntryDto = new RetailSalesEntryDto();
             newSalesEntryDto.setSaleDate(new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()));
             newSalesEntryDto.setCustomerName(retailSalesEntryDto.getCustomerName());
             newSalesEntryDto.setGender(retailSalesEntryDto.getGender());
             newSalesEntryDto.setMobileNumber(retailSalesEntryDto.getMobileNumber());
-            newSalesEntryDto.setCategory(retailSalesEntryDto.getCategory());
             newSalesEntryDto.setProductDetails(retailSalesEntryDto.getProductDetails());
             newSalesEntryDto.setQuantity(retailSalesEntryDto.getQuantity());
             newSalesEntryDto.setSize(retailSalesEntryDto.getSize());
@@ -48,8 +48,17 @@ public class RetailSalesReportController {
             newSalesEntryDto.setUpdatedBy(retailSalesEntryDto.getUpdatedBy());
             newSalesEntryDto.setStepInType(retailSalesEntryDto.getStepInType());
             newSalesEntryDto.setBrand(retailSalesEntryDto.getBrand());
-            newSalesEntryDto.setLeather(retailSalesEntryDto.getLeather());
-            retailSalesReportService.addRetailSalesEntry(newSalesEntryDto,invoiceNumber);
+            if (strs.length == 1) {
+                newSalesEntryDto.setCategory(strs[0]);
+                newSalesEntryDto.setLeather("NA");
+            } if (strs.length == 2) {
+                newSalesEntryDto.setCategory(strs[0]);
+                newSalesEntryDto.setLeather(strs[1]);
+            } if (strs.length == 3) {
+                newSalesEntryDto.setCategory(strs[0]+"_"+strs[1]);
+                newSalesEntryDto.setLeather(strs[2]);
+            }
+            retailSalesReportService.addRetailSalesEntry(newSalesEntryDto, invoiceNumber);
         });
         try {
             new FileUtils().saveInvoice(retailSalesEntryDtoList, invoiceNumber);

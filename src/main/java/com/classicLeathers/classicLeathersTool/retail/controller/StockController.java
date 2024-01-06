@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,8 +34,13 @@ public class StockController {
     @GetMapping("/skus")
     private ResponseEntity<Collection<String>> getAvailableSkus() {
         return ResponseEntity.ok(ClassicLeathersToolApplication.availableSkuMap.values().parallelStream()
-                .map(o->o.getSku())
+                .map(o -> o.getSku())
                 .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/availabilityMap")
+    private ResponseEntity<Map<String, Set<String>>> getAvailabilityMap() {
+        return ResponseEntity.ok(stockService.getAvailabilityMap());
     }
 
     @PostMapping(consumes = "application/json")

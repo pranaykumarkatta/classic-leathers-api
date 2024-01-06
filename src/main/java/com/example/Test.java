@@ -8,24 +8,38 @@ import org.springframework.web.client.RestTemplate;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import com.itextpdf.html2pdf.HtmlConverter;
 
 public class Test {
     public static void main(String[] args) throws Exception {
-//        HttpHeaders headers= new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        RestTemplate template = new RestTemplate();
-//        String res= template.getForObject(
-//                "http://sms.autobysms.com/app/smsapi/index.php?key=4649EC3A869075&campaign=0&routeid=9&type=text&contacts=9505424696&%20senderid=SPTSMS&msg=Welcome!!&template_id=1707166619134631839",String.class);
-        HtmlConverter.convertToPdf("<h1>Hello</h1>\"\n" +
-                "\t\t\t+ \"<p>This was created using iText</p>\"\n" +
-                "\t\t\t+ \"<a href='hmkcode.com'>hmkcode.com</a>", new FileOutputStream("D:\\WORKSPACE\\classic-leathers-ui\\Index.pdf"));
+        String s = "A01|BL\n" +
+                "A01|BR\n" +
+                "A01|TN\n" +
+                "A02|BL\n" +
+                "A02|BR\n" +
+                "A02|TN\n" +
+                "A03|BL\n" +
+                "A03|BR\n" +
+                "A03|TN\n" +
+                "A04|BL\n" +
+                "A04|BR\n" +
+                "A04|TN";
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        System.out.println(cal.get(Calendar.MONTH));
+        List l = new ArrayList();
+        l.addAll(Arrays.asList(s.split("\n")));
+        l.forEach(o -> {
+            System.out.println(o+"39");
+            System.out.println(o+"40");
+            System.out.println(o+"41");
+            System.out.println(o+"42");
+            System.out.println(o+"43");
+            System.out.println(o+"44");
+            System.out.println(o+"45");
+            System.out.println(o+"46");
+            System.out.println(o+"47");
+        });
+
     }
 }

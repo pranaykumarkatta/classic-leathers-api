@@ -1,5 +1,6 @@
 package com.classicLeathers.classicLeathersTool.retail.service;
 
+import com.classicLeathers.classicLeathersTool.ClassicLeathersToolApplication;
 import com.classicLeathers.classicLeathersTool.retail.model.ProductSalesHistoryDto;
 import com.classicLeathers.classicLeathersTool.retail.model.RetailCustomerSalesHistoryDto;
 import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
@@ -16,9 +17,13 @@ public class RetailCustomerSalesHistoryService {
 
     public List<RetailCustomerSalesHistoryDto> getRetailCustomerSalesHistory(Long mobileNumber) {
         List<RetailSalesEntryDto> retailSalesEntryDtos = new ArrayList<>();
+        retailSalesEntryDtos.addAll(ClassicLeathersToolApplication.retailSalesEntryDtoList);
+//        for (int i = 1; i < 13; i++) {
+//            retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth2023(i - 1));
+//        }
         for (int i = 1; i < 13; i++) {
-            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))))
-                retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i-1));
+            if (i == (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))))
+                retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i - 1));
         }
         List<RetailCustomerSalesHistoryDto> retailSalesEntryDtoList = buildRetailCustomerSalesHistoryDto(retailSalesEntryDtos, mobileNumber);
         return retailSalesEntryDtoList;
@@ -111,7 +116,7 @@ public class RetailCustomerSalesHistoryService {
         if (sheetNumber < 0) {
             for (int i = 1; i < 13; i++) {
                 if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))))
-                    retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i-1));
+                    retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(i - 1));
             }
         } else {
             retailSalesEntryDtos.addAll(retailSalesReportService.getSalesDataByMonth(sheetNumber));
