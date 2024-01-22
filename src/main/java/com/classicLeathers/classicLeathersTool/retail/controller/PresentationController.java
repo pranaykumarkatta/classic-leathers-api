@@ -71,7 +71,7 @@ public class PresentationController {
     }
 
     @GetMapping("/dailySales")
-    public ResponseEntity<List<DailySalesDto>> getDailySales(@RequestParam Integer monthNumber) {
-        return ResponseEntity.ok(presentationService.getDailySales(monthNumber));
+    public ResponseEntity<List<DailySalesDto>> getDailySales(@RequestParam Integer monthNumber, @RequestParam Integer year) {
+        return ResponseEntity.ok(presentationService.getDailySales(year, monthNumber));
     }
 }

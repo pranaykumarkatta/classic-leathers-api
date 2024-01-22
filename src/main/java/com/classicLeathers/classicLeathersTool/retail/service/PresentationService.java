@@ -76,8 +76,8 @@ public class PresentationService {
                 showSlippers, showHandBag, showBeltAndWallet,showOther,showNA);
     }
 
-    public List<DailySalesDto> getDailySales(Integer monthNumber) {
-        return getDailySalesDto(getSalesData(monthNumber).get(monthNumber.toString()), monthNumber);
+    public List<DailySalesDto> getDailySales(Integer year, Integer monthNumber) {
+        return getDailySalesDto(getSalesData(year, monthNumber).get(monthNumber.toString()), monthNumber);
     }
 
     private Map<String, Integer> getCostPriceData(Integer monthNumber) {
@@ -98,15 +98,19 @@ public class PresentationService {
     }
 
     private Map<String, List<RetailSalesEntryDto>> getSalesData(Integer monthNumber) {
+        return getSalesData(2024, monthNumber);
+    }
+
+    private Map<String, List<RetailSalesEntryDto>> getSalesData(Integer year, Integer monthNumber) {
         Map<String, List<RetailSalesEntryDto>> retailSalesEntryDtos = new HashMap<>();
         //update i=0 from next year
         if (monthNumber == 0) {
             for (int i = 1; i < 13; i++) {
                 if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))))
-                    retailSalesEntryDtos.put(String.format("%02d", i) + "_" + new DateFormatSymbols().getMonths()[i -1], retailSalesReportService.getSalesDataByMonth(i-1));
+                    retailSalesEntryDtos.put(String.format("%02d", i) + "_" + new DateFormatSymbols().getMonths()[i - 1], retailSalesReportService.getSalesDataByMonth(year,i - 1));
             }
         } else {
-            retailSalesEntryDtos.put(monthNumber.toString(), retailSalesReportService.getSalesDataByMonth(monthNumber - 1));
+            retailSalesEntryDtos.put(monthNumber.toString(), retailSalesReportService.getSalesDataByMonth(year,monthNumber - 1));
         }
         return retailSalesEntryDtos;
     }
@@ -205,8 +209,8 @@ public class PresentationService {
                     aSeriesPresentation.setTotalSales(aSeriesPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     aSeriesPresentation.setTotalCostPrice(aSeriesPresentation.getTotalCostPrice() + costPrice);
-                } else if (retailSalesEntryDto.getCategory().contains("JUSTON")||retailSalesEntryDto.getCategory().contains("RONALDO_")||
-                        retailSalesEntryDto.getCategory().contains("PRINCE_")||retailSalesEntryDto.getCategory().contains("AMERICAN_")) {
+                } else if (retailSalesEntryDto.getCategory().contains("JUSTON") || retailSalesEntryDto.getCategory().contains("RONALDO_") ||
+                        retailSalesEntryDto.getCategory().contains("PRINCE_") || retailSalesEntryDto.getCategory().contains("AMERICAN_")) {
                     justonPresentation.setTotalSales(justonPresentation.getTotalSales()
                             + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
                     justonPresentation.setTotalCostPrice(justonPresentation.getTotalCostPrice() + costPrice);

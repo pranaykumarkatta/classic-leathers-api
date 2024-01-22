@@ -12,10 +12,20 @@ import java.util.stream.Collectors;
 public class RetailSalesReportService {
 
     private static int sheetNO = ((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 1;
+
     public List<RetailSalesEntryDto> getSalesDataByMonth(Integer sheetNumber) {
+
+        return getSalesDataByMonth(2024, sheetNumber);
+    }
+
+    public List<RetailSalesEntryDto> getSalesDataByMonth(Integer year, Integer sheetNumber) {
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx", sheetNumber);
+            if (year.equals(2024)) {
+                fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx", sheetNumber);
+            } else {
+                fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx", sheetNumber);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -24,7 +34,7 @@ public class RetailSalesReportService {
         rowData.addAll(Arrays.asList(fileData.split("\n")));
         if (rowData.size() != 0) {
             rowData.remove(0);//Remove header data
-            List<RetailSalesEntryDto> retailSalesEntryDtoList= new ArrayList<>();
+            List<RetailSalesEntryDto> retailSalesEntryDtoList = new ArrayList<>();
             for (String row : rowData) {
                 String[] cellData = row.split(",");
                 RetailSalesEntryDto retailSalesEntryDto = new RetailSalesEntryDto();
@@ -48,7 +58,7 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.setUpdatedBy(cellData[17]);
                 retailSalesEntryDto.setStepInType(cellData[18]);
                 retailSalesEntryDto.setInvoiceNumber(cellData[19]);
-                retailSalesEntryDto.setIsTodaySale(""+(new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
+                retailSalesEntryDto.setIsTodaySale("" + (new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
                         .equals((new SimpleDateFormat("MMM-d-yyyy").format(new Date())))));
                 retailSalesEntryDtoList.add(retailSalesEntryDto);
             }
@@ -72,7 +82,7 @@ public class RetailSalesReportService {
         rowData.addAll(Arrays.asList(fileData.split("\n")));
         if (rowData.size() != 0) {
             rowData.remove(0);//Remove header data
-            List<RetailSalesEntryDto> retailSalesEntryDtoList= new ArrayList<>();
+            List<RetailSalesEntryDto> retailSalesEntryDtoList = new ArrayList<>();
             for (String row : rowData) {
                 String[] cellData = row.split(",");
                 RetailSalesEntryDto retailSalesEntryDto = new RetailSalesEntryDto();
@@ -96,7 +106,7 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.setUpdatedBy(cellData[17]);
                 retailSalesEntryDto.setStepInType(cellData[18]);
                 retailSalesEntryDto.setInvoiceNumber(cellData[19]);
-                retailSalesEntryDto.setIsTodaySale(""+(new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
+                retailSalesEntryDto.setIsTodaySale("" + (new SimpleDateFormat("MMM-d-yyyy").format(new Date((cellData[0])))
                         .equals((new SimpleDateFormat("MMM-d-yyyy").format(new Date())))));
                 retailSalesEntryDtoList.add(retailSalesEntryDto);
             }
@@ -108,8 +118,8 @@ public class RetailSalesReportService {
         return Collections.emptyList();
     }
 
-    public void addRetailSalesEntry(RetailSalesEntryDto retailSalesEntryDto,String invoiceNumber) {
-        Object[] data = new Object[]{retailSalesEntryDto.getSaleDate(),retailSalesEntryDto.getCustomerName(),
+    public void addRetailSalesEntry(RetailSalesEntryDto retailSalesEntryDto, String invoiceNumber) {
+        Object[] data = new Object[]{retailSalesEntryDto.getSaleDate(), retailSalesEntryDto.getCustomerName(),
                 retailSalesEntryDto.getGender(),
                 retailSalesEntryDto.getMobileNumber(),
                 retailSalesEntryDto.getBrand(),
@@ -128,11 +138,11 @@ public class RetailSalesReportService {
                 retailSalesEntryDto.getUpdatedBy(),
                 retailSalesEntryDto.getStepInType(),
                 invoiceNumber,
-                Math.round(Integer.parseInt(retailSalesEntryDto.getSalePrice())*.1)+""
+                Math.round(Integer.parseInt(retailSalesEntryDto.getSalePrice()) * .1) + ""
 
         };
         try {
-            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx",sheetNO,data);
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx", sheetNO, data);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
