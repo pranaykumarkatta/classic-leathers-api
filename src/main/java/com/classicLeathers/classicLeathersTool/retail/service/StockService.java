@@ -113,11 +113,11 @@ public class StockService {
             if (map.containsKey(sku.getBrand() + "_" + sku.getCategory().split("\\|")[0] + "_"
                     + sku.getCategory().split("\\|")[1] + "_" + sku.getSku().substring(0, sku.getSku().length() - 2))) {
                 map.get(sku.getBrand() + "_" + sku.getCategory().split("\\|")[0] + "_"
-                        + sku.getCategory().split("\\|")[1] + "_" + sku.getSku().substring(0, sku.getSku().length() - 2))
-                        .add(sku.getDescription()+"_"+sku.getRetailMrp());
+                                + sku.getCategory().split("\\|")[1] + "_" + sku.getSku().substring(0, sku.getSku().length() - 2))
+                        .add(sku.getDescription() + "_" + sku.getRetailMrp());
             } else {
                 Set<String> set = new TreeSet<>();
-                set.add(sku.getDescription()+"_"+sku.getRetailMrp());
+                set.add(sku.getDescription() + "_" + sku.getRetailMrp());
                 map.put(sku.getBrand() + "_" + sku.getCategory().split("\\|")[0] + "_"
                         + sku.getCategory().split("\\|")[1] + "_" + sku.getSku().substring(0, sku.getSku().length() - 2), set);
             }
@@ -125,7 +125,7 @@ public class StockService {
         return map;
     }
 
-    public void addStockEntry(List<StockEntry> stockDTOList) {
+    public void addStockEntry(List<StockEntry> stockDTOList, Boolean isAudit) {
 
         stockDTOList.forEach(dto -> {
             Object[] data = new Object[]{
@@ -136,7 +136,11 @@ public class StockService {
                     dto.getSku()
             };
             try {
-                new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT.xlsx", 0, data);
+                if (isAudit) {
+                    new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT.xlsx", 0, data);
+                } else {
+                    new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT.xlsx", 0, data);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

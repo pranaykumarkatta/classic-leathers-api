@@ -32,10 +32,10 @@ public class StockReportController {
 //        return ResponseEntity.ok(retailStockReportService.getStockAvailabilityData());
 //    }
 //
-//    @GetMapping(path = "/exportStockReport")
-//    public ResponseEntity<String> exportStockReport() {
-//        return ResponseEntity.ok(retailStockReportService.exportStockReport());
-//    }
+    @GetMapping(path = "/exportStockReport")
+    public ResponseEntity<String> exportStockReport() {
+        return ResponseEntity.ok(retailStockReportService.exportStockReport());
+    }
 //
 //    @PostMapping(path = "/saveStockEntry")
 //    public void saveStockEntry(@RequestBody DrivingShoeStockEntry drivingShoeStockEntry) {

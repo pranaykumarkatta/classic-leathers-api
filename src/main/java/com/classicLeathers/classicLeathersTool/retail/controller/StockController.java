@@ -44,8 +44,8 @@ public class StockController {
     }
 
     @PostMapping(consumes = "application/json")
-    public void addStockEntry(@RequestBody List<StockEntry> stockDTOList) throws ParseException {
-        stockService.addStockEntry(stockDTOList);
+    public void addStockEntry(@RequestBody List<StockEntry> stockDTOList,@RequestParam Boolean isAudit) throws ParseException {
+        stockService.addStockEntry(stockDTOList,isAudit);
     }
 
 }
