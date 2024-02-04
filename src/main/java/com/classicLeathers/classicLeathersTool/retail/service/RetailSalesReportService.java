@@ -141,8 +141,17 @@ public class RetailSalesReportService {
                 Math.round(Integer.parseInt(retailSalesEntryDto.getSalePrice()) * .1) + ""
 
         };
+
+        Object[] data1 = new Object[]{retailSalesEntryDto.getSaleDate(),
+                retailSalesEntryDto.getBrand(),
+                "CLASSIC LEATHERS RETAIL",
+                "RETAIL",
+                retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather() + retailSalesEntryDto.getSize(),
+
+        };
         try {
             new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx", sheetNO, data);
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT.xlsx", 0, data1);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
