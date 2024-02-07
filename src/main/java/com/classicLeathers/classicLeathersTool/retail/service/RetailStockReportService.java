@@ -41,16 +41,12 @@ public class RetailStockReportService {
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setStockInQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getStockInQuantity() + 1);
                     } else if (stockReportDto.getTo().equals("RETAIL")) {
-                        stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setStockInQuantity(
-                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getStockInQuantity() -1);
-                    } else if (stockReportDto.getTo().equals("AJIO")) {
-                        stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setStockInQuantity(
-                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getStockInQuantity() -1);
+                        stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setRetailSalesQuantity(
+                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getRetailSalesQuantity() +1);
+                    } else if (stockReportDto.getTo().equals("AJIO")) {;
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
                     }  else if (stockReportDto.getTo().equals("FLIPKART")) {
-                        stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setStockInQuantity(
-                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getStockInQuantity() -1);
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
                     }
