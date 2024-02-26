@@ -74,6 +74,24 @@ public class StockService {
         return availablSkuMap;
     }
 
+    public Map<String, String> getCategoryMap() {
+        Map<String, String> categoryMap = new HashMap<>();
+        try {
+            List<String> rowData = new LinkedList<>(Arrays.asList(((new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\SKU.xlsx", 0)).split("\n"))));
+            if (rowData.size() != 0) {
+
+                rowData.remove(0);
+                for (String row : rowData) {
+                    String[] cellData = row.split(",");
+                    categoryMap.put(cellData[2] + "_" + cellData[1].replace("|","__").replace("NA","").split("__")[0], cellData[3]);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return categoryMap;
+    }
+
     public Map<String, Set<String>> getAvailabilityMap() {
         Map<String, Set<String>> map = new HashMap<>();
         ClassicLeathersToolApplication.availableSkuMap.values().forEach(sku -> {

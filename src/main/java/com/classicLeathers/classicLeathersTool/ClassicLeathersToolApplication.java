@@ -19,6 +19,7 @@ public class ClassicLeathersToolApplication {
     public static final Map<String, String> availableStoreMap = new HashMap<>();
     public static final Map<String, String> availableBrandMap = new HashMap<>();
     public static final Map<String, Sku> availableSkuMap = new HashMap<>();
+    public static final Map<String, String> categoryMap = new HashMap<>();
     public static final List<RetailSalesEntryDto> retailSalesEntryDtoList = new ArrayList<>();
     @Autowired
     private StockService stockService;
@@ -34,6 +35,7 @@ public class ClassicLeathersToolApplication {
         availableStoreMap.putAll(stockService.getAvailableStores());
         availableBrandMap.putAll(stockService.getAvailableBrands());
         availableSkuMap.putAll(stockService.getAvailableSkus());
+        categoryMap.putAll(stockService.getCategoryMap());
 
         for (int i = 1; i < 13; i++) {
             retailSalesEntryDtoList.addAll(retailSalesReportService.getSalesDataByMonth2023(i - 1));
