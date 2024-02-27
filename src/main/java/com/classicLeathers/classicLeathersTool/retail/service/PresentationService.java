@@ -1,11 +1,10 @@
 package com.classicLeathers.classicLeathersTool.retail.service;
 
 import com.classicLeathers.classicLeathersTool.ClassicLeathersToolApplication;
-import com.classicLeathers.classicLeathersTool.retail.model.*;
-import jdk.nashorn.internal.objects.NativeJava;
+import com.classicLeathers.classicLeathersTool.retail.model.DailySalesDto;
+import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -28,30 +27,91 @@ public class PresentationService {
         return getDailySalesDto(getSalesData(year, monthNumber).get(monthNumber.toString()), monthNumber);
     }
 
-    public List<String> getTotalSalesData() {
+    public List<String> getPresentationData(String str) {
+        String filterString = str.replace("_All", "").replace("_undefined", "").replace("All", "");
+        Map<Integer, List<String>> map = new HashMap<>();
+        map.put(0, getTotalSalesDataList("Brand", filterString));
+        map.put(1, getTotalSalesDataList("Category", filterString));
+        map.put(2, getTotalSalesDataList("SubCategory", filterString));
+        map.put(3, getTotalSalesDataList("product", filterString));
+        return map.get(filterString.isEmpty() ? 0 : filterString.split("_").length);
+    }
+
+    public List<String> getTotalSalesDataList(String level, String filterString) {
         Map<String, Integer> totalSalesDataMap = new TreeMap<>();
         List<String> totalSalesDataList = new ArrayList<>();
         stockService.getAvailabilityMap().keySet().forEach(key -> {
-            if (key.split("_").length == 2) {
-                totalSalesDataMap.put(key, Integer.valueOf("0"));
+            if (level.equals("Brand")) {
+                if (key.split("_").length == 1) {
+                    totalSalesDataMap.put(key, Integer.valueOf("0"));
+                }
+            }
+            if (level.equals("Category")) {
+                if (key.split("_").length == 2) {
+                    totalSalesDataMap.put(key, Integer.valueOf("0"));
+                }
+            }
+            if (level.equals("SubCategory")) {
+                if (key.split("_").length == 3) {
+                    totalSalesDataMap.put(key, Integer.valueOf("0"));
+                }
+            }
+            if (level.equals("product")) {
+                if (key.split("_").length == 3) {
+                    totalSalesDataMap.put(key, Integer.valueOf("0"));
+                }
             }
         });
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
+        Map<String, Integer> tempMap = null;
         for (int i = 0; i <= calendar.get(Calendar.MONTH); i++) {
             List<String> header = new ArrayList<>();
             List<Integer> values = new ArrayList<>();
-            Map<String, Integer> tempMap = new HashMap<>();
+            tempMap = new HashMap<>();
             tempMap.putAll(totalSalesDataMap);
-            updateTotalSalesDataByCategoryMap(i + 1, tempMap).forEach((s, integer) -> {
-                header.add(s);
-                values.add(integer);
-            });
-            if (i == 0) {
-                totalSalesDataList.add("MONTH," + header.toString().replace("[","").replace("]",""));
+            if (level.equals("Brand")) {
+                updateTotalSalesDataByBrandMap(i + 1, tempMap).forEach((s, integer) -> {
+                    if (filterString.length() == 0) {
+                        header.add(s);
+                        values.add(integer);
+                    } else {
+                        if (s.contains(filterString)) {
+                            header.add(s);
+                            values.add(integer);
+                        }
+                    }
+                });
             }
-            totalSalesDataList.add((i+1)+ "," + values.toString().replace("[","").replace("]",""));
+            if (level.equals("Category")) {
+                updateTotalSalesDataByCategoryMap(i + 1, tempMap).forEach((s, integer) -> {
+                    if (s.contains(filterString)) {
+                        header.add(s);
+                        values.add(integer);
+                    }
+                });
+            }
+            if (level.equals("SubCategory")) {
+                updateTotalSalesDataBysubCategoryMap(i + 1, tempMap).forEach((s, integer) -> {
+                    if (s.contains(filterString)) {
+                        header.add(s);
+                        values.add(integer);
+                    }
+                });
+            }
+            if (level.equals("product")) {
+                updateTotalSalesDataByProductMap(i + 1, tempMap).forEach((s, integer) -> {
+                    if (s.contains(filterString)) {
+                        header.add(s);
+                        values.add(integer);
+                    }
+                });
+            }
+            if (i == 0) {
+                totalSalesDataList.add("MONTH," + header.toString().replace("[", "").replace("]", ""));
+            }
+            totalSalesDataList.add((i + 1) + "," + values.toString().replace("[", "").replace("]", ""));
         }
         return totalSalesDataList;
     }
@@ -82,7 +142,23 @@ public class PresentationService {
         });
         return totalSalesDataMap;
     }
+
     private Map<String, Integer> updateTotalSalesDataBysubCategoryMap(int monthNumber, Map<String, Integer> totalSalesDataMap) {
+        getSalesData(2024, monthNumber).forEach((s, retailSalesEntryDtoList) -> {
+            totalSalesDataMap.remove("brand");
+            retailSalesEntryDtoList.forEach(retailSalesEntryDto -> {
+                String c1 = ClassicLeathersToolApplication.categoryMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory()).replace("|", "__").split("__")[0];
+                String c2 = ClassicLeathersToolApplication.categoryMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory()).replace("|", "__").split("__")[1];
+                if (totalSalesDataMap.containsKey(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2)) {
+                    totalSalesDataMap.put(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2,
+                            totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2) + Integer.valueOf(retailSalesEntryDto.getSalePrice()));
+                }
+            });
+        });
+        return totalSalesDataMap;
+    }
+
+    private Map<String, Integer> updateTotalSalesDataByProductMap(int monthNumber, Map<String, Integer> totalSalesDataMap) {
         getSalesData(2024, monthNumber).forEach((s, retailSalesEntryDtoList) -> {
             totalSalesDataMap.remove("brand");
             retailSalesEntryDtoList.forEach(retailSalesEntryDto -> {
