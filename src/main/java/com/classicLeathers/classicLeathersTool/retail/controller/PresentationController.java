@@ -1,12 +1,11 @@
 package com.classicLeathers.classicLeathersTool.retail.controller;
 
-import com.classicLeathers.classicLeathersTool.retail.model.*;
+import com.classicLeathers.classicLeathersTool.retail.model.DailySalesDto;
 import com.classicLeathers.classicLeathersTool.retail.service.PresentationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -67,8 +66,8 @@ public class PresentationController {
     }
 
 
-    @GetMapping("/totalSales")
-    public ResponseEntity<List<String>> getTotalSalesData() {
-        return ResponseEntity.ok(presentationService.getTotalSalesData());
+    @GetMapping("/presentationDta")
+    public ResponseEntity<List<String>> getPresentationData(@RequestParam String filterString) {
+        return ResponseEntity.ok(presentationService.getPresentationData(filterString));
     }
 }
