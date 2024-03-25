@@ -16,7 +16,7 @@ public class PresentationController {
     @Autowired
     private PresentationService presentationService;
 
-//
+    //
 //    @GetMapping("/avgSales")
 //    public ResponseEntity<List<AverageSalesDto>> getAverageSalesData( ) {
 //        return ResponseEntity.ok(presentationService.getAverageSalesData());
@@ -50,24 +50,19 @@ public class PresentationController {
 //                showHour20Data, showHour21Data, showHour22Data, showHour00Data));
 //    }
 //
-//    @GetMapping("/profitGraph")
-//    public ResponseEntity<List<ProfitDto>> getProfitData(@RequestParam Boolean showDriving, @RequestParam Boolean showMirat,
-//                                                         @RequestParam Boolean showFormal, @RequestParam Boolean showCasual,
-//                                                         @RequestParam Boolean showSlippers, @RequestParam Boolean showHandBag,
-//                                                         @RequestParam Boolean showBeltAndWallet, @RequestParam Boolean showOther,
-//                                                         @RequestParam Boolean showNA) {
-//        return ResponseEntity.ok(presentationService.getProfitData(showDriving, showMirat,showFormal,showCasual,
-//                showSlippers, showHandBag, showBeltAndWallet,showOther,showNA));
-//    }
-
     @GetMapping("/dailySales")
     public ResponseEntity<List<DailySalesDto>> getDailySales(@RequestParam Integer monthNumber, @RequestParam Integer year) {
         return ResponseEntity.ok(presentationService.getDailySales(year, monthNumber));
     }
 
 
-    @GetMapping("/presentationDta")
-    public ResponseEntity<List<String>> getPresentationData(@RequestParam String filterString) {
-        return ResponseEntity.ok(presentationService.getPresentationData(filterString));
+    @GetMapping("/totalSales")
+    public ResponseEntity<List<String>> getTotalSales(@RequestParam String filterString) {
+        return ResponseEntity.ok(presentationService.getTotalSales(filterString));
+    }
+
+    @GetMapping("/profitGraph")
+    public ResponseEntity<List<String>> getProfitData(@RequestParam String filterString) {
+        return ResponseEntity.ok(presentationService.getProfitPercent(filterString));
     }
 }

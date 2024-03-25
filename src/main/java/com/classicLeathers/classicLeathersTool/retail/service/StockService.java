@@ -83,7 +83,7 @@ public class StockService {
                 rowData.remove(0);
                 for (String row : rowData) {
                     String[] cellData = row.split(",");
-                    categoryMap.put(cellData[2] + "_" + cellData[1].replace("|","__").replace("NA","").split("__")[0], cellData[3]);
+                    categoryMap.put(cellData[2] + "_" + cellData[1].replace("|", "__").replace("NA", "").split("__")[0], cellData[3]);
                 }
             }
         } catch (Exception e) {
@@ -138,6 +138,14 @@ public class StockService {
                 set.add(sku.getDescription() + "_" + sku.getRetailMrp());
                 map.put(sku.getBrand() + "_" + sku.getCategory().split("\\|")[0] + "_"
                         + sku.getCategory().split("\\|")[1] + "_" + sku.getSku().substring(0, sku.getSku().length() - 2), set);
+            }
+            if (map.containsKey(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA",""))) {
+                map.get(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA",""))
+                        .add(sku.getPurchaseCost());
+            } else {
+                Set<String> set = new TreeSet<>();
+                set.add(sku.getPurchaseCost());
+                map.put(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA",""), set);
             }
         });
         return map;

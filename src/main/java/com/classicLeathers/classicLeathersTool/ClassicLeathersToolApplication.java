@@ -3,6 +3,7 @@ package com.classicLeathers.classicLeathersTool;
 import com.classicLeathers.classicLeathersTool.retail.model.RetailCustomerSalesHistoryDto;
 import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
 import com.classicLeathers.classicLeathersTool.retail.model.Sku;
+import com.classicLeathers.classicLeathersTool.retail.service.PresentationService;
 import com.classicLeathers.classicLeathersTool.retail.service.RetailSalesReportService;
 import com.classicLeathers.classicLeathersTool.retail.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,11 @@ public class ClassicLeathersToolApplication {
     public static final Map<String, Sku> availableSkuMap = new HashMap<>();
     public static final Map<String, String> categoryMap = new HashMap<>();
     public static final List<RetailSalesEntryDto> retailSalesEntryDtoList = new ArrayList<>();
+    public static final Map<String, List<RetailSalesEntryDto>> salesData = new HashMap<>();
     @Autowired
     private StockService stockService;
+    @Autowired
+    private PresentationService presentationService;
     @Autowired
     private RetailSalesReportService retailSalesReportService;
 
@@ -36,12 +40,13 @@ public class ClassicLeathersToolApplication {
         availableBrandMap.putAll(stockService.getAvailableBrands());
         availableSkuMap.putAll(stockService.getAvailableSkus());
         categoryMap.putAll(stockService.getCategoryMap());
+        salesData.putAll(presentationService.updateSalesData(2024,0));
 
         for (int i = 1; i < 13; i++) {
             retailSalesEntryDtoList.addAll(retailSalesReportService.getSalesDataByMonth2023(i - 1));
         }
         for (int i = 1; i < 13; i++) {
-            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))))-1))
+            if (i <= (((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 1))
                 retailSalesEntryDtoList.addAll(retailSalesReportService.getSalesDataByMonth(i - 1));
         }
         System.out.println("Data Loaded Successfully");
