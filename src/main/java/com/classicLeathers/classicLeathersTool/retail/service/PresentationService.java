@@ -322,7 +322,6 @@ public class PresentationService {
         return tempMap;
     }
 
-
     private Map<String, String> updateProfitPercentDataByCategoryMap(int monthNumber, Map<String, String> totalSalesDataMap, Map<String, Set<String>> availabilityMap) {
         ClassicLeathersToolApplication.salesData.get(String.valueOf(monthNumber)).forEach(retailSalesEntryDto -> {
             totalSalesDataMap.remove("brand");
@@ -367,4 +366,28 @@ public class PresentationService {
         return totalSalesDataMap;
     }
 
+    public List<String> getSalesMediumData() {
+        List<String> salesMediumList = new ArrayList<>();
+
+        ClassicLeathersToolApplication.salesData.forEach((s, retailSalesEntryDtoList) -> {
+            Map<String, Integer> salesMediumData = new HashMap<>();
+            salesMediumData.put("WALK IN", 0);
+            salesMediumData.put("REFERRAL", 0);
+            salesMediumData.put("INSTAGRAM", 0);
+            salesMediumData.put("EXISTING CUSTOMER", 0);
+            retailSalesEntryDtoList.forEach(retailSalesEntryDto -> {
+                if (salesMediumData.containsKey(retailSalesEntryDto.getStepInType())) {
+                    salesMediumData.put(retailSalesEntryDto.getStepInType(),
+                            salesMediumData.get(retailSalesEntryDto.getStepInType()) + Integer.parseInt(retailSalesEntryDto.getSalePrice()));
+                } else {
+                    System.out.println("Invalid sales medium.");
+                }
+            });
+            if (s.equals("1")){
+                salesMediumList.add("MONTH,"+salesMediumData.keySet().toString().replace("[","").replace("]",""));
+            }
+            salesMediumList.add(s+","+salesMediumData.values().toString().replace("[","").replace("]",""));
+        });
+        return salesMediumList;
+    }
 }

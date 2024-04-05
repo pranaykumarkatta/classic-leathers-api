@@ -16,11 +16,6 @@ public class PresentationController {
     @Autowired
     private PresentationService presentationService;
 
-    //
-//    @GetMapping("/avgSales")
-//    public ResponseEntity<List<AverageSalesDto>> getAverageSalesData( ) {
-//        return ResponseEntity.ok(presentationService.getAverageSalesData());
-//    }
 //
 //    @GetMapping("/hourlySales")
 //    public ResponseEntity<List<HourlySalesDto>> getHourlySalesData(@RequestParam Boolean showHour8Data, @RequestParam Boolean showHour9Data,
@@ -64,5 +59,10 @@ public class PresentationController {
     @GetMapping("/profitGraph")
     public ResponseEntity<List<String>> getProfitData(@RequestParam String filterString) {
         return ResponseEntity.ok(presentationService.getProfitPercent(filterString));
+    }
+
+    @GetMapping("/salesMediumGraph")
+    public ResponseEntity<List<String>> getSalesMediumData() {
+        return ResponseEntity.ok(presentationService.getSalesMediumData());
     }
 }
