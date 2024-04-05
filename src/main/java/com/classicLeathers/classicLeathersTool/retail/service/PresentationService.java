@@ -268,11 +268,11 @@ public class PresentationService {
                 updateProfitPercentDataByBrandMap(i + 1, tempMap, availabilityMap).forEach((s, s2) -> {
                     if (filterString.length() == 0) {
                         header.add(s);
-                        values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[0])) * 100));
+                        values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[1])) * 100));
                     } else {
                         if (s.contains(filterString)) {
                             header.add(s);
-                            values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[0])) * 100));
+                            values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[1])) * 100));
                         }
                     }
                 });
@@ -281,7 +281,7 @@ public class PresentationService {
                 updateProfitPercentDataByCategoryMap(i + 1, tempMap, availabilityMap).forEach((s, s2) -> {
                     if (s.contains(filterString)) {
                         header.add(s);
-                        values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[0])) * 100));
+                        values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[1])) * 100));
                     }
                 });
             }
@@ -289,7 +289,7 @@ public class PresentationService {
                 updateProfitPercentDataBysubCategoryMap(i + 1, tempMap, availabilityMap).forEach((s, s2) -> {
                     if (s.contains(filterString)) {
                         header.add(s);
-                        values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[0])) * 100));
+                        values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[1])) * 100));
                     }
                 });
             }
@@ -297,7 +297,7 @@ public class PresentationService {
                 updateProfitPercentDataByProductMap(i + 1, tempMap, availabilityMap).forEach((s, s2) -> {
                     if (s.contains(filterString)) {
                         header.add(s);
-                        values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[0])) * 100));
+                        values.add((int) (((Double.parseDouble(s2.split("!")[1]) - Double.parseDouble(s2.split("!")[0])) / Double.parseDouble(s2.split("!")[1])) * 100));
                     }
                 });
             }
@@ -330,8 +330,8 @@ public class PresentationService {
             String c1 = ClassicLeathersToolApplication.categoryMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory()).replace("|", "__").split("__")[0];
             if (totalSalesDataMap.containsKey(retailSalesEntryDto.getBrand() + "_" + c1)) {
                 totalSalesDataMap.put(retailSalesEntryDto.getBrand() + "_" + c1,
-                        (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand()+ "_" + c1).split("!")[0]) + (Integer.valueOf(availabilityMap.get(key.replace("_NA", "")).toArray()[0].toString()) * Integer.valueOf(retailSalesEntryDto.getQuantity()))) + "!" +
-                                (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand()+ "_" + c1).split("!")[1]) + Integer.valueOf(retailSalesEntryDto.getSalePrice())));
+                        (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1).split("!")[0]) + (Integer.valueOf(availabilityMap.get(key.replace("_NA", "")).toArray()[0].toString()) * Integer.valueOf(retailSalesEntryDto.getQuantity()))) + "!" +
+                                (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1).split("!")[1]) + Integer.valueOf(retailSalesEntryDto.getSalePrice())));
             }
         });
         return totalSalesDataMap;
@@ -340,11 +340,12 @@ public class PresentationService {
     private Map<String, String> updateProfitPercentDataBysubCategoryMap(int monthNumber, Map<String, String> totalSalesDataMap, Map<String, Set<String>> availabilityMap) {
         ClassicLeathersToolApplication.salesData.get(String.valueOf(monthNumber)).forEach(retailSalesEntryDto -> {
             totalSalesDataMap.remove("brand");
+            String key = retailSalesEntryDto.getProductDetails() + "_" + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather();
             String c1 = ClassicLeathersToolApplication.categoryMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory()).replace("|", "__").split("__")[0];
             String c2 = ClassicLeathersToolApplication.categoryMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory()).replace("|", "__").split("__")[1];
             if (totalSalesDataMap.containsKey(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2)) {
                 totalSalesDataMap.put(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2,
-                        (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2).split("!")[0]) + (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .30)) + "!" +
+                        (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2).split("!")[0]) + (Integer.valueOf(availabilityMap.get(key.replace("_NA", "")).toArray()[0].toString()) * Integer.valueOf(retailSalesEntryDto.getQuantity()))) + "!" +
                                 (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2).split("!")[1]) + Integer.valueOf(retailSalesEntryDto.getSalePrice())));
             }
         });
@@ -354,12 +355,12 @@ public class PresentationService {
     private Map<String, String> updateProfitPercentDataByProductMap(int monthNumber, Map<String, String> totalSalesDataMap, Map<String, Set<String>> availabilityMap) {
         ClassicLeathersToolApplication.salesData.get(String.valueOf(monthNumber)).forEach(retailSalesEntryDto -> {
             totalSalesDataMap.remove("brand");
+            String key = retailSalesEntryDto.getProductDetails() + "_" + retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather();
             String c1 = ClassicLeathersToolApplication.categoryMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory()).replace("|", "__").split("__")[0];
             String c2 = ClassicLeathersToolApplication.categoryMap.get(retailSalesEntryDto.getBrand() + "_" + retailSalesEntryDto.getCategory()).replace("|", "__").split("__")[1];
             if (totalSalesDataMap.containsKey(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2)) {
                 totalSalesDataMap.put(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2,
-
-                        (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2).split("!")[0]) + (Integer.valueOf(retailSalesEntryDto.getSalePrice()) * .30)) + "!" +
+                        (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2).split("!")[0]) + (Integer.valueOf(availabilityMap.get(key.replace("_NA", "")).toArray()[0].toString()) * Integer.valueOf(retailSalesEntryDto.getQuantity()))) + "!" +
                                 (Double.valueOf(totalSalesDataMap.get(retailSalesEntryDto.getBrand() + "_" + c1 + "_" + c2).split("!")[1]) + Integer.valueOf(retailSalesEntryDto.getSalePrice())));
             }
         });
