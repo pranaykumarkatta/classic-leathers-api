@@ -1,5 +1,6 @@
 package com.classicLeathers.classicLeathersTool.retail.controller;
 
+import com.classicLeathers.classicLeathersTool.ClassicLeathersToolApplication;
 import com.classicLeathers.classicLeathersTool.FileUtils;
 import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
 import com.classicLeathers.classicLeathersTool.retail.service.RetailSalesReportService;
@@ -62,6 +63,7 @@ public class RetailSalesReportController {
         });
         try {
             new FileUtils().saveInvoice(retailSalesEntryDtoList, invoiceNumber);
+            new ClassicLeathersToolApplication().doSomethingAfterStartup();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
