@@ -49,6 +49,9 @@ public class RetailStockReportService {
                     }  else if (stockReportDto.getTo().equals("FLIPKART")) {
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
+                    }else if (stockReportDto.getTo().equals("MYNTRA")) {
+                        stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
+                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
                     }
                 } else {
                     stockReportDto = new StockReportDto();
