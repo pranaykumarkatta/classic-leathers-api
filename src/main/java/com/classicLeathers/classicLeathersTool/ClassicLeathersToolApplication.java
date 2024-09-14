@@ -11,11 +11,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SpringBootApplication
+@EnableScheduling
 public class ClassicLeathersToolApplication {
     public static final Map<String, String> availableStoreMap = new HashMap<>();
     public static final Map<String, String> availableBrandMap = new HashMap<>();
@@ -35,7 +38,13 @@ public class ClassicLeathersToolApplication {
     }
 
     @EventListener(ApplicationReadyEvent.class)
+    @Scheduled(cron = "0 0 12 1/1 * ?")
     public void doSomethingAfterStartup() {
+        availableStoreMap.clear();
+        availableBrandMap.clear();
+        availableSkuMap.clear();
+        categoryMap.clear();
+        salesData.clear();
         availableStoreMap.putAll(stockService.getAvailableStores());
         availableBrandMap.putAll(stockService.getAvailableBrands());
         availableSkuMap.putAll(stockService.getAvailableSkus());

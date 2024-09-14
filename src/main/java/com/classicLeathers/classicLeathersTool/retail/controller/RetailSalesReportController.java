@@ -63,7 +63,6 @@ public class RetailSalesReportController {
         });
         try {
             new FileUtils().saveInvoice(retailSalesEntryDtoList, invoiceNumber);
-            new ClassicLeathersToolApplication().doSomethingAfterStartup();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
