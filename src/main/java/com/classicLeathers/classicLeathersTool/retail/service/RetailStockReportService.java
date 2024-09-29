@@ -15,9 +15,12 @@ public class RetailStockReportService {
     private RetailSalesReportService retailSalesReportService;
 
     public Collection<StockAvailabilityDto> getStockReport() {
+        return getStockReport("STOCK_AUDIT_REPORT");
+    }
+    public Collection<StockAvailabilityDto> getStockReport(String fileName) {
         String fileData = "";
         try {
-            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT.xlsx", 0);
+            fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\"+fileName+".xlsx", 0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -43,6 +46,9 @@ public class RetailStockReportService {
                     } else if (stockReportDto.getTo().equals("RETAIL")) {
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setRetailSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getRetailSalesQuantity() +1);
+                    }else if (stockReportDto.getTo().equals("PIXOGREY STUDIOS")) {
+                        stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setRetailSalesQuantity(
+                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getRetailSalesQuantity() +1);
                     } else if (stockReportDto.getTo().equals("AJIO")) {;
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
@@ -50,6 +56,9 @@ public class RetailStockReportService {
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
                     }else if (stockReportDto.getTo().equals("MYNTRA")) {
+                        stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
+                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
+                    }else if (stockReportDto.getTo().equals("ONE_WAY_SHOES_CHENNAI")) {
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
                     }
@@ -375,7 +384,7 @@ public class RetailStockReportService {
 //    }
 //
     public String exportStockReport() {
-        getStockReport().stream().sorted((o1, o2) -> (o1.getBrand()+"_"+o1.getArticle()).compareTo(o2.getBrand()+"_"+o2.getArticle()))
+        getStockReport("STOCK_AUDIT_REPORT").stream().sorted((o1, o2) -> (o1.getBrand()+"_"+o1.getArticle()).compareTo(o2.getBrand()+"_"+o2.getArticle()))
                 .forEach(stockAvailabilityDto -> {
             Object[] data = new Object[]{
                     stockAvailabilityDto.getBrand(),
@@ -394,7 +403,35 @@ public class RetailStockReportService {
                             stockAvailabilityDto.getSize_45() + stockAvailabilityDto.getSize_46() + stockAvailabilityDto.getSize_47())
             };
             try {
-                new FileUtils().WriteData("D:\\onedrive\\Tag_classicLeathers\\Reports\\STOCK_AUDIT_REPORT.xlsx", 0, data);
+                new FileUtils().WriteData("D:\\onedrive\\Tag_classicLeathers\\Reports\\STOCK_SUMMARY.xlsx", 0, data);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return "Report saved successfully";
+    }
+    public String exportAuditReport() {
+        getStockReport("STOCK_AUDIT").stream().sorted((o1, o2) -> (o1.getBrand()+"_"+o1.getArticle()).compareTo(o2.getBrand()+"_"+o2.getArticle()))
+                .forEach(stockAvailabilityDto -> {
+            Object[] data = new Object[]{
+                    stockAvailabilityDto.getBrand(),
+                    stockAvailabilityDto.getArticle(),
+                    stockAvailabilityDto.getSize_39().toString(),
+                    stockAvailabilityDto.getSize_40().toString(),
+                    stockAvailabilityDto.getSize_41().toString(),
+                    stockAvailabilityDto.getSize_42().toString(),
+                    stockAvailabilityDto.getSize_43().toString(),
+                    stockAvailabilityDto.getSize_44().toString(),
+                    stockAvailabilityDto.getSize_45().toString(),
+                    stockAvailabilityDto.getSize_46().toString(),
+                    stockAvailabilityDto.getSize_47().toString(),
+                    (stockAvailabilityDto.getSize_39() + stockAvailabilityDto.getSize_40() + stockAvailabilityDto.getSize_41() +
+                            stockAvailabilityDto.getSize_42() + stockAvailabilityDto.getSize_43() + stockAvailabilityDto.getSize_44() +
+                            stockAvailabilityDto.getSize_45() + stockAvailabilityDto.getSize_46() + stockAvailabilityDto.getSize_47())
+            };
+            try {
+                new FileUtils().WriteData("D:\\onedrive\\Tag_classicLeathers\\Reports\\AUDIT_SUMMARY.xlsx", 0, data);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);

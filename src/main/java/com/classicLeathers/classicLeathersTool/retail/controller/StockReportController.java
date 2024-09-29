@@ -36,6 +36,10 @@ public class StockReportController {
     public ResponseEntity<String> exportStockReport() {
         return ResponseEntity.ok(retailStockReportService.exportStockReport());
     }
+    @GetMapping(path = "/exportAuditReport")
+    public ResponseEntity<String> exportAuditReport() {
+        return ResponseEntity.ok(retailStockReportService.exportAuditReport());
+    }
 //
 //    @PostMapping(path = "/saveStockEntry")
 //    public void saveStockEntry(@RequestBody DrivingShoeStockEntry drivingShoeStockEntry) {
