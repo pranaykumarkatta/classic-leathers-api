@@ -2,6 +2,7 @@ package com.classicLeathers.classicLeathersTool.retail.service;
 
 import com.classicLeathers.classicLeathersTool.FileUtils;
 import com.classicLeathers.classicLeathersTool.retail.model.RetailSalesEntryDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -10,6 +11,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class RetailSalesReportService {
+    @Autowired
+    StockService stockService;
 
     private static int sheetNO = ((Integer.parseInt(new SimpleDateFormat("MM").format(new Date())))) - 1;
 
@@ -152,6 +155,13 @@ public class RetailSalesReportService {
         try {
             new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx", sheetNO, data);
             new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT.xlsx", 0, data1);
+            String sku = retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather() + retailSalesEntryDto.getSize();
+            if (stockService.getOnlineSkus().contains(sku)) {
+                Object[] d1 = new Object[]{
+                        sku, 1, "DEFAULT", "ADD"
+                };
+                new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\INVENTORY_ADJUSTMENT.xlsx", 0, d1);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

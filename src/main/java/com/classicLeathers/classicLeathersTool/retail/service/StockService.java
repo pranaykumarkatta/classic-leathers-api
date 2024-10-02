@@ -139,16 +139,34 @@ public class StockService {
                 map.put(sku.getBrand() + "_" + sku.getCategory().split("\\|")[0] + "_"
                         + sku.getCategory().split("\\|")[1] + "_" + sku.getSku().substring(0, sku.getSku().length() - 2), set);
             }
-            if (map.containsKey(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA",""))) {
-                map.get(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA",""))
+            if (map.containsKey(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA", ""))) {
+                map.get(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA", ""))
                         .add(sku.getPurchaseCost());
             } else {
                 Set<String> set = new TreeSet<>();
                 set.add(sku.getPurchaseCost());
-                map.put(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA",""), set);
+                map.put(sku.getDescription().toUpperCase() + "_" + sku.getBrand() + "_" + sku.getSku().substring(0, sku.getSku().length() - 2).replace("_NA", ""), set);
             }
         });
         return map;
+    }
+
+    public List<String> getOnlineSkus() {
+        List<String> onlineSkus = new ArrayList<>();
+        try {
+            List<String> rowData = new LinkedList<>(Arrays.asList(((new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\ONLINE_SKUS.xlsx", 0)).split("\n"))));
+            if (rowData.size() != 0) {
+
+                rowData.remove(0);
+                for (String row : rowData) {
+                    String[] cellData = row.split(",");
+                    onlineSkus.add(cellData[0]);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return onlineSkus;
     }
 
     public void addStockEntry(List<StockEntry> stockDTOList, Boolean isAudit) {
@@ -166,6 +184,12 @@ public class StockService {
                     new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT.xlsx", 0, data);
                 } else {
                     new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT.xlsx", 0, data);
+                    if (getOnlineSkus().contains(dto.getSku()) && (!dto.getTo().equals("MYNTRA"))) {
+                        Object[] d1 = new Object[]{
+                                dto.getSku(), 1, "DEFAULT", "ADD"
+                        };
+                        new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\INVENTORY_ADJUSTMENT.xlsx", 0, d1);
+                    }
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
