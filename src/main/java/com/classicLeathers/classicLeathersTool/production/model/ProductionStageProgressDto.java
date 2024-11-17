@@ -3,6 +3,7 @@ package com.classicLeathers.classicLeathersTool.production.model;
 public class ProductionStageProgressDto {
     private String sku;
     private String leather;
+    private String size_39_quantity;
     private String size_40_quantity;
     private String size_41_quantity;
     private String size_42_quantity;
@@ -30,6 +31,14 @@ public class ProductionStageProgressDto {
 
     public String getSize_40_quantity() {
         return size_40_quantity;
+    }
+
+    public String getSize_39_quantity() {
+        return size_39_quantity;
+    }
+
+    public void setSize_39_quantity(String size_39_quantity) {
+        this.size_39_quantity = size_39_quantity;
     }
 
     public void setSize_40_quantity(String size_40_quantity) {

@@ -10,6 +10,7 @@ public class PackingListEntry {
     private String sku;
     private String leather;
     private String price;
+    private String size_39_quantity;
     private String size_40_quantity;
     private String size_41_quantity;
     private String size_42_quantity;
@@ -77,6 +78,14 @@ public class PackingListEntry {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getSize_39_quantity() {
+        return size_39_quantity;
+    }
+
+    public void setSize_39_quantity(String size_39_quantity) {
+        this.size_39_quantity = size_39_quantity;
     }
 
     public String getSize_40_quantity() {

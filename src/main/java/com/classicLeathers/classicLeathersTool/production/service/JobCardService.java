@@ -93,19 +93,20 @@ public class JobCardService {
             JobCard jobCardEntry = new JobCard();
             jobCardEntry.setSku(cellData[0]);
             jobCardEntry.setLeather(cellData[1]);
-            jobCardEntry.setSize_40_quantity(cellData[2]);
-            jobCardEntry.setSize_41_quantity(cellData[3]);
-            jobCardEntry.setSize_42_quantity(cellData[4]);
-            jobCardEntry.setSize_43_quantity(cellData[5]);
-            jobCardEntry.setSize_44_quantity(cellData[6]);
-            jobCardEntry.setSize_45_quantity(cellData[7]);
-            jobCardEntry.setSize_46_quantity(cellData[8]);
-            jobCardEntry.setSize_47_quantity(cellData[9]);
-            jobCardEntry.setTotalQuantity(cellData[10]);
-            jobCardEntry.setHandStitchingPattern(cellData[11]);
-            jobCardEntry.setStyle(cellData[12]);
-            jobCardEntry.setLining(cellData[13]);
-            jobCardEntry.setSole(cellData[14]);
+            jobCardEntry.setSize_39_quantity(cellData[2]);
+            jobCardEntry.setSize_40_quantity(cellData[3]);
+            jobCardEntry.setSize_41_quantity(cellData[4]);
+            jobCardEntry.setSize_42_quantity(cellData[5]);
+            jobCardEntry.setSize_43_quantity(cellData[6]);
+            jobCardEntry.setSize_44_quantity(cellData[7]);
+            jobCardEntry.setSize_45_quantity(cellData[8]);
+            jobCardEntry.setSize_46_quantity(cellData[9]);
+            jobCardEntry.setSize_47_quantity(cellData[10]);
+            jobCardEntry.setTotalQuantity(cellData[11]);
+            jobCardEntry.setHandStitchingPattern(cellData[12]);
+            jobCardEntry.setStyle(cellData[13]);
+            jobCardEntry.setLining(cellData[14]);
+            jobCardEntry.setSole(cellData[15]);
             jobCardEntry.setClient(clientData[0]);
             jobCardEntry.setBrand(clientData[1]);
             jobCardEntry.setPoDate(clientData[3]);
@@ -199,34 +200,38 @@ public class JobCardService {
                     String size = "";
                     if (!cellData[2].equals("0")) {
                         count = cellData[2];
-                        size = "40";
+                        size = "39";
                     }
                     if (!cellData[3].equals("0")) {
                         count = cellData[3];
-                        size = "41";
+                        size = "40";
                     }
                     if (!cellData[4].equals("0")) {
                         count = cellData[4];
-                        size = "42";
+                        size = "41";
                     }
                     if (!cellData[5].equals("0")) {
                         count = cellData[5];
-                        size = "43";
+                        size = "42";
                     }
                     if (!cellData[6].equals("0")) {
                         count = cellData[6];
-                        size = "44";
+                        size = "43";
                     }
                     if (!cellData[7].equals("0")) {
                         count = cellData[7];
-                        size = "45";
+                        size = "44";
                     }
                     if (!cellData[8].equals("0")) {
                         count = cellData[8];
-                        size = "46";
+                        size = "45";
                     }
                     if (!cellData[9].equals("0")) {
                         count = cellData[9];
+                        size = "46";
+                    }
+                    if (!cellData[10].equals("0")) {
+                        count = cellData[10];
                         size = "47";
                     }
                     JobCardProgress jobCardProgressDto = new JobCardProgress();
@@ -301,14 +306,15 @@ public class JobCardService {
                 String[] cellData = row.split(",");
                 dto.setSku(cellData[0]);
                 dto.setLeather(cellData[1]);
-                dto.setSize_40_quantity(cellData[2]);
-                dto.setSize_41_quantity(cellData[3]);
-                dto.setSize_42_quantity(cellData[4]);
-                dto.setSize_43_quantity(cellData[5]);
-                dto.setSize_44_quantity(cellData[6]);
-                dto.setSize_45_quantity(cellData[7]);
-                dto.setSize_46_quantity(cellData[8]);
-                dto.setSize_47_quantity(cellData[9]);
+                dto.setSize_39_quantity(cellData[2]);
+                dto.setSize_40_quantity(cellData[3]);
+                dto.setSize_41_quantity(cellData[4]);
+                dto.setSize_42_quantity(cellData[5]);
+                dto.setSize_43_quantity(cellData[6]);
+                dto.setSize_44_quantity(cellData[7]);
+                dto.setSize_45_quantity(cellData[8]);
+                dto.setSize_46_quantity(cellData[9]);
+                dto.setSize_47_quantity(cellData[10]);
 
                 orderedProgressMap.put(dto.getSku() + "_" + dto.getLeather(), dto);
             }
@@ -328,6 +334,13 @@ public class JobCardService {
             OverAllJobCardProgress overAllJobCardProgress = new OverAllJobCardProgress();
             overAllJobCardProgress.setSku(skuStrings[0]);
             overAllJobCardProgress.setLeather(skuStrings[1]);
+            overAllJobCardProgress.setSize_39_ordered_quantity(orderDto.getSize_39_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_39_quantity()));
+            overAllJobCardProgress.setSize_39_cutting_quantity(cutDto.getSize_39_quantity() == null ? 0 : Integer.parseInt(cutDto.getSize_39_quantity()));
+            overAllJobCardProgress.setSize_39_upperMaking_quantity(upperDto.getSize_39_quantity() == null ? 0 : Integer.parseInt(upperDto.getSize_39_quantity()));
+            overAllJobCardProgress.setSize_39_hs_quantity(hsDto.getSize_39_quantity() == null ? 0 : Integer.parseInt(hsDto.getSize_39_quantity()));
+            overAllJobCardProgress.setSize_39_finished_quantity(finishingDto.getSize_39_quantity() == null ? 0 : Integer.parseInt(finishingDto.getSize_39_quantity()));
+            overAllJobCardProgress.setSize_39_packed_quantity(packedDto.getSize_39_quantity() == null ? 0 : Integer.parseInt(packedDto.getSize_39_quantity()));
+
             overAllJobCardProgress.setSize_40_ordered_quantity(orderDto.getSize_40_quantity() == null ? 0 : Integer.parseInt(orderDto.getSize_40_quantity()));
             overAllJobCardProgress.setSize_40_cutting_quantity(cutDto.getSize_40_quantity() == null ? 0 : Integer.parseInt(cutDto.getSize_40_quantity()));
             overAllJobCardProgress.setSize_40_upperMaking_quantity(upperDto.getSize_40_quantity() == null ? 0 : Integer.parseInt(upperDto.getSize_40_quantity()));
@@ -416,27 +429,29 @@ public class JobCardService {
                         ProductionStageProgressDto productionStageProgressDto = new ProductionStageProgressDto();
                         productionStageProgressDto.setSku(cellData[0]);
                         productionStageProgressDto.setLeather(cellData[1]);
-                        productionStageProgressDto.setSize_40_quantity(cellData[2]);
-                        productionStageProgressDto.setSize_41_quantity(cellData[3]);
-                        productionStageProgressDto.setSize_42_quantity(cellData[4]);
-                        productionStageProgressDto.setSize_43_quantity(cellData[5]);
-                        productionStageProgressDto.setSize_44_quantity(cellData[6]);
-                        productionStageProgressDto.setSize_45_quantity(cellData[7]);
-                        productionStageProgressDto.setSize_46_quantity(cellData[8]);
-                        productionStageProgressDto.setSize_47_quantity(cellData[9]);
+                        productionStageProgressDto.setSize_39_quantity(cellData[2]);
+                        productionStageProgressDto.setSize_40_quantity(cellData[3]);
+                        productionStageProgressDto.setSize_41_quantity(cellData[4]);
+                        productionStageProgressDto.setSize_42_quantity(cellData[5]);
+                        productionStageProgressDto.setSize_43_quantity(cellData[6]);
+                        productionStageProgressDto.setSize_44_quantity(cellData[7]);
+                        productionStageProgressDto.setSize_45_quantity(cellData[8]);
+                        productionStageProgressDto.setSize_46_quantity(cellData[9]);
+                        productionStageProgressDto.setSize_47_quantity(cellData[10]);
                         map.put(cellData[0] + "_" + cellData[1], productionStageProgressDto);
                     } else {
                         ProductionStageProgressDto productionStageProgressDto = map.get(cellData[0] + "_" + cellData[1]);
                         productionStageProgressDto.setSku(cellData[0]);
                         productionStageProgressDto.setLeather(cellData[1]);
-                        productionStageProgressDto.setSize_40_quantity("" + ((Integer.parseInt(cellData[2])) + (Integer.parseInt(productionStageProgressDto.getSize_40_quantity()))));
-                        productionStageProgressDto.setSize_41_quantity("" + ((Integer.parseInt(cellData[3])) + (Integer.parseInt(productionStageProgressDto.getSize_41_quantity()))));
-                        productionStageProgressDto.setSize_42_quantity("" + ((Integer.parseInt(cellData[4])) + (Integer.parseInt(productionStageProgressDto.getSize_42_quantity()))));
-                        productionStageProgressDto.setSize_43_quantity("" + ((Integer.parseInt(cellData[5])) + (Integer.parseInt(productionStageProgressDto.getSize_43_quantity()))));
-                        productionStageProgressDto.setSize_44_quantity("" + ((Integer.parseInt(cellData[6])) + (Integer.parseInt(productionStageProgressDto.getSize_44_quantity()))));
-                        productionStageProgressDto.setSize_45_quantity("" + ((Integer.parseInt(cellData[7])) + (Integer.parseInt(productionStageProgressDto.getSize_45_quantity()))));
-                        productionStageProgressDto.setSize_46_quantity("" + ((Integer.parseInt(cellData[8])) + (Integer.parseInt(productionStageProgressDto.getSize_46_quantity()))));
-                        productionStageProgressDto.setSize_47_quantity("" + ((Integer.parseInt(cellData[9])) + (Integer.parseInt(productionStageProgressDto.getSize_47_quantity()))));
+                        productionStageProgressDto.setSize_39_quantity("" + ((Integer.parseInt(cellData[2])) + (Integer.parseInt(productionStageProgressDto.getSize_39_quantity()))));
+                        productionStageProgressDto.setSize_40_quantity("" + ((Integer.parseInt(cellData[3])) + (Integer.parseInt(productionStageProgressDto.getSize_40_quantity()))));
+                        productionStageProgressDto.setSize_41_quantity("" + ((Integer.parseInt(cellData[4])) + (Integer.parseInt(productionStageProgressDto.getSize_41_quantity()))));
+                        productionStageProgressDto.setSize_42_quantity("" + ((Integer.parseInt(cellData[5])) + (Integer.parseInt(productionStageProgressDto.getSize_42_quantity()))));
+                        productionStageProgressDto.setSize_43_quantity("" + ((Integer.parseInt(cellData[6])) + (Integer.parseInt(productionStageProgressDto.getSize_43_quantity()))));
+                        productionStageProgressDto.setSize_44_quantity("" + ((Integer.parseInt(cellData[7])) + (Integer.parseInt(productionStageProgressDto.getSize_44_quantity()))));
+                        productionStageProgressDto.setSize_45_quantity("" + ((Integer.parseInt(cellData[8])) + (Integer.parseInt(productionStageProgressDto.getSize_45_quantity()))));
+                        productionStageProgressDto.setSize_46_quantity("" + ((Integer.parseInt(cellData[9])) + (Integer.parseInt(productionStageProgressDto.getSize_46_quantity()))));
+                        productionStageProgressDto.setSize_47_quantity("" + ((Integer.parseInt(cellData[10])) + (Integer.parseInt(productionStageProgressDto.getSize_47_quantity()))));
                         map.put(cellData[0] + "_" + cellData[1], productionStageProgressDto);
                     }
                 }
@@ -473,6 +488,7 @@ public class JobCardService {
         ) {
             Object[] data = new Object[]{jobCard.getSku(),
                     jobCard.getLeather(),
+                    jobCard.getSize_39_quantity(),
                     jobCard.getSize_40_quantity(),
                     jobCard.getSize_41_quantity(),
                     jobCard.getSize_42_quantity(),
@@ -569,31 +585,33 @@ public class JobCardService {
             cell.setCellValue("SKU");
             Cell cell1 = row.createCell(1);
             cell1.setCellValue("LEATHER");
-            Cell cell2 = row.createCell(2);
+            Cell cell2_1 = row.createCell(2);
+            cell2_1.setCellValue("39");
+            Cell cell2 = row.createCell(3);
             cell2.setCellValue("40");
-            Cell cell3 = row.createCell(3);
+            Cell cell3 = row.createCell(4);
             cell3.setCellValue("41");
-            Cell cell4 = row.createCell(4);
+            Cell cell4 = row.createCell(5);
             cell4.setCellValue("42");
-            Cell cell5 = row.createCell(5);
+            Cell cell5 = row.createCell(6);
             cell5.setCellValue("43");
-            Cell cell6 = row.createCell(6);
+            Cell cell6 = row.createCell(7);
             cell6.setCellValue("44");
-            Cell cell7 = row.createCell(7);
+            Cell cell7 = row.createCell(8);
             cell7.setCellValue("45");
-            Cell cell8 = row.createCell(8);
+            Cell cell8 = row.createCell(9);
             cell8.setCellValue("46");
-            Cell cell9 = row.createCell(9);
+            Cell cell9 = row.createCell(10);
             cell9.setCellValue("47");
-            Cell cell10 = row.createCell(10);
+            Cell cell10 = row.createCell(11);
             cell10.setCellValue("DATE");
-            Cell cell11 = row.createCell(11);
+            Cell cell11 = row.createCell(12);
             cell11.setCellValue("BATCH_NUMBER");
-            Cell cell12 = row.createCell(12);
+            Cell cell12 = row.createCell(13);
             cell12.setCellValue("BOX_NUMBER");
-            Cell cell13 = row.createCell(13);
+            Cell cell13 = row.createCell(14);
             cell13.setCellValue("VENDOR");
-            Cell cell14 = row.createCell(14);
+            Cell cell14 = row.createCell(15);
             cell14.setCellValue("PRICE");
         }
     }
@@ -616,7 +634,14 @@ public class JobCardService {
                     if (jobCardProgress.getProductionStage().equals("PACKING"))
                         validatePackingDetails(jobCardProgress, jobCardFileName);
                     String vendor = jobCardProgress.getVendor() != null ? jobCardProgress.getVendor() : "NA";
-                    if (jobCardProgress.getSize().equals("40")) {
+                    if (jobCardProgress.getSize().equals("39")) {
+                        data = new Object[]{jobCardProgress.getSku(),
+                                jobCardProgress.getLeather(),
+                                jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0", "0",
+                                new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                                "", "", vendor, jobCardProgress.getPrice()
+                        };
+                    } if (jobCardProgress.getSize().equals("40")) {
                         data = new Object[]{jobCardProgress.getSku(),
                                 jobCardProgress.getLeather(),
                                 jobCardProgress.getCount(), "0", "0", "0", "0", "0", "0", "0",
@@ -770,6 +795,14 @@ public class JobCardService {
                 switch (jobCardProgress.getProductionStage()) {
                     case "CUTTING":
                         switch (jobCardProgress.getSize()) {
+                            case "39":
+                                if (Integer.parseInt(jobCardProgress.getCount()) >
+                                        (overAllJobCardProgress.getSize_39_ordered_quantity()
+                                                - overAllJobCardProgress.getSize_39_cutting_quantity())) {
+                                    throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= " + (overAllJobCardProgress.getSize_39_ordered_quantity()
+                                            - overAllJobCardProgress.getSize_39_cutting_quantity()) + " for the selection");
+                                }
+                                break;
                             case "40":
                                 if (Integer.parseInt(jobCardProgress.getCount()) >
                                         (overAllJobCardProgress.getSize_40_ordered_quantity()
@@ -839,6 +872,14 @@ public class JobCardService {
                     case "UPPER":
                         switch (jobCardProgress.getSize()) {
 
+                            case "39":
+                                if (Integer.parseInt(jobCardProgress.getCount()) >
+                                        overAllJobCardProgress.getSize_39_cutting_quantity()
+                                                - overAllJobCardProgress.getSize_39_upperMaking_quantity()) {
+                                    throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= " + (overAllJobCardProgress.getSize_39_cutting_quantity()
+                                            - overAllJobCardProgress.getSize_39_cutting_quantity()) + " for the selection");
+                                }
+                                break;
                             case "40":
                                 if (Integer.parseInt(jobCardProgress.getCount()) >
                                         overAllJobCardProgress.getSize_40_cutting_quantity()
@@ -908,6 +949,14 @@ public class JobCardService {
                     case "HS":
                         switch (jobCardProgress.getSize()) {
 
+                            case "39":
+                                if (Integer.parseInt(jobCardProgress.getCount()) >
+                                        overAllJobCardProgress.getSize_39_upperMaking_quantity()
+                                                - overAllJobCardProgress.getSize_39_hs_quantity()) {
+                                    throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= " + (overAllJobCardProgress.getSize_39_upperMaking_quantity()
+                                            - overAllJobCardProgress.getSize_39_hs_quantity()) + " for the selection");
+                                }
+                                break;
                             case "40":
                                 if (Integer.parseInt(jobCardProgress.getCount()) >
                                         overAllJobCardProgress.getSize_40_upperMaking_quantity()
@@ -977,6 +1026,14 @@ public class JobCardService {
                     case "FINISHING":
                         switch (jobCardProgress.getSize()) {
 
+                            case "39":
+                                if (Integer.parseInt(jobCardProgress.getCount()) >
+                                        overAllJobCardProgress.getSize_39_hs_quantity()
+                                                - overAllJobCardProgress.getSize_39_finished_quantity()) {
+                                    throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= " + (overAllJobCardProgress.getSize_39_hs_quantity()
+                                            - overAllJobCardProgress.getSize_39_finished_quantity()) + " for the selection");
+                                }
+                                break;
                             case "40":
                                 if (Integer.parseInt(jobCardProgress.getCount()) >
                                         overAllJobCardProgress.getSize_40_hs_quantity()
@@ -1046,6 +1103,14 @@ public class JobCardService {
                     case "PACKING":
                         switch (jobCardProgress.getSize()) {
 
+                            case "39":
+                                if (Integer.parseInt(jobCardProgress.getCount()) >
+                                        overAllJobCardProgress.getSize_39_finished_quantity()
+                                                - overAllJobCardProgress.getSize_39_packed_quantity()) {
+                                    throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= " + (overAllJobCardProgress.getSize_39_finished_quantity()
+                                            - overAllJobCardProgress.getSize_39_packed_quantity()) + " for the selection");
+                                }
+                                break;
                             case "40":
                                 if (Integer.parseInt(jobCardProgress.getCount()) >
                                         overAllJobCardProgress.getSize_40_finished_quantity()
@@ -1127,6 +1192,14 @@ public class JobCardService {
                 switch (jobCardProgress.getProductionStage()) {
                     case "CUTTING":
                         switch (jobCardProgress.getSize()) {
+                            case "39":
+                                if (Integer.parseInt(jobCardProgress.getCount()) >
+                                        (overAllJobCardProgress.getSize_39_ordered_quantity()
+                                                - overAllJobCardProgress.getSize_39_cutting_quantity())) {
+                                    throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= " + (overAllJobCardProgress.getSize_39_ordered_quantity()
+                                            - overAllJobCardProgress.getSize_39_cutting_quantity()) + " for the selection");
+                                }
+                                break;
                             case "40":
                                 if (Integer.parseInt(jobCardProgress.getCount()) >
                                         (overAllJobCardProgress.getSize_40_ordered_quantity()
@@ -1196,6 +1269,14 @@ public class JobCardService {
                     case "PACKING":
                         switch (jobCardProgress.getSize()) {
 
+                            case "39":
+                                if (Integer.parseInt(jobCardProgress.getCount()) >
+                                        overAllJobCardProgress.getSize_39_cutting_quantity()
+                                                - overAllJobCardProgress.getSize_39_packed_quantity()) {
+                                    throw new InvalidCountException("Invalid Count for Size " + jobCardProgress.getSize() + ". Expected value <= " + (overAllJobCardProgress.getSize_39_cutting_quantity()
+                                            - overAllJobCardProgress.getSize_39_packed_quantity()) + " for the selection");
+                                }
+                                break;
                             case "40":
                                 if (Integer.parseInt(jobCardProgress.getCount()) >
                                         overAllJobCardProgress.getSize_40_cutting_quantity()
@@ -1469,6 +1550,7 @@ public class JobCardService {
 
         table.addHeaderCell("SKU");
         table.addHeaderCell("Leather");
+        table.addHeaderCell("39");
         table.addHeaderCell("40");
         table.addHeaderCell("41");
         table.addHeaderCell("42");
@@ -1487,6 +1569,7 @@ public class JobCardService {
         jobCardList.forEach(timeSheetDto -> {
             table.addCell(timeSheetDto.getSku());
             table.addCell(timeSheetDto.getLeather());
+            table.addCell(timeSheetDto.getSize_39_quantity());
             table.addCell(timeSheetDto.getSize_40_quantity());
             table.addCell(timeSheetDto.getSize_41_quantity());
             table.addCell(timeSheetDto.getSize_42_quantity());

@@ -7,6 +7,12 @@ public class OverAllJobCardProgress {
     private String leather;
 
     private String SearchString;
+    private Integer size_39_ordered_quantity;
+    private Integer size_39_cutting_quantity;
+    private Integer size_39_upperMaking_quantity;
+    private Integer size_39_hs_quantity;
+    private Integer size_39_finished_quantity;
+    private Integer size_39_packed_quantity;
     private Integer size_40_ordered_quantity;
     private Integer size_40_cutting_quantity;
     private Integer size_40_upperMaking_quantity;
@@ -82,6 +88,54 @@ public class OverAllJobCardProgress {
 
     public Integer getSize_40_ordered_quantity() {
         return size_40_ordered_quantity;
+    }
+
+    public Integer getSize_39_ordered_quantity() {
+        return size_39_ordered_quantity;
+    }
+
+    public void setSize_39_ordered_quantity(Integer size_39_ordered_quantity) {
+        this.size_39_ordered_quantity = size_39_ordered_quantity;
+    }
+
+    public Integer getSize_39_cutting_quantity() {
+        return size_39_cutting_quantity;
+    }
+
+    public void setSize_39_cutting_quantity(Integer size_39_cutting_quantity) {
+        this.size_39_cutting_quantity = size_39_cutting_quantity;
+    }
+
+    public Integer getSize_39_upperMaking_quantity() {
+        return size_39_upperMaking_quantity;
+    }
+
+    public void setSize_39_upperMaking_quantity(Integer size_39_upperMaking_quantity) {
+        this.size_39_upperMaking_quantity = size_39_upperMaking_quantity;
+    }
+
+    public Integer getSize_39_hs_quantity() {
+        return size_39_hs_quantity;
+    }
+
+    public void setSize_39_hs_quantity(Integer size_39_hs_quantity) {
+        this.size_39_hs_quantity = size_39_hs_quantity;
+    }
+
+    public Integer getSize_39_finished_quantity() {
+        return size_39_finished_quantity;
+    }
+
+    public void setSize_39_finished_quantity(Integer size_39_finished_quantity) {
+        this.size_39_finished_quantity = size_39_finished_quantity;
+    }
+
+    public Integer getSize_39_packed_quantity() {
+        return size_39_packed_quantity;
+    }
+
+    public void setSize_39_packed_quantity(Integer size_39_packed_quantity) {
+        this.size_39_packed_quantity = size_39_packed_quantity;
     }
 
     public void setSize_40_ordered_quantity(Integer size_40_ordered_quantity) {
