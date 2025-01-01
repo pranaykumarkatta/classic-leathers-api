@@ -49,7 +49,7 @@ public class ClassicLeathersToolApplication {
         availableBrandMap.putAll(stockService.getAvailableBrands());
         availableSkuMap.putAll(stockService.getAvailableSkus());
         categoryMap.putAll(stockService.getCategoryMap());
-        salesData.putAll(presentationService.updateSalesData(2024,0));
+        salesData.putAll(presentationService.updateSalesData(2025,0));
 
         for (int i = 1; i < 13; i++) {
             retailSalesEntryDtoList.addAll(retailSalesReportService.getSalesDataByMonth2023(i - 1));

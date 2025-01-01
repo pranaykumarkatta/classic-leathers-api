@@ -184,13 +184,13 @@ public class StockService {
                     new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT.xlsx", 0, data);
                 } else {
                     new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT.xlsx", 0, data);
-                    if (getOnlineSkus().contains(dto.getSku()) && (!dto.getTo().equals("MYNTRA")) && (!dto.getFrom().equals("CLASSIC LEATHERS RETAIL"))){
+                    if (getOnlineSkus().contains(dto.getSku()) && (!dto.getTo().equals("MYNTRA")) && (dto.getFrom().equals("CLASSIC LEATHERS RETAIL"))){
                         Object[] d1 = new Object[]{
                                 dto.getSku(), 1, "DEFAULT", "REMOVE"
                         };
                         new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\INVENTORY_ADJUSTMENT.xlsx", 0, d1);
                     }
-                    if (getOnlineSkus().contains(dto.getSku()) && (!dto.getTo().equals("CLASSIC LEATHERS RETAIL"))){
+                    if (getOnlineSkus().contains(dto.getSku()) && (!dto.getFrom().equals("MYNTRA")) && (dto.getTo().equals("CLASSIC LEATHERS RETAIL"))){
                         Object[] d1 = new Object[]{
                                 dto.getSku(), 1, "DEFAULT", "ADD"
                         };

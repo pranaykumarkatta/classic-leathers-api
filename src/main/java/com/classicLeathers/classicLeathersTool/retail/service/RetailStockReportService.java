@@ -49,18 +49,15 @@ public class RetailStockReportService {
                     }else if (stockReportDto.getTo().equals("PIXOGREY STUDIOS")) {
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setRetailSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getRetailSalesQuantity() +1);
-                    } else if (stockReportDto.getTo().equals("AJIO")) {;
-                        stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
-                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
-                    }  else if (stockReportDto.getTo().equals("FLIPKART")) {
+                    }else if (stockReportDto.getTo().equals("AJIO")) {;
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
                     }else if (stockReportDto.getTo().equals("MYNTRA")) {
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
                                 stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
-                    }else if (stockReportDto.getTo().equals("ONE_WAY_SHOES_CHENNAI")) {
+                    }else if (stockReportDto.getTo().equals("WHOLESALE")) {
                         stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).setOnlineSalesQuantity(
-                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getOnlineSalesQuantity() + 1);
+                                stockReportDtoMap.get(stockReportDto.getBrand() + "||" + stockReportDto.getArticle()).getRetailSalesQuantity() + 1);
                     }
                 } else {
                     stockReportDto = new StockReportDto();

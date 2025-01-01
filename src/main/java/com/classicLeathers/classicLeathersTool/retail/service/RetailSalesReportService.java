@@ -18,13 +18,15 @@ public class RetailSalesReportService {
 
     public List<RetailSalesEntryDto> getSalesDataByMonth(Integer sheetNumber) {
 
-        return getSalesDataByMonth(2024, sheetNumber);
+        return getSalesDataByMonth(2025, sheetNumber);
     }
 
     public List<RetailSalesEntryDto> getSalesDataByMonth(Integer year, Integer sheetNumber) {
         String fileData = "";
         try {
-            if (year.equals(2024)) {
+            if (year.equals(2025)) {
+                fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2025_SALES_REPORT.xlsx", sheetNumber);
+            } else if (year.equals(2024)) {
                 fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx", sheetNumber);
             } else {
                 fileData = new FileUtils().getFileData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2023_SALES_REPORT_V2.xlsx", sheetNumber);
@@ -153,7 +155,7 @@ public class RetailSalesReportService {
 
         };
         try {
-            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024_SALES_REPORT.xlsx", sheetNO, data);
+            new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2025_SALES_REPORT.xlsx", sheetNO, data);
             new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT.xlsx", 0, data1);
             String sku = retailSalesEntryDto.getCategory() + "_" + retailSalesEntryDto.getLeather() + retailSalesEntryDto.getSize();
             if (stockService.getOnlineSkus().contains(sku)) {
