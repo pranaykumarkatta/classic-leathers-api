@@ -17,6 +17,15 @@ public class RetailStockReportService {
     public Collection<StockAvailabilityDto> getStockReport() {
         return getStockReport("STOCK_AUDIT_REPORT");
     }
+    public Collection<StockAvailabilityDto> getAmburStockReport() {
+        return getStockReport("STOCK_AUDIT_REPORT_AMBUR");
+    }
+    public Collection<StockAvailabilityDto> getMelvisharamStockReport() {
+        return getStockReport("STOCK_AUDIT_REPORT_MELVISHARAM");
+    }
+    public Collection<StockAvailabilityDto> getStockAuditReport() {
+        return getStockReport("STOCK_AUDIT");
+    }
     public Collection<StockAvailabilityDto> getStockReport(String fileName) {
         String fileData = "";
         try {

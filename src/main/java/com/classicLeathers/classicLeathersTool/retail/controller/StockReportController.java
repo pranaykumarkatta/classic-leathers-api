@@ -26,7 +26,21 @@ public class StockReportController {
     public ResponseEntity<Collection<StockAvailabilityDto>> getStockReport() {
         return ResponseEntity.ok(retailStockReportService.getStockReport());
     }
-//
+    @GetMapping(path = "/getAmburStockReport")
+    public ResponseEntity<Collection<StockAvailabilityDto>> getAmburStockReport() {
+        return ResponseEntity.ok(retailStockReportService.getAmburStockReport());
+    }
+    @GetMapping(path = "/getMelvisharamrStockReport")
+    public ResponseEntity<Collection<StockAvailabilityDto>> getMelvisharamStockReport() {
+        return ResponseEntity.ok(retailStockReportService.getMelvisharamStockReport());
+    }
+
+    @GetMapping(path = "/getStockAuditReport")
+    public ResponseEntity<Collection<StockAvailabilityDto>> getStockAuditReport() {
+        return ResponseEntity.ok(retailStockReportService.getStockAuditReport());
+    }
+
+    //
 //    @GetMapping(path = "/availability")
 //    public ResponseEntity<Map<String, Set<String>>> getStockAvailabilityData() {
 //        return ResponseEntity.ok(retailStockReportService.getStockAvailabilityData());
@@ -36,6 +50,7 @@ public class StockReportController {
     public ResponseEntity<String> exportStockReport() {
         return ResponseEntity.ok(retailStockReportService.exportStockReport());
     }
+
     @GetMapping(path = "/exportAuditReport")
     public ResponseEntity<String> exportAuditReport() {
         return ResponseEntity.ok(retailStockReportService.exportAuditReport());

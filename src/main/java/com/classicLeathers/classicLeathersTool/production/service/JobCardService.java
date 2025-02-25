@@ -1527,15 +1527,15 @@ public class JobCardService {
 
 
     public String exportJobCard(String fileName) {
-        Table table = new Table(15);
+        Table table = new Table(16);
 
         List<JobCard> jobCardList = getJobCardDetails(fileName);
-        com.itextpdf.layout.element.Cell fileNameCell = new com.itextpdf.layout.element.Cell(1, 15);
+        com.itextpdf.layout.element.Cell fileNameCell = new com.itextpdf.layout.element.Cell(1, 16);
         fileNameCell.add(new Paragraph(fileName.substring(0, fileName.length() - 5)));
         fileNameCell.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(fileNameCell);
 
-        com.itextpdf.layout.element.Cell clientInfoCell = new com.itextpdf.layout.element.Cell(1, 5);
+        com.itextpdf.layout.element.Cell clientInfoCell = new com.itextpdf.layout.element.Cell(1, 6);
         clientInfoCell.add(new Paragraph(jobCardList.get(0).getClient()));
         clientInfoCell.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(clientInfoCell);

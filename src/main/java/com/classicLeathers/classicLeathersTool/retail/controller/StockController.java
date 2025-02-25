@@ -47,5 +47,12 @@ public class StockController {
     public void addStockEntry(@RequestBody List<StockEntry> stockDTOList,@RequestParam Boolean isAudit) throws ParseException {
         stockService.addStockEntry(stockDTOList,isAudit);
     }
+    @PostMapping(consumes = "application/json",path = "/ambur")
+    public void addAmburStockEntry(@RequestBody List<StockEntry> stockDTOList,@RequestParam Boolean isAudit) throws ParseException {
+        stockService.addAmburStockEntry(stockDTOList,isAudit);
+    } @PostMapping(consumes = "application/json",path = "/melvisharam")
+    public void addMelvisharamStockEntry(@RequestBody List<StockEntry> stockDTOList,@RequestParam Boolean isAudit) throws ParseException {
+        stockService.addMelvisharamStockEntry(stockDTOList,isAudit);
+    }
 
 }

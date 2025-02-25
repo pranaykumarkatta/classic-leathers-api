@@ -204,5 +204,51 @@ public class StockService {
 
 
     }
+    public void addAmburStockEntry(List<StockEntry> stockDTOList, Boolean isAudit) {
+
+        stockDTOList.forEach(dto -> {
+            Object[] data = new Object[]{
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                    dto.getBrand(),
+                    dto.getFrom(),
+                    dto.getTo(),
+                    dto.getSku()
+            };
+            try {
+                if (isAudit) {
+                    new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_AMBUR.xlsx", 0, data);
+                } else {
+                    new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT_AMBUR.xlsx", 0, data);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+    }
+    public void addMelvisharamStockEntry(List<StockEntry> stockDTOList, Boolean isAudit) {
+
+        stockDTOList.forEach(dto -> {
+            Object[] data = new Object[]{
+                    new SimpleDateFormat("MMM-d-yyyy h:mm a").format(new Date()),
+                    dto.getBrand(),
+                    dto.getFrom(),
+                    dto.getTo(),
+                    dto.getSku()
+            };
+            try {
+                if (isAudit) {
+                    new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_MELVISHARAM.xlsx", 0, data);
+                } else {
+                    new FileUtils().WriteData("D:\\onedrive\\CLASSIC_DOCS\\RETAIL_DOCS\\2024\\STOCK_AUDIT_REPORT_MELVISHARAM.xlsx", 0, data);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+    }
 
 }
